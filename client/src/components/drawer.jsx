@@ -1,147 +1,159 @@
-import React from "react";
-import clsx from "clsx";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { Fragment } from "react";
+import cx from "clsx";
 import {
   CssBaseline,
-  Drawer,
-  AppBar,
-  Toolbar,
-  Typography,
-  Divider,
-  IconButton,
-  Button,
-  Menu,
-  List,
-  MenuItem,
-  Container,
   Paper,
-  Grid,
-  Avatar
+  Toolbar,
+  makeStyles,
+  Container,
+  Grid
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
-import { Link } from "react-router-dom";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import {
+  Root,
+  Header,
+  Sidebar,
+  Content,
+  CollapseBtn,
+  SidebarTrigger,
+  SidebarTriggerIcon
+} from "@mui-treasury/layout";
+
 import {
   ListRootDrawerItems,
   ListAdminDrawerItems,
   ListClientDrawerItems
-} from "./listDrawerItems";
+} from "components/drawer/drawerItems";
 
-const drawerWidth = 220;
+import NavBar from "components/drawer/navBar";
+import NavHeader from "components/drawer/profile";
+// import { TextSidebar } from "@mui-treasury/mockup/sidebars";
+// import Content from "components/drawer/content";
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    display: "flex"
-  },
-  toolbar: {
-    paddingRight: 24
-  },
-  white: {
-    color: "#000",
-    opacity: 0.95,
+  header: {
     backgroundColor: "#fff",
-    margin: theme.spacing(1)
+    boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.08)"
   },
-  toolbarIcon: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    ...theme.mixins.toolbar
+  // appBarSpacer: theme.mixins.toolbar,
+  appBarSpacer: {
+    marginTop: 30
   },
-  profileTextDeco: {
-    textDecoration: "none",
-    color: "black"
-  },
-  appBar: {
-    backgroundColor: "#0079c4",
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    })
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  },
-  menuButton: {
-    marginRight: 36
-  },
-  menuButtonHidden: {
-    display: "none"
-  },
-  title: {
-    flexGrow: 1
-  },
-  titleHide: {
-    flexGrow: 1,
-    display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "block"
+  collapseBtn: {
+    color: "#fff",
+    minWidth: 0,
+    width: 40,
+    borderRadius: "50%",
+    border: "none",
+    backgroundColor: "rgba(0,0,0,0.24)",
+    margin: "0 auto 16px",
+    "&:hover": {
+      backgroundColor: "rgba(0,0,0,0.38)"
     }
   },
-  drawerPaper: {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  },
-  drawerPaperClose: {
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(8)
-    }
-  },
-  appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
     height: "100vh",
     overflow: "auto"
   },
-  container: {
-    paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3),
-    paddingLeft: theme.spacing(2)
+  sidebar: {
+    backgroundColor: "#4065E0",
+    border: "none"
+  },
+  content: {
+    backgroundColor: "#f9f9f9"
   },
   paper: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(1),
     display: "flex",
     overflow: "auto",
     flexDirection: "column"
-  },
-  fixedHeight: {
-    height: 240
-  },
-  accountMenu: {
-    margin: theme.spacing(0.7)
-  },
-  textStyle: {
-    textDecoration: "none",
-    color: "red"
   }
 }));
 
-export default function Dashboard({ user, children }) {
+const config = {
+  autoCollapseDisabled: false,
+  collapsedBreakpoint: "sm",
+  heightAdjustmentDisabled: false,
+  xs: {
+    sidebar: {
+      anchor: "left",
+      hidden: false,
+      inset: false,
+      variant: "persistent",
+      width: 220,
+      collapsible: true,
+      collapsedWidth: 64
+    },
+    header: {
+      position: "sticky",
+      clipped: true,
+      offsetHeight: 56,
+      persistentBehavior: "fit"
+    },
+    content: {
+      persistentBehavior: "fit"
+    },
+    footer: {
+      persistentBehavior: "fit"
+    }
+  },
+  sm: {
+    sidebar: {
+      anchor: "left",
+      hidden: false,
+      inset: false,
+      variant: "temporary",
+      width: 256,
+      collapsible: true,
+      collapsedWidth: 64
+    },
+    header: {
+      position: "sticky",
+      clipped: true,
+      offsetHeight: 64,
+      persistentBehavior: "fit"
+    },
+    content: {
+      persistentBehavior: "fit"
+    },
+    footer: {
+      persistentBehavior: "fit"
+    }
+  },
+  md: {
+    sidebar: {
+      anchor: "left",
+      hidden: false,
+      inset: false,
+      variant: "permanent",
+      width: 256,
+      collapsible: true,
+      collapsedWidth: 64
+    },
+    header: {
+      position: "sticky",
+      clipped: true,
+      offsetHeight: 64,
+      persistentBehavior: "fit"
+    },
+    content: {
+      persistentBehavior: "fit"
+    },
+    footer: {
+      persistentBehavior: "fit"
+    }
+  }
+};
+
+const App = ({ children, user }) => {
   const userData = user || {};
-  console.log("Data: " + userData);
   const role = userData.role;
   const companyName = userData.companyName;
   let drawerList;
+  const styles = useStyles();
 
   switch (role) {
     case "root":
@@ -157,136 +169,53 @@ export default function Dashboard({ user, children }) {
       break;
   }
 
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const isMenuOpen = Boolean(anchorEl);
-
-  function handleMenuClose() {
-    setAnchorEl(null);
-  }
-
-  function handleProfileMenuOpen(event) {
-    setAnchorEl(event.currentTarget);
-  }
-
-  const menuId = "primary-search-account-menu";
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose} component={Link} to="/editprofile">
-        <PersonOutlineIcon className={classes.accountMenu} />
-        <Typography className={classes.profileTextDeco}>
-          Edit Profile
-        </Typography>
-      </MenuItem>
-      <MenuItem component={Link} to="/logout">
-        <ExitToAppIcon color={"secondary"} className={classes.accountMenu} />
-        <Typography onClick={handleMenuClose} color="secondary">
-          Sign out
-        </Typography>
-      </MenuItem>
-    </Menu>
-  );
-
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar
-        position="absolute"
-        className={clsx(classes.appBar, open && classes.appBarShift)}
-      >
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(
-              classes.menuButton,
-              open && classes.menuButtonHidden
-            )}
-          >
-            <MenuIcon />
-          </IconButton>
+    <Root config={config}>
+      {({ headerStyles, sidebarStyles, collapsed }) => (
+        <Fragment>
+          <CssBaseline />
+          <Header className={styles.header}>
+            <Toolbar>
+              <SidebarTrigger className={headerStyles.leftTrigger}>
+                <SidebarTriggerIcon />
+              </SidebarTrigger>
+              <NavBar companyName={companyName} />
+            </Toolbar>
+          </Header>
 
-          <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            className={classes.titleHide}
-          >
-            Dashboard
-          </Typography>
-          <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            className={classes.title}
-          >
-            {companyName}
-          </Typography>
-          <Button
-            edge="end"
-            aria-label="account of current user"
-            aria-controls={menuId}
-            aria-haspopup="true"
-            onClick={handleProfileMenuOpen}
-            color="inherit"
-          >
-            <Avatar className={classes.white}>{userData.name.charAt(0)}</Avatar>
-            <Typography color="inherit" className={classes.titleHide}>
-              {role}
-            </Typography>
-          </Button>
-        </Toolbar>
-      </AppBar>
-      {renderMenu}
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose)
-        }}
-        open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
+          {/* DRAWER */}
+          <Sidebar PaperProps={{ classes: { root: styles.sidebar } }}>
+            {/* PROFILE */}
+            <NavHeader collapsed={collapsed} userData={userData} />
 
-        <List>{drawerList}</List>
-        <Divider />
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>{children}</Paper>
-            </Grid>
-          </Grid>
-        </Container>
-      </main>
-    </div>
+            {/* DRAWER LIST */}
+            <div className={sidebarStyles.container}>
+              {drawerList}
+              {/* <TextSidebar /> */}
+            </div>
+            <CollapseBtn
+              className={cx(sidebarStyles.collapseBtn, styles.collapseBtn)}
+            >
+              {collapsed ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            </CollapseBtn>
+          </Sidebar>
+
+          {/* Main content in the page */}
+          <Content>
+            <div className={styles.appBarSpacer}>
+              <Container>
+                <Grid container direction="column">
+                  <Grid item>
+                    <Paper>{children}</Paper>
+                  </Grid>
+                </Grid>
+              </Container>
+            </div>
+          </Content>
+        </Fragment>
+      )}
+    </Root>
   );
-}
+};
+
+export default App;

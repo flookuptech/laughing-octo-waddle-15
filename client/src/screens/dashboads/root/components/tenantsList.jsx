@@ -6,7 +6,7 @@ import {
   withStyles,
   Grid
 } from "@material-ui/core";
-import TenantTable from "./tenantTable";
+import TenantTable from "./dataFields/tenantTable";
 
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";

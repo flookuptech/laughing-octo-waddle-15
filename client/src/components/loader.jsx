@@ -1,7 +1,9 @@
 import React from "react";
 import { ThreeHorseLoading } from "react-loadingg";
+import BrandAppLoader from "../assets/images/brand/flookupGif.gif";
 
-const Loader = () => (
-<ThreeHorseLoading color="#009933" speed={1} size="default" />
-);
-export default Loader;
+export const LoaderApp = () => <img src={BrandAppLoader} alt={"loader"} />;
+
+// export const LoaderApp = () => (
+//   <ThreeHorseLoading color="#009933" speed={1} size="default" />
+// );

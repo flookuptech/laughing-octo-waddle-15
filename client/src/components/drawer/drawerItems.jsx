@@ -45,18 +45,6 @@ export function ListRootDrawerItems() {
       <ListItem
         button
         component={Link}
-        to="/dashboard/IAM"
-        selected={selectedIndex === 2}
-        onClick={event => handleListItemClick(event, 2)}
-      >
-        <ListItemIcon>
-          <PersonAddIcon />
-        </ListItemIcon>
-        <ListItemText primary="IAM" />
-      </ListItem>
-      <ListItem
-        button
-        component={Link}
         to="/dashboard/organizations"
         selected={selectedIndex === 3}
         onClick={event => handleListItemClick(event, 3)}
@@ -65,7 +53,7 @@ export function ListRootDrawerItems() {
           <PeopleIcon />
         </ListItemIcon>
         <ListItemText
-          primary="Organizations"
+          primary="Create Admin"
           primaryTypographyProps={{ noWrap: true }}
           style={{ color: "#11fedc" }}
         />
@@ -81,7 +69,7 @@ export function ListRootDrawerItems() {
           <BusinessIcon />
         </ListItemIcon>
         <ListItemText
-          primary="Users List"
+          primary="Admins List"
           primaryTypographyProps={{ noWrap: true }}
           style={{ color: "#11fedc" }}
         />
@@ -98,6 +86,25 @@ export function ListRootDrawerItems() {
         </ListItemIcon>
         <ListItemText
           primary="Reports"
+          primaryTypographyProps={{ noWrap: true }}
+          style={{ color: "#11fedc" }}
+        />
+      </ListItem>
+      <Divider style={{ margin: "12px 0" }} />
+      <ListItem
+        button
+        component={Link}
+        to="/dashboard/account"
+        selected={selectedIndex === 6}
+        onClick={event => handleListItemClick(event, 6)}
+      >
+        <ListItemIcon>
+          <Icon>
+            <AccountCircleRoundedIcon />
+          </Icon>
+        </ListItemIcon>
+        <ListItemText
+          primary="Account"
           primaryTypographyProps={{ noWrap: true }}
           style={{ color: "#11fedc" }}
         />
@@ -125,7 +132,11 @@ export function ListAdminDrawerItems() {
         <ListItemIcon>
           <HomeIcon />
         </ListItemIcon>
-        <ListItemText primary="Home" />
+        <ListItemText
+          primary="Home"
+          primaryTypographyProps={{ noWrap: true }}
+          style={{ color: "#11fedc" }}
+        />
       </ListItem>
       <ListItem
         button
@@ -137,7 +148,11 @@ export function ListAdminDrawerItems() {
         <ListItemIcon>
           <PersonAddIcon />
         </ListItemIcon>
-        <ListItemText primary="Add Client" />
+        <ListItemText
+          primary="Add Client"
+          primaryTypographyProps={{ noWrap: true }}
+          style={{ color: "#11fedc" }}
+        />
       </ListItem>
       <ListItem
         button
@@ -149,7 +164,30 @@ export function ListAdminDrawerItems() {
         <ListItemIcon>
           <PeopleIcon />
         </ListItemIcon>
-        <ListItemText primary="Clients List" />
+        <ListItemText
+          primary="Clients List"
+          primaryTypographyProps={{ noWrap: true }}
+          style={{ color: "#11fedc" }}
+        />
+      </ListItem>
+      <Divider style={{ margin: "12px 0" }} />
+      <ListItem
+        button
+        component={Link}
+        to="/dashboard/account"
+        selected={selectedIndex === 4}
+        onClick={event => handleListItemClick(event, 4)}
+      >
+        <ListItemIcon>
+          <Icon>
+            <AccountCircleRoundedIcon />
+          </Icon>
+        </ListItemIcon>
+        <ListItemText
+          primary="Account"
+          primaryTypographyProps={{ noWrap: true }}
+          style={{ color: "#11fedc" }}
+        />
       </ListItem>
     </List>
   );
@@ -196,7 +234,13 @@ export function ListClientDrawerItems() {
         />
       </ListItem>
       <Divider style={{ margin: "12px 0" }} />
-      <ListItem button>
+      <ListItem
+        button
+        component={Link}
+        to="/dashboard/account"
+        selected={selectedIndex === 3}
+        onClick={event => handleListItemClick(event, 3)}
+      >
         <ListItemIcon>
           <Icon>
             <AccountCircleRoundedIcon />

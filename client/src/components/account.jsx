@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { Grid, Typography, Container, withStyles } from "@material-ui/core";
 
-import Form from "components/form/form";
+import Form from "./form/form";
 
 const styles = {
   boxBorder: {
@@ -31,7 +31,7 @@ class UploadInvoice extends Form {
             <Container maxWidth="lg">
               <br />
               <Typography component="h5" variant="h5">
-                Home page
+                Account Page
               </Typography>
               <br />
             </Container>

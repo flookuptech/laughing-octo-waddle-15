@@ -44,17 +44,15 @@ class UsersList extends Component {
           <main className={classes.content}>
             <Container maxWidth="lg">
               <br />
-              <Box className={classes.boxBorder}>
-                <div>
-                  <Typography component="h5" variant="h5">
-                    Clients list
-                  </Typography>
-                </div>
-                <br />
-                <Fragment>
-                  <UserTable clientsList={clientsList} />
-                </Fragment>
-              </Box>
+              <div>
+                <Typography component="h5" variant="h5">
+                  Clients list
+                </Typography>
+              </div>
+              <br />
+              <Fragment>
+                <UserTable clientsList={clientsList} />
+              </Fragment>
               <br />
             </Container>
           </main>

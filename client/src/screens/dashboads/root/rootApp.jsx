@@ -2,15 +2,13 @@ import React, { Component } from "react";
 
 import { Route, Switch } from "react-router-dom";
 
-import NotFound from "components/pageNotFound";
-import EditProfile from "components/editProfile";
-// import PrivateRoute from "../";
-import IAM from "./components/iam";
 import Home from "./components/home";
+import Account from "components/account";
 import Reports from "./components/reports";
+import NotFound from "components/pageNotFound";
 import DashboardLayout from "components/drawer";
 import TenantsList from "./components/tenantsList";
-import Organizations from "./components/orgComponents/organizations";
+import Organizations from "./components/createAdmins";
 
 class AdminDashBoard extends Component {
   state = {};
@@ -19,8 +17,7 @@ class AdminDashBoard extends Component {
     return (
       <DashboardLayout user={user}>
         <Switch>
-          <Route path="/editprofile" component={EditProfile} />
-          <Route path="/dashboard/iam" component={IAM} />
+          <Route path="/dashboard/account" component={Account} />
           <Route path="/dashboard/reports" component={Reports} />
           <Route path="/dashboard/organizations" component={Organizations} />
           <Route

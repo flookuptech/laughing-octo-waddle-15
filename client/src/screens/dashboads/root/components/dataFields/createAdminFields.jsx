@@ -16,7 +16,7 @@ class OrgDataFields extends Component {
                 <InputField
                   required
                   id="companyName"
-                  label="Name of organization"
+                  label="Company Name"
                   name="companyName"
                   onChange={onChange}
                   autoFocus
@@ -63,7 +63,7 @@ class OrgDataFields extends Component {
                 <InputField
                   required
                   id="name"
-                  label="Name of Senior"
+                  label="Name of Admin"
                   name="name"
                   onChange={onChange}
                 />
@@ -72,7 +72,7 @@ class OrgDataFields extends Component {
                 <InputField
                   required
                   id="email"
-                  label="Senior Email"
+                  label="Admin Email"
                   type="email"
                   name="email"
                   onChange={onChange}
