@@ -1,12 +1,19 @@
 import React, { Component, Fragment } from "react";
-import { Grid, Button } from "@material-ui/core";
+import { Grid, Button, TextField } from "@material-ui/core";
 
 import InputField from "components/form/inputField";
+import { SelectFieldRole } from "components/form/select";
 
-class OrgDataFields extends Component {
-  state = {};
+class CreateAdminFields extends Component {
   render() {
-    const { onSubmit, onChange } = this.props;
+    const role = [
+      {
+        role: "admin",
+        label: "Admin"
+      }
+    ];
+
+    const { onSubmit, onChange, hasError } = this.props;
     return (
       <Fragment>
         <form onSubmit={onSubmit}>
@@ -87,32 +94,12 @@ class OrgDataFields extends Component {
                   onChange={onChange}
                 />
               </Grid>
-              <Grid item xs={6} md={3} lg={3}>
-                <select
-                  className="select-button-padding select-button-org-styles"
-                  name="role"
+              <Grid item xs={6} md={4} lg={3}>
+                <SelectFieldRole
                   onChange={onChange}
-                  required
-                >
-                  <option disabled selected value={null}>
-                    Role
-                  </option>
-                  <option value="admin">Admin</option>
-                </select>
-              </Grid>
-
-              <Grid item xs={6} md={3} lg={3}>
-                <select
-                  className="select-button-padding select-button-org-styles"
-                  name="userType"
-                  onChange={onChange}
-                  required
-                >
-                  <option disabled selected value={null}>
-                    User type
-                  </option>
-                  <option value="client">Client</option>
-                </select>
+                  role={role}
+                  hasError={hasError}
+                />
               </Grid>
 
               <Grid item xs={12} lg={12}>
@@ -130,4 +117,4 @@ class OrgDataFields extends Component {
   }
 }
 
-export default OrgDataFields;
+export default CreateAdminFields;

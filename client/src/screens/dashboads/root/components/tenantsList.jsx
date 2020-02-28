@@ -1,11 +1,7 @@
 import React, { Component, Fragment } from "react";
-import {
-  Typography,
-  Container,
-  Box,
-  withStyles,
-  Grid
-} from "@material-ui/core";
+import { Typography, Container, withStyles, Grid } from "@material-ui/core";
+
+import HtmlTitle from "components/title";
 import TenantTable from "./dataFields/tenantTable";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -38,22 +34,21 @@ class UsersList extends Component {
     const { tenantList } = this.state;
     return (
       <Fragment>
+        <HtmlTitle title="Admins List" />
         <ToastContainer autoClose={1500} closeButton={false} />
         <Grid>
           <main className={classes.content}>
             <Container maxWidth="lg">
               <br />
-              <Box className={classes.boxBorder}>
-                <div>
-                  <Typography component="h5" variant="h5">
-                    Users list
-                  </Typography>
-                </div>
-                <br />
-                <Fragment>
-                  <TenantTable tenantList={tenantList} />
-                </Fragment>
-              </Box>
+              <div>
+                <Typography component="h5" variant="h5">
+                  Users list
+                </Typography>
+              </div>
+              <br />
+              <Fragment>
+                <TenantTable tenantList={tenantList} />
+              </Fragment>
               <br />
             </Container>
           </main>
