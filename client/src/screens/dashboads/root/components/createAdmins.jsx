@@ -7,9 +7,9 @@ import {
   Container
 } from "@material-ui/core";
 
-import { registerSenior } from "services/createCallsRoot";
-import AdminDataFields from "./dataFields/createAdminFields";
 import Form from "components/form/form";
+import HtmlTitle from "components/title";
+import AdminDataFields from "./dataFields/createAdminFields";
 
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
@@ -27,29 +27,16 @@ const styles = {
   }
 };
 
-class Organizations extends Form {
+class RegisterAdmin extends Form {
   state = {
-    data: {
-      companyName: "",
-      panNumber: "",
-      orgEmail: "",
-      contact: "",
-      designation: "",
-      address: "",
-      name: "",
-      email: "",
-      userType: "",
-      role: ""
-    }
+    data: { hasError: false }
   };
 
   onSubmit = async () => {
     // Call to backend to create organisation database
     try {
       const { data } = this.state;
-      const register = await registerSenior(data);
-      toast.success("Organization created");
-      console.log(register);
+      console.log(data);
     } catch (error) {
       toast.error("Organization creation failed!");
     }
@@ -60,8 +47,9 @@ class Organizations extends Form {
 
     return (
       <Fragment>
+        <HtmlTitle title={"Create Admin"} />
+        <ToastContainer autoClose={1500} closeButton={false} />
         <Grid>
-          <ToastContainer autoClose={1500} closeButton={false} />
           <main className={classes.content}>
             <Container>
               <br />
@@ -73,6 +61,7 @@ class Organizations extends Form {
                 <AdminDataFields
                   onSubmit={this.handleSubmit}
                   onChange={this.handleOnChange}
+                  hasError={this.state.data.hasError}
                 />
                 <br />
               </Fragment>
@@ -84,4 +73,4 @@ class Organizations extends Form {
   }
 }
 
-export default withStyles(styles)(Organizations);
+export default withStyles(styles)(RegisterAdmin);

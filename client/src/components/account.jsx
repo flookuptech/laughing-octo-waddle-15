@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { Grid, Typography, Container, withStyles } from "@material-ui/core";
 
 import Form from "./form/form";
+import HtmlTitle from "components/title";
 
 const styles = {
   boxBorder: {
@@ -26,6 +27,7 @@ class UploadInvoice extends Form {
 
     return (
       <Fragment>
+        <HtmlTitle title="Account page" />
         <Grid>
           <main className={classes.content}>
             <Container maxWidth="lg">
