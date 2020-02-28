@@ -2,39 +2,23 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import Radio from "@material-ui/core/Radio";
 import Grid from "@material-ui/core/Grid";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormGroup from "@material-ui/core/FormGroup";
-import Checkbox from "@material-ui/core/Checkbox";
 
 const styles = ({ breakpoints }) => ({
   root: {
-    padding: 16,
-    [breakpoints.up("sm")]: {
-      padding: 24,
-      maxWidth: 500,
-      margin: "auto"
-    },
-    [breakpoints.up("md")]: {
-      maxWidth: 700
-    }
+    display: "flex"
   },
   paper: {
-    padding: 16
+    // padding: theme.spacing(1),
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column"
   }
 });
 
-const ContentForm = ({
-  classes,
-  preset,
-  onChangePreset,
-  data,
-  onChangeData
-}) => {
+const ContentForm = ({ classes, data, onChangeData, children }) => {
   const handleChange = key => e =>
     onChangeData({
       ...data,
@@ -44,15 +28,9 @@ const ContentForm = ({
     <div className={classes.root}>
       <Paper elevation={1} square className={classes.paper}>
         <Grid container>
-          <Grid item xs={6}>
+          <Grid item>
             <FormControl component="fieldset">
-              <FormLabel component="legend">Presets</FormLabel>
-            </FormControl>
-          </Grid>
-          <Grid item xs={6}>
-            <FormControl component="fieldset" className={classes.formControl}>
-              <FormLabel component="legend">Enabled mockup</FormLabel>
-              <FormGroup></FormGroup>
+              <FormLabel component="legend">{children}</FormLabel>
             </FormControl>
           </Grid>
         </Grid>

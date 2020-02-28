@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { Typography, Box, withStyles, Container } from "@material-ui/core";
 
-import UserDataFields from "./userDataFields";
+import UserDataFields from "./dataFields/userDataFields";
 import Form from "components/form/form";
 import { createUser } from "services/createUserSenior";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,7 +17,6 @@ const styles = {
   },
   content: {
     flexGrow: 1,
-    //height: "100vh",
     overflow: "auto"
   }
 };
@@ -62,28 +61,24 @@ class AddUsers extends Form {
     return (
       <Fragment>
         <ToastContainer autoClose={1500} closeButton={false} />
-        <div>
-          <main className={classes.content}>
-            <Container maxWidth="lg">
-              <br />
-              <Box className={classes.boxBorder}>
-                <div>
-                  <Typography component="h5" variant="h5">
-                    Register Users
-                  </Typography>
-                </div>
-                <br />
-                <div>
-                  <UserDataFields
-                    onSubmit={this.handleSubmit}
-                    onChange={this.handleOnChange}
-                  />
-                </div>
-              </Box>
-              <br />
-            </Container>
-          </main>
-        </div>
+        <main className={classes.content}>
+          <Container maxWidth="lg">
+            <br />
+            <div>
+              <Typography component="h5" variant="h5">
+                Register Users
+              </Typography>
+            </div>
+            <br />
+            <div>
+              <UserDataFields
+                onSubmit={this.handleSubmit}
+                onChange={this.handleOnChange}
+              />
+            </div>
+            <br />
+          </Container>
+        </main>
       </Fragment>
     );
   }

@@ -1,11 +1,7 @@
-import React, { Component, Fragment } from "react";
-import {
-  Grid,
-  Typography,
-  Container,
-  Box,
-  withStyles
-} from "@material-ui/core";
+import React, { Fragment } from "react";
+import { Grid, Typography, Container, withStyles } from "@material-ui/core";
+
+import Form from "components/form/form";
 
 const styles = {
   boxBorder: {
@@ -20,10 +16,14 @@ const styles = {
   }
 };
 
-class Home extends Component {
-  state = {};
+class UploadInvoice extends Form {
+  state = {
+    data: {}
+  };
+
   render() {
     const { classes } = this.props;
+
     return (
       <Fragment>
         <Grid>
@@ -31,8 +31,9 @@ class Home extends Component {
             <Container maxWidth="lg">
               <br />
               <Typography component="h5" variant="h5">
-                Home page - Coming soon
+                Home page
               </Typography>
+              <br />
             </Container>
           </main>
         </Grid>
@@ -41,4 +42,4 @@ class Home extends Component {
   }
 }
 
-export default withStyles(styles)(Home);
+export default withStyles(styles)(UploadInvoice);
