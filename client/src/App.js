@@ -6,16 +6,15 @@ import {
   BrowserRouter as Router,
   Redirect
 } from "react-router-dom";
+
 import "assets/css/formstyles.css";
 
 // Local imports
-import { getCurrentUser } from "./services/auth";
-import RootUserDashboard from "screens/dashboads/root/adminDashBoard";
-import ClientDashboard from "screens/dashboads/users/client/clientDs";
-import AdminUserDashboard from "screens/dashboads/users/admin/adminUserDs";
-
-//APPLoader
-import LoaderApp from "./components/loaderApp";
+import { LoaderApp } from "components/loader";
+import { getCurrentUser } from "services/auth";
+import RootUserDashboard from "screens/dashboads/root/rootApp";
+import ClientDashboard from "screens/dashboads/users/client/clientApp";
+import AdminUserDashboard from "screens/dashboads/users/admin/adminApp";
 
 class App extends Component {
   constructor(props) {

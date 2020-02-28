@@ -1,6 +1,6 @@
 const dev = {
-  apiUrl: "http://localhost:4000",
-  authApiUrl: "http://localhost:4001"
+  apiUrl: "http://localhost:5000",
+  authApiUrl: "http://localhost:5001"
 };
 
 const prod = {

@@ -8,10 +8,9 @@ import {
 } from "@material-ui/core";
 
 import { registerSenior } from "services/createCallsRoot";
-import OrgDataFields from "./orgDataFields";
+import AdminDataFields from "./dataFields/createAdminFields";
 import Form from "components/form/form";
 
-import * as Sentry from "@sentry/browser";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -24,7 +23,6 @@ const styles = {
   },
   content: {
     flexGrow: 1,
-    height: "100vh",
     overflow: "auto"
   }
 };
@@ -47,7 +45,6 @@ class Organizations extends Form {
 
   onSubmit = async () => {
     // Call to backend to create organisation database
-
     try {
       const { data } = this.state;
       const register = await registerSenior(data);
@@ -63,31 +60,25 @@ class Organizations extends Form {
 
     return (
       <Fragment>
-        <ToastContainer autoClose={1500} closeButton={false} />
-        <div>
+        <Grid>
+          <ToastContainer autoClose={1500} closeButton={false} />
           <main className={classes.content}>
-            <Container maxWidth="lg">
+            <Container>
               <br />
-              <Box className={classes.boxBorder}>
-                <div>
-                  <Typography component="h5" variant="h5">
-                    Create organization
-                  </Typography>
-                </div>
+              <Typography component="h5" variant="h5">
+                Register Admin
+              </Typography>
+              <br />
+              <Fragment>
+                <AdminDataFields
+                  onSubmit={this.handleSubmit}
+                  onChange={this.handleOnChange}
+                />
                 <br />
-                <div>
-                  <OrgDataFields
-                    onSubmit={this.handleSubmit}
-                    onChange={this.handleOnChange}
-                  />
-                </div>
-              </Box>
-              <Box>
-                <Grid>{/* <Table /> */}</Grid>
-              </Box>
+              </Fragment>
             </Container>
           </main>
-        </div>
+        </Grid>
       </Fragment>
     );
   }

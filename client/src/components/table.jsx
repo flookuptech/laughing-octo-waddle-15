@@ -33,7 +33,6 @@ class UserTable extends Component {
               <TableCell align="center" className={classes.tableHeader}>
                 Email
               </TableCell>
-
               <TableCell align="center" className={classes.tableHeader}>
                 Designation
               </TableCell>
