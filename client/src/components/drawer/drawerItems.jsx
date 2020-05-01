@@ -14,15 +14,48 @@ import {
   ListItemText,
   ListItemIcon,
   Icon,
-  Divider
+  Divider,
+  makeStyles,
+  Typography
 } from "@material-ui/core";
+
+
+const styles = makeStyles({
+  listItemActive: {
+    backgroundColor: 'rgba(0,0,128,0.8) !important',
+    borderLeft: '7px solid #11fedc',
+  },
+  listItemInActive: {
+    backgroundColor: '#4065e0'
+  },
+  activeIcon: {
+    color: '#11fedc'
+  },
+  inActiveIcon: {
+    color: '#11fedc',
+    opacity: 0.6
+  },
+  activeText: {
+    color: 'white',
+    textTransform: 'uppercase',
+    fontSize: 16,
+    fontWeight: 'bolder'
+  },
+  inActiveText: {
+    color: 'white',
+    opacity: 0.6,
+    textTransform: 'uppercase',
+    fontSize: 16,
+    fontWeight: 'bold'
+  }
+});
 
 export function ListRootDrawerItems() {
   const [selectedIndex, setSelectedIndex] = React.useState(1);
-
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
+  const classes = styles();
 
   return (
     <List>
@@ -31,83 +64,76 @@ export function ListRootDrawerItems() {
         component={Link}
         to="/dashboard/"
         selected={selectedIndex === 1}
+        className={selectedIndex == 1 ? classes.listItemActive: classes.listItemInActive}
         onClick={event => handleListItemClick(event, 1)}
       >
         <ListItemIcon>
-          <HomeIcon />
+          <HomeIcon className={selectedIndex == 1 ? classes.activeIcon : classes.inActiveIcon} />
         </ListItemIcon>
-        <ListItemText
-          primary="Home"
-          primaryTypographyProps={{ noWrap: true }}
-          style={{ color: "#11fedc" }}
-        />
+        <ListItemText>
+          <Typography className={selectedIndex == 1 ? classes.activeText : classes.inActiveText}>HOME</Typography>
+        </ListItemText>
       </ListItem>
       <ListItem
         button
         component={Link}
         to="/dashboard/organizations"
-        selected={selectedIndex === 3}
-        onClick={event => handleListItemClick(event, 3)}
+        selected={selectedIndex === 2}
+        className={selectedIndex == 2 ? classes.listItemActive: classes.listItemInActive}
+        onClick={event => handleListItemClick(event, 2)}
       >
         <ListItemIcon>
-          <PeopleIcon />
+          <PeopleIcon className={selectedIndex == 2 ? classes.activeIcon : classes.inActiveIcon} />
         </ListItemIcon>
-        <ListItemText
-          primary="Create Admin"
-          primaryTypographyProps={{ noWrap: true }}
-          style={{ color: "#11fedc" }}
-        />
+        <ListItemText>
+          <Typography className={selectedIndex == 2 ? classes.activeText : classes.inActiveText}>CREATE ADMIN</Typography>
+        </ListItemText>
       </ListItem>
       <ListItem
         button
         component={Link}
         to="/dashboard/tenantsList"
-        selected={selectedIndex === 4}
-        onClick={event => handleListItemClick(event, 4)}
+        selected={selectedIndex === 3}
+        className={selectedIndex == 3 ? classes.listItemActive: classes.listItemInActive}
+        onClick={event => handleListItemClick(event, 3)}
       >
         <ListItemIcon>
-          <BusinessIcon />
+          <BusinessIcon className={selectedIndex == 3 ? classes.activeIcon : classes.inActiveIcon} />
         </ListItemIcon>
-        <ListItemText
-          primary="Admins List"
-          primaryTypographyProps={{ noWrap: true }}
-          style={{ color: "#11fedc" }}
-        />
+        <ListItemText>
+          <Typography className={selectedIndex == 3 ? classes.activeText : classes.inActiveText}>ADMIN LIST</Typography>
+        </ListItemText>
       </ListItem>
       <ListItem
         button
         component={Link}
         to="/dashboard/Reports"
-        selected={selectedIndex === 5}
-        onClick={event => handleListItemClick(event, 5)}
+        selected={selectedIndex === 4}
+        className={selectedIndex == 4 ? classes.listItemActive: classes.listItemInActive}
+        onClick={event => handleListItemClick(event, 4)}
       >
         <ListItemIcon>
-          <BarChartIcon />
+          <BarChartIcon className={selectedIndex == 4 ? classes.activeIcon : classes.inActiveIcon} />
         </ListItemIcon>
-        <ListItemText
-          primary="Reports"
-          primaryTypographyProps={{ noWrap: true }}
-          style={{ color: "#11fedc" }}
-        />
+        <ListItemText>
+          <Typography className={selectedIndex == 4 ? classes.activeText : classes.inActiveText}>REPORTS</Typography>
+        </ListItemText>
       </ListItem>
       <Divider style={{ margin: "12px 0" }} />
       <ListItem
         button
         component={Link}
         to="/dashboard/account"
-        selected={selectedIndex === 6}
-        onClick={event => handleListItemClick(event, 6)}
+        onClick={event => handleListItemClick(event, 5)}
+        selected={selectedIndex === 5}
+        className={selectedIndex == 5 ? classes.listItemActive: classes.listItemInActive}
       >
         <ListItemIcon>
-          <Icon>
-            <AccountCircleRoundedIcon />
-          </Icon>
+          <AccountCircleRoundedIcon className={selectedIndex == 5 ? classes.activeIcon : classes.inActiveIcon} />
         </ListItemIcon>
-        <ListItemText
-          primary="Account"
-          primaryTypographyProps={{ noWrap: true }}
-          style={{ color: "#11fedc" }}
-        />
+        <ListItemText>
+          <Typography className={selectedIndex == 5 ? classes.activeText : classes.inActiveText}>ACCOUNT</Typography>
+        </ListItemText>
       </ListItem>
     </List>
   );
@@ -115,10 +141,10 @@ export function ListRootDrawerItems() {
 
 export function ListAdminDrawerItems() {
   const [selectedIndex, setSelectedIndex] = React.useState(1);
-
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
+  const classes = styles();
 
   return (
     <List>
@@ -127,48 +153,45 @@ export function ListAdminDrawerItems() {
         component={Link}
         to="/dashboard/"
         selected={selectedIndex === 1}
+        className={selectedIndex == 1 ? classes.listItemActive: classes.listItemInActive}
         onClick={event => handleListItemClick(event, 1)}
       >
         <ListItemIcon>
-          <HomeIcon />
+          <HomeIcon className={selectedIndex == 1 ? classes.activeIcon : classes.inActiveIcon} />
         </ListItemIcon>
-        <ListItemText
-          primary="Home"
-          primaryTypographyProps={{ noWrap: true }}
-          style={{ color: "#11fedc" }}
-        />
+        <ListItemText>
+          <Typography className={selectedIndex == 1 ? classes.activeText : classes.inActiveText}>HOME</Typography>
+        </ListItemText>
       </ListItem>
       <ListItem
         button
         component={Link}
         to="/dashboard/addUsers"
         selected={selectedIndex === 2}
+        className={selectedIndex == 2 ? classes.listItemActive: classes.listItemInActive}
         onClick={event => handleListItemClick(event, 2)}
       >
         <ListItemIcon>
-          <PersonAddIcon />
+          <PersonAddIcon className={selectedIndex == 2 ? classes.activeIcon : classes.inActiveIcon} />
         </ListItemIcon>
-        <ListItemText
-          primary="Add Client"
-          primaryTypographyProps={{ noWrap: true }}
-          style={{ color: "#11fedc" }}
-        />
+        <ListItemText>
+          <Typography className={selectedIndex == 2 ? classes.activeText : classes.inActiveText}>ADD CLIENT</Typography>
+        </ListItemText>
       </ListItem>
       <ListItem
         button
         component={Link}
         to="/dashboard/usersList"
         selected={selectedIndex === 3}
+        className={selectedIndex == 3 ? classes.listItemActive: classes.listItemInActive}
         onClick={event => handleListItemClick(event, 3)}
       >
         <ListItemIcon>
-          <PeopleIcon />
+          <PeopleIcon className={selectedIndex == 3 ? classes.activeIcon : classes.inActiveIcon} />
         </ListItemIcon>
-        <ListItemText
-          primary="Clients List"
-          primaryTypographyProps={{ noWrap: true }}
-          style={{ color: "#11fedc" }}
-        />
+        <ListItemText>
+          <Typography className={selectedIndex == 3 ? classes.activeText : classes.inActiveText}>CLIENT LIST</Typography>
+        </ListItemText>
       </ListItem>
       <Divider style={{ margin: "12px 0" }} />
       <ListItem
@@ -176,18 +199,15 @@ export function ListAdminDrawerItems() {
         component={Link}
         to="/dashboard/account"
         selected={selectedIndex === 4}
+        className={selectedIndex == 4 ? classes.listItemActive: classes.listItemInActive}
         onClick={event => handleListItemClick(event, 4)}
       >
         <ListItemIcon>
-          <Icon>
-            <AccountCircleRoundedIcon />
-          </Icon>
+          <AccountCircleRoundedIcon className={selectedIndex == 4 ? classes.activeIcon : classes.inActiveIcon} />
         </ListItemIcon>
-        <ListItemText
-          primary="Account"
-          primaryTypographyProps={{ noWrap: true }}
-          style={{ color: "#11fedc" }}
-        />
+        <ListItemText>
+          <Typography className={selectedIndex == 4 ? classes.activeText : classes.inActiveText}>ACCOUNT</Typography>
+        </ListItemText>
       </ListItem>
     </List>
   );
@@ -195,10 +215,11 @@ export function ListAdminDrawerItems() {
 
 export function ListClientDrawerItems() {
   const [selectedIndex, setSelectedIndex] = React.useState(1);
-
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
+  const classes = styles();  
+
   return (
     <List>
       <ListItem
@@ -206,32 +227,30 @@ export function ListClientDrawerItems() {
         component={Link}
         to="/dashboard/"
         selected={selectedIndex === 1}
+        className={selectedIndex == 1 ? classes.listItemActive: classes.listItemInActive}
         onClick={event => handleListItemClick(event, 1)}
       >
         <ListItemIcon>
-          <HomeRoundedIcon />
+          <HomeRoundedIcon className={selectedIndex == 1 ? classes.activeIcon : classes.inActiveIcon} />
         </ListItemIcon>
-        <ListItemText
-          primary="Home"
-          primaryTypographyProps={{ noWrap: true }}
-          style={{ color: "#11fedc" }}
-        />
+        <ListItemText>
+          <Typography className={selectedIndex == 1 ? classes.activeText : classes.inActiveText}>HOME</Typography>
+        </ListItemText>
       </ListItem>
       <ListItem
         button
         component={Link}
         to="/dashboard/uploadInvoice"
         selected={selectedIndex === 2}
+        className={selectedIndex == 2 ? classes.listItemActive: classes.listItemInActive}
         onClick={event => handleListItemClick(event, 2)}
       >
         <ListItemIcon>
-          <DescriptionRoundedIcon />
+          <DescriptionRoundedIcon className={selectedIndex == 2 ? classes.activeIcon : classes.inActiveIcon} />
         </ListItemIcon>
-        <ListItemText
-          primary="Upload Invoice"
-          primaryTypographyProps={{ noWrap: true }}
-          style={{ color: "#11fedc" }}
-        />
+        <ListItemText>
+          <Typography className={selectedIndex == 2 ? classes.activeText : classes.inActiveText}>UPLOAD INVOICE</Typography>
+        </ListItemText>
       </ListItem>
       <Divider style={{ margin: "12px 0" }} />
       <ListItem
@@ -239,18 +258,15 @@ export function ListClientDrawerItems() {
         component={Link}
         to="/dashboard/account"
         selected={selectedIndex === 3}
+        className={selectedIndex == 3 ? classes.listItemActive: classes.listItemInActive}
         onClick={event => handleListItemClick(event, 3)}
       >
         <ListItemIcon>
-          <Icon>
-            <AccountCircleRoundedIcon />
-          </Icon>
+          <AccountCircleRoundedIcon className={selectedIndex == 3 ? classes.activeIcon : classes.inActiveIcon}/>
         </ListItemIcon>
-        <ListItemText
-          primary="Account"
-          primaryTypographyProps={{ noWrap: true }}
-          style={{ color: "#11fedc" }}
-        />
+        <ListItemText>
+          <Typography className={selectedIndex == 3 ? classes.activeText : classes.inActiveText}>ACCOUNT</Typography>
+        </ListItemText>
       </ListItem>
     </List>
   );

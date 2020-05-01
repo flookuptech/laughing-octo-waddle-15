@@ -29,7 +29,7 @@ import {
 
 import NavBar from "components/drawer/navBar";
 import NavHeader from "components/drawer/profile";
-// import { TextSidebar } from "@mui-treasury/mockup/sidebars";
+import { TextSidebar } from "@mui-treasury/mockup/sidebars";
 // import Content from "components/drawer/content";
 
 const useStyles = makeStyles(theme => ({
@@ -47,7 +47,8 @@ const useStyles = makeStyles(theme => ({
     width: 40,
     borderRadius: "50%",
     border: "none",
-    backgroundColor: "rgba(0,0,0,0.24)",
+    backgroundColor: "rgba(0,0,0,0.5)",
+    //backgroundColor: '#000000',
     margin: "0 auto 16px",
     "&:hover": {
       backgroundColor: "rgba(0,0,0,0.38)"
@@ -199,7 +200,7 @@ const App = ({ children, user }) => {
               {collapsed ? <ChevronRightIcon /> : <ChevronLeftIcon />}
             </CollapseBtn>
           </Sidebar>
-
+          
           {/* Main content in the page */}
           <Content>
             <div className={styles.appBarSpacer}>
