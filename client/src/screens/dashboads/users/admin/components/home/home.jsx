@@ -1,5 +1,8 @@
 import React, { Fragment, Component } from "react";
 import { Grid, Typography, Container, withStyles, Paper, Box } from "@material-ui/core";
+import HomeTable from './homeTable';
+import { getUsers } from "services/getUsers";
+import { adminHomeTableHead } from 'components/tableHead'; 
 import HtmlTitle from "components/title";
 
 const styles = {
@@ -26,12 +29,22 @@ const styles = {
   }
 };
 
-class Account extends Component {
+class Home extends Component {
+  state = { clientsList: [] };
+
+  async componentDidMount() {
+    const db = this.props.user.orgDatabase;
+    const { data: clientsList } = await getUsers(db);
+    this.setState({ clientsList });
+  }
+
   render() {
     const { classes } = this.props;
+    const { clientsList } = this.state;
+
     return (
       <Fragment>
-        <HtmlTitle title={"Account"} />
+        <HtmlTitle title={"Home"} />
         <Grid>
           <main className={classes.content}>
             <Container maxWidth="lg">
@@ -40,9 +53,13 @@ class Account extends Component {
                 <Box className={classes.boxBorder}>
                   <div>
                     <Typography className={classes.pageHeading} component="h5" variant="h5">
-                      Account
+                      Home Page
                     </Typography>
+                  </div><br />
+                  <div>
+                      <HomeTable tableHead={adminHomeTableHead} clientsList={clientsList} />
                   </div>
+                  <br />
                 </Box>
               </Paper><br />
             </Container>
@@ -53,4 +70,4 @@ class Account extends Component {
   }
 }
 
-export default withStyles(styles)(Account);
+export default withStyles(styles)(Home);

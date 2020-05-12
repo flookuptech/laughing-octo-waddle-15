@@ -26,12 +26,12 @@ const styles = {
   }
 };
 
-class Account extends Component {
+class Dashboard extends Component {
   render() {
     const { classes } = this.props;
     return (
       <Fragment>
-        <HtmlTitle title={"Account"} />
+        <HtmlTitle title={"Reports"} />
         <Grid>
           <main className={classes.content}>
             <Container maxWidth="lg">
@@ -40,7 +40,7 @@ class Account extends Component {
                 <Box className={classes.boxBorder}>
                   <div>
                     <Typography className={classes.pageHeading} component="h5" variant="h5">
-                      Account
+                      Reports
                     </Typography>
                   </div>
                 </Box>
@@ -53,4 +53,4 @@ class Account extends Component {
   }
 }
 
-export default withStyles(styles)(Account);
+export default withStyles(styles)(Dashboard);

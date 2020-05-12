@@ -2,7 +2,6 @@ import React, { Fragment } from "react";
 import cx from "clsx";
 import {
   CssBaseline,
-  Paper,
   Toolbar,
   makeStyles,
   Container,
@@ -130,8 +129,8 @@ const config = {
       hidden: false,
       inset: false,
       variant: "permanent",
-      width: 256,
-      collapsible: true,
+      width: 246,
+      // collapsible: true,
       collapsedWidth: 64
     },
     header: {
@@ -141,7 +140,7 @@ const config = {
       persistentBehavior: "fit"
     },
     content: {
-      persistentBehavior: "fit"
+      persistentBehavior: ""
     },
     footer: {
       persistentBehavior: "fit"
@@ -206,9 +205,9 @@ const App = ({ children, user }) => {
             <div className={styles.appBarSpacer}>
               <Container>
                 <Grid container direction="column">
-                  <Grid item>
-                    <Paper>{children}</Paper>
-                  </Grid>
+                  {/* <Grid item> */}
+                    {children}
+                  {/* </Grid> */}
                 </Grid>
               </Container>
             </div>

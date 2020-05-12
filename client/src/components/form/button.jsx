@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-
 import { Button, withStyles, makeStyles } from "@material-ui/core";
 
 const BootstrapButton = withStyles({
@@ -8,10 +7,11 @@ const BootstrapButton = withStyles({
     textTransform: "none",
     fontSize: 16,
     padding: "6px 12px",
-    border: "1px solid",
+    border: "2px solid",
     lineHeight: 1.5,
-    backgroundColor: "#28a745",
-    borderColor: "#28a745",
+    fontWeight: "bold",
+    backgroundColor: "rgba(64, 101, 224, 1.0)",
+    borderColor: "rgba(64, 101, 224, 1.0)",
     fontFamily: [
       "-apple-system",
       "BlinkMacSystemFont",
@@ -25,18 +25,19 @@ const BootstrapButton = withStyles({
       '"Segoe UI Symbol"'
     ].join(","),
     "&:hover": {
-      backgroundColor: "#218838",
-      borderColor: "#1e7e34",
+      backgroundColor: "rgba(0,0,0, 0.08)",
+      borderColor: "rgba(64, 101, 224, 1.0)",
+      color: "rgba(64, 101, 224, 1.0)",
       boxShadow: "none"
     },
     "&:active": {
       boxShadow: "none",
-      backgroundColor: "#1e7e34",
-      borderColor: "##1c7430"
-    },
-    "&:focus": {
-      boxShadow: "0 0 0 0.2rem rgba(72,180,97,.5)"
+      backgroundColor: "#11fedc",
+      borderColor: "rgba(64, 101, 224, 1.0)"
     }
+    // "&:focus": {
+    //   boxShadow: "0 0 0 0.2rem rgba(64, 101, 224, 1.0)"
+    // }
   }
 })(Button);
 

@@ -3,7 +3,6 @@ import {
   makeStyles,
   InputLabel,
   MenuItem,
-  FormHelperText,
   FormControl,
   Select
 } from "@material-ui/core";
@@ -17,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export function SelectFieldRole({ onChange, role, hasError }) {
+export function SelectField({ onChange, options, label, name}) {
   const inputLabel = React.useRef(null);
   const [labelWidth, setLabelWidth] = React.useState(0);
   React.useEffect(() => {
@@ -35,22 +34,18 @@ export function SelectFieldRole({ onChange, role, hasError }) {
         required
       >
         <InputLabel ref={inputLabel} id="demo-simple-select-outlined-label">
-          Role
+            {label}
         </InputLabel>
         <Select
           onChange={onChange}
-          name="role"
+          name={name}
           labelWidth={labelWidth}
           required
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {role.map(item => {
-            return <MenuItem value={item.role}>{item.label}</MenuItem>;
+          {options.map(item => {
+            return <MenuItem value={item.value}>{item.label}</MenuItem>;
           })}
         </Select>
-        {hasError && <FormHelperText>This is required!</FormHelperText>}
       </FormControl>
     </div>
   );

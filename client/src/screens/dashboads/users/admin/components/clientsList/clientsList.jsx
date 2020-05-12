@@ -1,42 +1,71 @@
 import React, { Component, Fragment } from "react";
-import { Typography, Container, withStyles, Grid, Paper, Box} from "@material-ui/core";
-import HtmlTitle from "components/title";
-import TenantTable from "./dataFields/tenantTable";
+import {
+  Typography,
+  Container,
+  Box,
+  withStyles,
+  Grid,
+  Paper
+} from "@material-ui/core";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
-import { getAllTenants } from "services/getUsers";
-import { rootTenantTableHead } from "components/tableHead";
- 
+import { getUsers } from "services/getUsers";
+import { ToastContainer, toast } from "react-toastify";
+import UserTable from "./clientTable";
+import HtmlTitle from "components/title";
+
 const styles = {
-  pageHeading: {
-    fontWeight: 'bold'
-  },
   boxBorder: {
     border: "1px solid rgba(0, 0, 0, 0.2)",
     borderRadius: "10px",
-    opacity: "1",
-    padding: "15px"
+    padding: "25px"
   },
   content: {
     flexGrow: 1,
-    height: "auto",
     overflow: "none",
     width: '75vw'
   },
-  paper:{
-    display: 'flex',
+  paper: {
+    display: "flex",
     flexDirection: "column",
-    overflow: 'auto',
+    overflow: "auto",
     padding: 32
+  },
+  pageHeading: {
+    fontWeight: 'bold'
   }
 };
 
+const tableHead = [
+  {
+    value: 'Sr.No'
+  },
+  {
+    value: 'Name'
+  },
+  {
+    value: 'Email'
+  },
+  {
+    value: 'Designation'
+  },
+  {
+    value: 'Contact'
+  },
+  {
+    value: 'Date Registered'
+  },
+  {
+    value: 'Status'
+  }
+]
+
 class UsersList extends Component {
-  state = { tenantList: [] };
+  state = { clientsList: [] };
 
   async componentDidMount() {
-    const { data } = await getAllTenants();
-    this.setState({ tenantList: data });
+    const db = this.props.user.orgDatabase;
+    const { data: clientsList } = await getUsers(db);
+    this.setState({ clientsList });
   }
 
   // handleSwitchChange = async (e) => {
@@ -59,26 +88,25 @@ class UsersList extends Component {
 
   render() {
     const { classes } = this.props;
-    const { tenantList } = this.state;
+    const { clientsList } = this.state;
     return (
       <Fragment>
-        <HtmlTitle title={"Admin List"} />
-        <ToastContainer autoClose={1500} closeButton={false} />
+        <HtmlTitle title={"Client List"} />
         <Grid>
+          <ToastContainer autoClose={1500} closeButton={false} />
           <main className={classes.content}>
             <Container maxWidth="lg">
               <br />
-              <Paper className={classes.paper} elevation={4}>
+              <Paper className={classes.paper}>
                 <Box className={classes.boxBorder}>
                   <div>
                     <Typography className={classes.pageHeading} component="h5" variant="h5">
-                      Admin List
+                      Client List
                     </Typography>
+                  </div><br />
+                  <div>
+                    <UserTable clientsList={clientsList} tableHead={tableHead} handleChange={this.handleSwitchChange} />
                   </div>
-                  <br />
-                  <Fragment>
-                    <TenantTable tenantList={tenantList} tableHead={rootTenantTableHead} handleChange={this.handleSwitchChange} />
-                  </Fragment>
                   <br />
                 </Box>
               </Paper><br />

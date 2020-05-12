@@ -1,81 +1,89 @@
-import React, { Component } from "react";
-import { withStyles } from "@material-ui/core";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+import React from "react";
+import {
+  withStyles,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+  TablePagination
+} from "@material-ui/core";
+import TableHeaders from "components/tableHeaders.jsx";
+import Switch from "components/switch";
 
 const styles = {
   table: {
-    minWidth: 750
+    minWidth: 650,
   },
-
-  tableHeader: {
-    fontWeight: "bold",
-    fontSize: 16
+  container: {
+    maxHeight: 650,
+  },
+  root: {
+    width: "100%",
   }
 };
 
-class TenantTable extends Component {
-  render() {
-    const { tenantList, classes } = this.props;
-    return (
-      <TableContainer component={Paper}>
-        <Table
-          className={classes.table}
-          aria-label="simple table"
-          size="medium"
-        >
-          <TableHead>
-            <TableRow>
-              <TableCell align="center" className={classes.tableHeader}>
-                Name
-              </TableCell>
-              <TableCell align="center" className={classes.tableHeader}>
-                Email
-              </TableCell>
-              <TableCell align="center" className={classes.tableHeader}>
-                Contact
-              </TableCell>
-              <TableCell align="center" className={classes.tableHeader}>
-                Company Name
-              </TableCell>
-              <TableCell align="center" className={classes.tableHeader}>
-                Organization Email
-              </TableCell>
-              <TableCell align="center" className={classes.tableHeader}>
-                Pan Number
-              </TableCell>
-            </TableRow>
-          </TableHead>
+const TenantTable = ({tenantList, classes, tableHead, handleChange}) => {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+  return (
+    <Paper className={classes.root}>
+      <TableContainer className={classes.container} component={Paper}>
+        <Table stickyHeader aria-label="sticky table" className={classes.table}>
+          <TableHeaders head={tableHead} />
           <TableBody>
-            {tenantList.map(function(item, i) {
-              return (
-                <React.Fragment>
-                  <TableRow key={item._id}>
-                    <TableCell component="th" sope="row" align="center">
-                      {item.name}
-                    </TableCell>
-                    <TableCell align="center">
-                      <a href={"mailto:" + item.email}>{item.email}</a>
-                    </TableCell>
-                    <TableCell align="center">{item.contact}</TableCell>
-                    <TableCell align="center">{item.companyName}</TableCell>
-                    <TableCell align="center">
-                      <a href={"mailto:" + item.orgEmail}>{item.orgEmail}</a>
-                    </TableCell>
-                    <TableCell align="center">{item.panNumber}</TableCell>
-                  </TableRow>
-                </React.Fragment>
-              );
-            })}
-          </TableBody>
+            {console.log(tenantList)}
+          {tenantList.map(function(item, i) {
+            return (
+              <React.Fragment>
+                <TableRow key={item._id}>
+                  <TableCell component="th" sope="row" align="center">
+                    { i + 1 }
+                  </TableCell>
+                  <TableCell align="center">{item.name}</TableCell>
+                  <TableCell align="center">
+                    <a href={"mailto:" + item.email}>{item.email}</a>
+                  </TableCell>
+                  <TableCell align="center">{item.contact}</TableCell>
+                  <TableCell align="center">{item.companyName}</TableCell>
+                  <TableCell align="center">
+                    <a href={"mailto:" + item.orgEmail}>{item.orgEmail}</a>
+                  </TableCell>
+                  <TableCell align="center">{item.panNumber}</TableCell>
+                  <TableCell align="center">{item.dateCreated.split("T")[0]}</TableCell>
+                  <TableCell align="center">
+                    <Switch
+                      // onChangeHandler={() => handleChange(item)}
+                      checked={true}
+                    />
+                  </TableCell>
+                </TableRow>
+              </React.Fragment>
+            );
+          })}
+        </TableBody>
         </Table>
       </TableContainer>
-    );
-  }
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count={tenantList.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+      />
+    </Paper> 
+  );
 }
 export default withStyles(styles)(TenantTable);

@@ -1,6 +1,6 @@
-import React from "react";
-import { withStyles } from "@material-ui/core";
+import React, { Fragment } from "react";
 import {
+  withStyles,
   Table,
   TableBody,
   TableCell,
@@ -9,7 +9,7 @@ import {
   Paper,
   TablePagination
 } from "@material-ui/core";
-import TableHeaders from 'components/tableHeaders';
+import TableHeader from 'components/tableHeaders';
 
 const styles = {
   table: {
@@ -23,7 +23,7 @@ const styles = {
   }
 };
 
-const Table =  ({ classes, tableHead }) => {
+const HomeTable =  ({ classes, tableHead }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -39,7 +39,7 @@ const Table =  ({ classes, tableHead }) => {
     <Paper className={classes.root}>
       <TableContainer className={classes.container} component={Paper}>
         <Table stickyHeader aria-label="sticky table" className={classes.table}>
-          <TableHeaders head={tableHead} />
+          <TableHeader head={tableHead} />
           <TableBody>
           </TableBody>
         </Table>
@@ -53,7 +53,7 @@ const Table =  ({ classes, tableHead }) => {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
-    </Paper> 
+    </Paper>
   );
 }
-export default withStyles(styles)(Table);
+export default withStyles(styles)(HomeTable);

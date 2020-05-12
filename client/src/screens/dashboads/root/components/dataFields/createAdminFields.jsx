@@ -1,8 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { Grid, Button, TextField } from "@material-ui/core";
-
 import InputField from "components/form/inputField";
-import { SelectFieldRole } from "components/form/select";
+import { SelectField } from "components/form/select";
 
 class CreateAdminFields extends Component {
   render() {
@@ -19,7 +18,7 @@ class CreateAdminFields extends Component {
         <form onSubmit={onSubmit}>
           <div>
             <Grid container spacing={3}>
-              <Grid item xs={6} md={4} lg={3}>
+              <Grid item xs={6} md={4} lg={4}>
                 <InputField
                   required
                   id="companyName"
@@ -29,7 +28,7 @@ class CreateAdminFields extends Component {
                   autoFocus
                 />
               </Grid>
-              <Grid item xs={6} md={4} lg={3}>
+              <Grid item xs={6} md={4} lg={4}>
                 <InputField
                   required
                   id="panNumber"
@@ -38,7 +37,7 @@ class CreateAdminFields extends Component {
                   onChange={onChange}
                 />
               </Grid>
-              <Grid item xs={6} md={4} lg={3}>
+              <Grid item xs={6} md={4} lg={4}>
                 <InputField
                   required
                   id="orgEmail"
@@ -48,7 +47,7 @@ class CreateAdminFields extends Component {
                   onChange={onChange}
                 />
               </Grid>
-              <Grid item xs={6} md={4} lg={3}>
+              <Grid item xs={6} md={4} lg={4}>
                 <InputField
                   required
                   id="contact"
@@ -57,7 +56,7 @@ class CreateAdminFields extends Component {
                   onChange={onChange}
                 />
               </Grid>
-              <Grid item xs={6} md={4} lg={3}>
+              <Grid item xs={6} md={4} lg={4}>
                 <InputField
                   required
                   id="address"
@@ -66,7 +65,7 @@ class CreateAdminFields extends Component {
                   onChange={onChange}
                 />
               </Grid>
-              <Grid item xs={6} md={4} lg={3}>
+              <Grid item xs={6} md={4} lg={4}>
                 <InputField
                   required
                   id="name"
@@ -75,7 +74,7 @@ class CreateAdminFields extends Component {
                   onChange={onChange}
                 />
               </Grid>
-              <Grid item xs={6} md={4} lg={3}>
+              <Grid item xs={6} md={4} lg={4}>
                 <InputField
                   required
                   id="email"
@@ -85,7 +84,7 @@ class CreateAdminFields extends Component {
                   onChange={onChange}
                 />
               </Grid>
-              <Grid item xs={6} md={4} lg={3}>
+              <Grid item xs={6} md={4} lg={4}>
                 <InputField
                   required
                   id="designation"
@@ -94,14 +93,14 @@ class CreateAdminFields extends Component {
                   onChange={onChange}
                 />
               </Grid>
-              <Grid item xs={6} md={4} lg={3}>
-                <SelectFieldRole
+              <Grid item xs={6} md={4} lg={4}>
+                <SelectField
                   onChange={onChange}
-                  role={role}
-                  hasError={hasError}
+                  options={role}
+                  label="Role"
+                  name="role"
                 />
               </Grid>
-
               <Grid item xs={12} lg={12}>
                 <div>
                   <Button variant="contained" color="secondary" type="submit">

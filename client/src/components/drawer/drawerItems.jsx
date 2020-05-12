@@ -8,12 +8,13 @@ import PeopleIcon from "@material-ui/icons/People";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import BusinessIcon from "@material-ui/icons/Business";
 import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
+import ScheduleIcon from '@material-ui/icons/Schedule';
 import {
   List,
   ListItem,
   ListItemText,
   ListItemIcon,
-  Icon,
   Divider,
   makeStyles,
   Typography
@@ -193,20 +194,50 @@ export function ListAdminDrawerItems() {
           <Typography className={selectedIndex == 3 ? classes.activeText : classes.inActiveText}>CLIENT LIST</Typography>
         </ListItemText>
       </ListItem>
-      <Divider style={{ margin: "12px 0" }} />
       <ListItem
         button
         component={Link}
-        to="/dashboard/account"
+        to="/dashboard/completed15CB"
         selected={selectedIndex === 4}
         className={selectedIndex == 4 ? classes.listItemActive: classes.listItemInActive}
         onClick={event => handleListItemClick(event, 4)}
       >
         <ListItemIcon>
-          <AccountCircleRoundedIcon className={selectedIndex == 4 ? classes.activeIcon : classes.inActiveIcon} />
+          <AssignmentTurnedInIcon className={selectedIndex == 4 ? classes.activeIcon : classes.inActiveIcon} />
         </ListItemIcon>
         <ListItemText>
-          <Typography className={selectedIndex == 4 ? classes.activeText : classes.inActiveText}>ACCOUNT</Typography>
+          <Typography className={selectedIndex == 4 ? classes.activeText : classes.inActiveText}>COMPLETED 15CB</Typography>
+        </ListItemText>
+      </ListItem>
+      <ListItem
+        button
+        component={Link}
+        to="/dashboard/pending15CB"
+        selected={selectedIndex === 5}
+        className={selectedIndex == 5 ? classes.listItemActive: classes.listItemInActive}
+        onClick={event => handleListItemClick(event, 5)}
+      >
+        <ListItemIcon>
+          <ScheduleIcon className={selectedIndex == 5 ? classes.activeIcon : classes.inActiveIcon} />
+        </ListItemIcon>
+        <ListItemText>
+          <Typography className={selectedIndex == 5 ? classes.activeText : classes.inActiveText}>PENDING 15CB</Typography>
+        </ListItemText>
+      </ListItem>
+      <Divider style={{ margin: "12px 0" }} />
+      <ListItem
+        button
+        component={Link}
+        to="/dashboard/account"
+        selected={selectedIndex === 6}
+        className={selectedIndex == 6 ? classes.listItemActive: classes.listItemInActive}
+        onClick={event => handleListItemClick(event, 6)}
+      >
+        <ListItemIcon>
+          <AccountCircleRoundedIcon className={selectedIndex == 6 ? classes.activeIcon : classes.inActiveIcon} />
+        </ListItemIcon>
+        <ListItemText>
+          <Typography className={selectedIndex == 6 ? classes.activeText : classes.inActiveText}>ACCOUNT</Typography>
         </ListItemText>
       </ListItem>
     </List>
@@ -252,20 +283,65 @@ export function ListClientDrawerItems() {
           <Typography className={selectedIndex == 2 ? classes.activeText : classes.inActiveText}>UPLOAD INVOICE</Typography>
         </ListItemText>
       </ListItem>
-      <Divider style={{ margin: "12px 0" }} />
       <ListItem
         button
         component={Link}
-        to="/dashboard/account"
+        to="/dashboard/completed15CB"
         selected={selectedIndex === 3}
         className={selectedIndex == 3 ? classes.listItemActive: classes.listItemInActive}
         onClick={event => handleListItemClick(event, 3)}
       >
         <ListItemIcon>
-          <AccountCircleRoundedIcon className={selectedIndex == 3 ? classes.activeIcon : classes.inActiveIcon}/>
+          <AssignmentTurnedInIcon className={selectedIndex == 3 ? classes.activeIcon : classes.inActiveIcon} />
         </ListItemIcon>
         <ListItemText>
-          <Typography className={selectedIndex == 3 ? classes.activeText : classes.inActiveText}>ACCOUNT</Typography>
+          <Typography className={selectedIndex == 3 ? classes.activeText : classes.inActiveText}>COMPLETED 15CB</Typography>
+        </ListItemText>
+      </ListItem>
+      <ListItem
+        button
+        component={Link}
+        to="/dashboard/pending15CB"
+        selected={selectedIndex === 4}
+        className={selectedIndex == 4 ? classes.listItemActive: classes.listItemInActive}
+        onClick={event => handleListItemClick(event, 4)}
+      >
+        <ListItemIcon>
+          <ScheduleIcon className={selectedIndex == 4 ? classes.activeIcon : classes.inActiveIcon} />
+        </ListItemIcon>
+        <ListItemText>
+          <Typography className={selectedIndex == 4 ? classes.activeText : classes.inActiveText}>PENDING 15CB</Typography>
+        </ListItemText>
+      </ListItem>
+      <ListItem
+        button
+        component={Link}
+        to="/dashboard/reports"
+        selected={selectedIndex === 5}
+        className={selectedIndex == 5 ? classes.listItemActive: classes.listItemInActive}
+        onClick={event => handleListItemClick(event, 5)}
+      >
+        <ListItemIcon>
+          <BarChartIcon className={selectedIndex == 5 ? classes.activeIcon : classes.inActiveIcon} />
+        </ListItemIcon>
+        <ListItemText>
+          <Typography className={selectedIndex == 5 ? classes.activeText : classes.inActiveText}>REPORTS</Typography>
+        </ListItemText>
+      </ListItem>
+      <Divider style={{ margin: "12px 0" }} />
+      <ListItem
+        button
+        component={Link}
+        to="/dashboard/account"
+        selected={selectedIndex === 6}
+        className={selectedIndex == 6 ? classes.listItemActive: classes.listItemInActive}
+        onClick={event => handleListItemClick(event, 6)}
+      >
+        <ListItemIcon>
+          <AccountCircleRoundedIcon className={selectedIndex == 6 ? classes.activeIcon : classes.inActiveIcon}/>
+        </ListItemIcon>
+        <ListItemText>
+          <Typography className={selectedIndex == 6 ? classes.activeText : classes.inActiveText}>ACCOUNT</Typography>
         </ListItemText>
       </ListItem>
     </List>

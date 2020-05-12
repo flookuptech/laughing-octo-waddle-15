@@ -23,7 +23,7 @@ const styles = {
   }
 };
 
-const Table =  ({ classes, tableHead }) => {
+const PendingDetailedTable =  ({ classes, tableHead }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -56,4 +56,4 @@ const Table =  ({ classes, tableHead }) => {
     </Paper> 
   );
 }
-export default withStyles(styles)(Table);
+export default withStyles(styles)(PendingDetailedTable);
