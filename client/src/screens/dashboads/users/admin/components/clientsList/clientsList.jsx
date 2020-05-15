@@ -12,6 +12,8 @@ import { getUsers } from "services/getUsers";
 import { ToastContainer, toast } from "react-toastify";
 import UserTable from "./clientTable";
 import HtmlTitle from "components/title";
+import { clientList } from 'components/tableHead'; 
+
 
 const styles = {
   boxBorder: {
@@ -34,30 +36,6 @@ const styles = {
     fontWeight: 'bold'
   }
 };
-
-const tableHead = [
-  {
-    value: 'Sr.No'
-  },
-  {
-    value: 'Name'
-  },
-  {
-    value: 'Email'
-  },
-  {
-    value: 'Designation'
-  },
-  {
-    value: 'Contact'
-  },
-  {
-    value: 'Date Registered'
-  },
-  {
-    value: 'Status'
-  }
-]
 
 class UsersList extends Component {
   state = { clientsList: [] };
@@ -105,7 +83,7 @@ class UsersList extends Component {
                     </Typography>
                   </div><br />
                   <div>
-                    <UserTable clientsList={clientsList} tableHead={tableHead} handleChange={this.handleSwitchChange} />
+                    <UserTable clientsList={clientsList} tableHead={clientList} handleChange={this.handleSwitchChange} />
                   </div>
                   <br />
                 </Box>

@@ -7,9 +7,9 @@ import {
   TableContainer,
   TableRow,
   Paper,
-  TablePagination
+  TablePagination,
+  TableHead
 } from "@material-ui/core";
-import TableHeaders from 'components/tableHeaders';
 
 const styles = {
   table: {
@@ -20,10 +20,15 @@ const styles = {
   },
   root: {
     width: "100%",
+  },
+  tableHeader: {
+    fontWeight: "bold",
+    fontSize: 16,
+    minWidth: 200,
   }
 };
 
-const Table =  ({ classes, tableHead }) => {
+const CustomTable =  ({ classes, tableHead, tbody}) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -39,15 +44,26 @@ const Table =  ({ classes, tableHead }) => {
     <Paper className={classes.root}>
       <TableContainer className={classes.container} component={Paper}>
         <Table stickyHeader aria-label="sticky table" className={classes.table}>
-          <TableHeaders head={tableHead} />
+          <TableHead>
+            <TableRow>
+              {tableHead.map(function(item) {
+                return (
+                  <TableCell align="center" className={classes.tableHeader}>
+                    {item.value}
+                  </TableCell>
+                );
+              })}
+            </TableRow>
+          </TableHead>
           <TableBody>
+            {tbody}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        // count={clientsList.length}
+        count={tbody.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}
@@ -56,4 +72,4 @@ const Table =  ({ classes, tableHead }) => {
     </Paper> 
   );
 }
-export default withStyles(styles)(Table);
+export default withStyles(styles)(CustomTable);

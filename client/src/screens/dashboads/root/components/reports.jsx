@@ -43,7 +43,7 @@ class Reports extends Component {
                     <Typography className={classes.pageHeading} component="h5" variant="h5">
                       Reports
                     </Typography>
-                  </div><br />
+                  </div>
                 </Box>
               </Paper><br />
             </Container>

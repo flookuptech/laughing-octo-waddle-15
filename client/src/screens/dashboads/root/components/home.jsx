@@ -43,7 +43,7 @@ class Home extends Component {
                     <Typography className={classes.pageHeading} component="h5" variant="h5">
                       Home Page
                     </Typography>
-                  </div><br />
+                  </div>
                 </Box>
               </Paper><br />
             </Container>
