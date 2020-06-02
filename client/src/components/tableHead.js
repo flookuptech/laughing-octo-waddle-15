@@ -30,14 +30,14 @@ export let adminHomeTableHead = [
         value: 'Client Name'
     },
     {
-        value: 'No.of 15CB submitted'
-    },
-    {
-        value: 'No. of 15CB completed'
-    },
-    {
-        value: 'No. of 15CB pending'
+        value: '15CB Work Status'
     }
+    // {
+    //     value: 'No. of 15CB completed'
+    // },
+    // {
+    //     value: 'No. of 15CB pending'
+    // }
 ];
 
 export let adminDetailedTableHead = [
@@ -51,29 +51,36 @@ export let adminDetailedTableHead = [
     value: 'Date'
   },
   {
-    value: 'Remarks'
+    value: 'Tracking No'
   },
   {
-    value: 'Acknowledgent No'
-  },
-  {
-    value: 'UDIN'
-  },
-  {
-    value: 'Invoice'
-  },
-  {
-    value: '15CB'
-  },
-  {
-    value: 'Party/Client'
-  },
-  {
-    value: '15CA'
-  },
-  {
-    value: 'XML'
+    value: 'View Transaction'
   }
+  // },
+  // {
+  //   value: 'Remarks'
+  // },
+  // {
+  //   value: 'Acknowledgent No'
+  // },
+  // {
+  //   value: 'UDIN'
+  // },
+  // {
+  //   value: 'Invoice'
+  // },
+  // {
+  //   value: '15CB'
+  // },
+  // {
+  //   value: 'Party/Client'
+  // },
+  // {
+  //   value: '15CA'
+  // },
+  // {
+  //   value: 'XML'
+  // }
 ];
 
 export let adminCompletedSummaryTableHead = [

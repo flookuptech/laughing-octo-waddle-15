@@ -3,69 +3,85 @@ import {
   Typography,
   Container,
   Box,
-  withStyles,
   Grid,
-  Paper
+  Paper,
+  Button,
+  ButtonGroup,
 } from "@material-ui/core";
 import "react-toastify/dist/ReactToastify.css";
 import SummaryTable from './summaryTable';
-import DetailedTable from '../detailedTable';
-import { adminPendingSummaryTableHead } from 'components/tableHead';
+import DetailedTable from './detailedTable';
+import {adminPendingSummaryTableHead } from 'components/tableHead';
 import HtmlTitle from "components/title";
+import Form from "components/form/form";
+import {adminDetailedTableHead} from 'components/tableHead';
 
-const styles = {
-  pageHeading: {
-    fontWeight: 'bold'
-  },
-  boxBorder: {
-    border: "1px solid rgba(0, 0, 0, 0.2)",
-    borderRadius: "10px",
-    opacity: "1",
-    padding: "15px"
-  },
-  content: {
-    flexGrow: 1,
-    height: "auto",
-    overflow: "none",
-    maxWidth: '75vw'
-  },
-  paper:{
-    display: 'flex',
-    flexDirection: "column",
-    padding: 32
+class Pending15cb extends Form {
+  state = {
+    data: {},
+    summary: true
   }
-};
 
-class Completed15cb extends Component {
-    render(){
-        const { classes } = this.props;
-        return(
-          <Fragment>
-            <HtmlTitle title={"Pending 15CB"} />
-            <Grid>
-              <main className={classes.content}>
-                <Container maxWidth="lg">
+  handleViewChange = () => {
+    this.setState({ summary: true });
+  };
+
+  handleViewChangeDetail = () => {
+    this.setState({ summary: false });
+  };
+
+  render(){
+    const{ summary } = this.state;
+    return(
+      <Fragment>
+        <HtmlTitle title={"Pending 15CB"} />
+        <Grid>
+          <main className="content">
+            <Container maxWidth="lg">
+              <br />
+              <Paper className="paper" elevation={4}>
+                <Box className="boxBorder">
+                  <div>
+                    <Typography className="pageHeading" component="h5" variant="h5">
+                      Pending 15CB
+                    </Typography>
+                  </div><br />
+                  <div className="button-align">
+                    <ButtonGroup
+                      variant="contained"
+                    >
+                      <Button
+                        onClick={this.handleViewChange}
+                        className={summary ? 'selectedButton' : 'button-background'}
+                      >
+                        Summary
+                      </Button>
+                      <Button
+                        onClick={this.handleViewChangeDetail}
+                        className={!summary ? 'selectedButton' : 'button-background'}
+                      >
+                        All Transcations
+                      </Button>
+                    </ButtonGroup>
+                  </div><br /><br />
+                  <Fragment>
+                    {summary ? 
+                      <SummaryTable tableHead={adminPendingSummaryTableHead} /> :
+                      <DetailedTable 
+                        tableHead={adminDetailedTableHead}
+                        onSubmit={this.handleSubmit}
+                        onChange={this.handleOnChange}/>
+                    }
+                  </Fragment>
                   <br />
-                  <Paper className={classes.paper} elevation={4}>
-                    <Box className={classes.boxBorder}>
-                      <div>
-                        <Typography className={classes.pageHeading} component="h5" variant="h5">
-                          Pending 15CB
-                        </Typography>
-                      </div><br />
-                      <div>
-                        <SummaryTable tableHead={ adminPendingSummaryTableHead} /><br /><br />
-                        <DetailedTable />
-                      </div>
-                      <br />
-                    </Box>
-                  </Paper><br />
-                </Container>
-              </main>
-            </Grid>
-          </Fragment>
-        );
-    }
+                </Box>
+              </Paper><br />
+            </Container>
+          </main>
+        </Grid>
+      </Fragment>
+    );
+  }
 }
 
-export default withStyles(styles)(Completed15cb);
+export default Pending15cb;

@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import cx from "clsx";
 import {
   CssBaseline,
+  Paper,
   Toolbar,
   makeStyles,
   Container,
@@ -28,7 +29,7 @@ import {
 
 import NavBar from "components/drawer/navBar";
 import NavHeader from "components/drawer/profile";
-import { TextSidebar } from "@mui-treasury/mockup/sidebars";
+// import { TextSidebar } from "@mui-treasury/mockup/sidebars";
 // import Content from "components/drawer/content";
 
 const useStyles = makeStyles(theme => ({
@@ -46,8 +47,7 @@ const useStyles = makeStyles(theme => ({
     width: 40,
     borderRadius: "50%",
     border: "none",
-    backgroundColor: "rgba(0,0,0,0.5)",
-    //backgroundColor: '#000000',
+    backgroundColor: "rgba(0,0,0,0.24)",
     margin: "0 auto 16px",
     "&:hover": {
       backgroundColor: "rgba(0,0,0,0.38)"
@@ -82,8 +82,8 @@ const config = {
       anchor: "left",
       hidden: false,
       inset: false,
-      variant: "persistent",
-      width: 220,
+      variant: "temporary", 
+      width: 256,
       collapsible: true,
       collapsedWidth: 64
     },
@@ -129,8 +129,8 @@ const config = {
       hidden: false,
       inset: false,
       variant: "permanent",
-      width: 246,
-      // collapsible: true,
+      width: 256,
+      collapsible: true,
       collapsedWidth: 64
     },
     header: {
@@ -140,7 +140,7 @@ const config = {
       persistentBehavior: "fit"
     },
     content: {
-      persistentBehavior: ""
+      persistentBehavior: "fit"
     },
     footer: {
       persistentBehavior: "fit"
@@ -199,15 +199,16 @@ const App = ({ children, user }) => {
               {collapsed ? <ChevronRightIcon /> : <ChevronLeftIcon />}
             </CollapseBtn>
           </Sidebar>
-          
+
           {/* Main content in the page */}
           <Content>
             <div className={styles.appBarSpacer}>
               <Container>
                 <Grid container direction="column">
-                  {/* <Grid item> */}
+                  <Grid item>
                     {children}
-                  {/* </Grid> */}
+                    {/* <Paper>{children}</Paper> */}
+                  </Grid>
                 </Grid>
               </Container>
             </div>

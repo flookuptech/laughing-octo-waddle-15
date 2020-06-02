@@ -7,7 +7,10 @@ import DashboardLayout from "components/drawer";
 import Account from "components/account";
 import AddUsers from "./components/addClients";
 import Completed15cb from './components/completed15cb/completed15cb';
+import Completed15cbDetails from './components/completed15cb/15cbDetails';
 import Pending15cb from './components/pending15cb/pending15cb';
+import Pending15cbDetails from './components/pending15cb/15cbDetails';
+
 
 class AdminUserDS extends Component {
   render() {
@@ -30,12 +33,22 @@ class AdminUserDS extends Component {
             render={props => <Home user={user} {...props} />}
           />
           <Route
+            exact
             path="/dashboard/completed15CB"
             component={Completed15cb}
           />
           <Route
+            exact
             path="/dashboard/pending15CB"
             component={Pending15cb}
+          />
+          <Route
+            path="/dashboard/pending15CB/:trackingNo"
+            component={Pending15cbDetails}
+          />
+          <Route
+            path="/dashboard/completed15CB/:trackingNo"
+            component={Completed15cbDetails} 
           />
           <Route component={NotFound} />
         </Switch>

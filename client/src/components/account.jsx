@@ -1,45 +1,20 @@
 import React, { Fragment, Component } from "react";
-import { Grid, Typography, Container, withStyles, Paper, Box } from "@material-ui/core";
+import { Grid, Typography, Container, Paper, Box } from "@material-ui/core";
 import HtmlTitle from "components/title";
-
-const styles = {
-  pageHeading: {
-    fontWeight: 'bold'
-  },
-  boxBorder: {
-    border: "1px solid rgba(0, 0, 0, 0.2)",
-    borderRadius: "10px",
-    opacity: "1",
-    padding: "15px"
-  },
-  content: {
-    flexGrow: 1,
-    height: "auto",
-    overflow: "none",
-    width: '75vw'
-  },
-  paper:{
-    display: 'flex',
-    flexDirection: "column",
-    overflow: 'auto',
-    padding: 32
-  }
-};
 
 class Account extends Component {
   render() {
-    const { classes } = this.props;
     return (
       <Fragment>
         <HtmlTitle title={"Account"} />
         <Grid>
-          <main className={classes.content}>
+          <main className="content">
             <Container maxWidth="lg">
               <br />
-              <Paper className={classes.paper} elevation={4}>
-                <Box className={classes.boxBorder}>
+              <Paper className="paper" elevation={4}>
+                <Box className="boxBorder">
                   <div>
-                    <Typography className={classes.pageHeading} component="h5" variant="h5">
+                    <Typography className="pageHeading" component="h5" variant="h5">
                       Account
                     </Typography>
                   </div>
@@ -53,4 +28,4 @@ class Account extends Component {
   }
 }
 
-export default withStyles(styles)(Account);
+export default Account;

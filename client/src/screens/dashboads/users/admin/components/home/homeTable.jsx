@@ -4,6 +4,7 @@ import {
   TableRow
 } from "@material-ui/core";
 import CustomTable from 'components/table';
+import { LinearBar } from 'components/linearBar.jsx';
 
 const HomeTable =  ({tableHead, clientsList }) => {
   const tbody = clientsList.map((item, i) => {
@@ -16,10 +17,7 @@ const HomeTable =  ({tableHead, clientsList }) => {
           {item.name}
         </TableCell>
         <TableCell align="center" component="th" scope="row" >
-        </TableCell>
-        <TableCell align="center" component="th" scope="row">
-        </TableCell>
-        <TableCell align="center" component="th" scope="row">
+          <LinearBar completed={10} pending={30}/>
         </TableCell>
       </TableRow>
     );

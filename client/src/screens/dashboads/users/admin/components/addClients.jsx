@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Typography, Box, withStyles, Container, Grid, Paper } from "@material-ui/core";
+import { Typography, Box, Container, Grid, Paper } from "@material-ui/core";
 import UserDataFields from "./dataFields/userDataFields";
 import Form from "components/form/form";
 import { createUser } from "services/createUserSenior";
@@ -7,28 +7,6 @@ import "react-toastify/dist/ReactToastify.css";
 import * as Sentry from "@sentry/browser";
 import { ToastContainer, toast } from "react-toastify";
 import HtmlTitle from "components/title";
-
-const styles = {
-  boxBorder: {
-    border: "1px solid rgba(0, 0, 0, 0.2)",
-    borderRadius: "10px",
-    padding: "25px"
-  },
-  content: {
-    flexGrow: 1,
-    overflow: "none",
-    width: '75vw'
-  },
-  paper: {
-    display: "flex",
-    flexDirection: "column",
-    overflow: "auto",
-    padding: 32
-  },
-  pageHeading: {
-    fontWeight: 'bold'
-  }
-};
 
 class AddUsers extends Form {
   state = {
@@ -66,19 +44,18 @@ class AddUsers extends Form {
   };
 
   render() {
-    const { classes } = this.props;
     return (
       <Fragment>
         <HtmlTitle title={"Add Client"} />
         <Grid>
           <ToastContainer autoClose={1500} closeButton={false} />
-          <main className={classes.content}>
+          <main className="content">
             <Container maxWidth="lg">
               <br />
-              <Paper className={classes.paper} elevation={4}>
-                <Box className={classes.boxBorder}>
+              <Paper className="paper" elevation={4}>
+                <Box className="boxBorder">
                   <div>
-                    <Typography className={classes.pageHeading} component="h5" variant="h5">
+                    <Typography className="pageHeading" component="h5" variant="h5">
                       Register Users
                     </Typography>
                   </div><br />
@@ -99,4 +76,4 @@ class AddUsers extends Form {
   }
 }
 
-export default withStyles(styles)(AddUsers);
+export default AddUsers;

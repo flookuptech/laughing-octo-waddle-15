@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { withStyles } from "@material-ui/core";
 import {
   Table,
@@ -17,14 +17,15 @@ const styles = {
   },
   container: {
     maxHeight: 650,
+    maxWidth: 1200
   },
   root: {
     width: "100%",
   },
   tableHeader: {
     fontWeight: "bold",
-    fontSize: 16,
-    minWidth: 200,
+    fontSize: 16, 
+    minWidth: 100,
   }
 };
 
@@ -41,7 +42,8 @@ const CustomTable =  ({ classes, tableHead, tbody}) => {
     setPage(0);
   };
   return (
-    <Paper className={classes.root}>
+    // <Paper className={classes.root}>
+    <Fragment>
       <TableContainer className={classes.container} component={Paper}>
         <Table stickyHeader aria-label="sticky table" className={classes.table}>
           <TableHead>
@@ -69,7 +71,7 @@ const CustomTable =  ({ classes, tableHead, tbody}) => {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
-    </Paper> 
+    </Fragment> 
   );
 }
 export default withStyles(styles)(CustomTable);

@@ -3,7 +3,6 @@ import {
   Typography,
   Container,
   Box,
-  withStyles,
   Grid,
   Paper
 } from "@material-ui/core";
@@ -12,30 +11,7 @@ import { getUsers } from "services/getUsers";
 import { ToastContainer, toast } from "react-toastify";
 import UserTable from "./clientTable";
 import HtmlTitle from "components/title";
-import { clientList } from 'components/tableHead'; 
-
-
-const styles = {
-  boxBorder: {
-    border: "1px solid rgba(0, 0, 0, 0.2)",
-    borderRadius: "10px",
-    padding: "25px"
-  },
-  content: {
-    flexGrow: 1,
-    overflow: "none",
-    width: '75vw'
-  },
-  paper: {
-    display: "flex",
-    flexDirection: "column",
-    overflow: "auto",
-    padding: 32
-  },
-  pageHeading: {
-    fontWeight: 'bold'
-  }
-};
+import { clientList } from 'components/tableHead';
 
 class UsersList extends Component {
   state = { clientsList: [] };
@@ -65,20 +41,19 @@ class UsersList extends Component {
   // };
 
   render() {
-    const { classes } = this.props;
     const { clientsList } = this.state;
     return (
       <Fragment>
         <HtmlTitle title={"Client List"} />
         <Grid>
           <ToastContainer autoClose={1500} closeButton={false} />
-          <main className={classes.content}>
+          <main className="content">
             <Container maxWidth="lg">
               <br />
-              <Paper className={classes.paper}>
-                <Box className={classes.boxBorder}>
+              <Paper className="paper">
+                <Box className="boxBorder">
                   <div>
-                    <Typography className={classes.pageHeading} component="h5" variant="h5">
+                    <Typography className="pageHeading" component="h5" variant="h5">
                       Client List
                     </Typography>
                   </div><br />
@@ -96,4 +71,4 @@ class UsersList extends Component {
   }
 }
 
-export default withStyles(styles)(UsersList);
+export default UsersList;
