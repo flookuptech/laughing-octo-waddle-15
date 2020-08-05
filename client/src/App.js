@@ -4,7 +4,7 @@ import {
   Route,
   Switch,
   BrowserRouter as Router,
-  Redirect
+  Redirect,
 } from "react-router-dom";
 
 import "assets/css/formstyles.css";
@@ -17,18 +17,15 @@ import ClientDashboard from "screens/dashboads/users/client/clientApp";
 import AdminUserDashboard from "screens/dashboads/users/admin/adminApp";
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      user: null,
-      role: ""
-    };
-  }
+  state = {
+    user: "",
+    role: "",
+  };
 
   UNSAFE_componentWillMount() {
     try {
       const user = getCurrentUser();
-      if (user !== null) this.setState({ user, role: user.role });
+      if (user) this.setState({ user, role: user.role });
     } catch (error) {
       return null;
     }
@@ -50,7 +47,7 @@ class App extends Component {
                 <Route exact path="/" component={Login} />
                 <Route
                   path="/dashboard/"
-                  render={props => {
+                  render={(props) => {
                     if (!user) return <Redirect exact to="/" />;
                     if (user.role === "root")
                       return (

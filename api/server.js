@@ -1,63 +1,35 @@
-// Packages
-const express = require("express");
-const app = express();
-const cors = require("cors");
-const mongoose = require("mongoose");
 require("dotenv").config();
+const mongoose = require("mongoose");
 
-app.use(cors());
-app.use(express.json({ limit: "50mb" }));
+process.on("uncaughtException", (err) => {
+  // console.log("UNHANDLED EXCEPTION! SHUTTING DOWN...");
+  console.log(err, err.message);
+  // process.exit(1);
+});
 
-//Local imports
-const connect = require("./routes/connect");
-const sendMail = require("./routes/sendMail");
-// const fileUpload = require("./routes/fileUpload");
+const app = require("./app");
 
-console.log("API CACB App...");
+const uri = process.env.MONGO_LOCAL_URI;
 
-// Check if the jwt private key is set or not
-if (!process.env.CACB_JWT_PRIVATEKEY) {
-  console.log("FATAL ERROR: Set CACB_JWT_PRIVATEKEY.");
-  process.exit(1);
-}
+mongoose
+  .connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  })
+  .then(() => console.log("Connected to 15cacb-api database"));
 
-// Check if the email account password is set or not
-if (!process.env.CACB_MAIL_PASSWORD) {
-  console.log(
-    "FATAL ERROR: Set CACB_MAIL_PASSWORD emailing account password (tech@flookup.com). "
-  );
-  process.exit(1);
-}
-
-// Check if the database password is set or not
-if (!process.env.CACB_DB_PASSWORD) {
-  console.log(
-    "FATAL ERROR: Set CACB_DB_PASSWORD password (tech@flookup.com). "
-  );
-  process.exit(1);
-}
-
-// if (!process.env.FAR_AWS_ACCESSKEY_ID) {
-//   console.log("FATAL ERROR: Set FAR_AWS_ACCESSKEY_ID. ");
-//   process.exit(1);
-// }
-// if (!process.env.FAR_AWS_SECRETKEY) {
-//   console.log("FATAL ERROR: Set FAR_AWS_SECRETKEY. ");
-//   process.exit(1);
-// }
-
-// DB connection to authentication database
-mongoose.set("useNewUrlParser", true);
-mongoose.set("useUnifiedTopology", true);
-mongoose.set("useCreateIndex", true);
-
-// Routes
-app.use("/connect", connect);
-app.use("/sendMail", sendMail);
-// app.use("/imageUpload", fileUpload);
-
-// Port
 const PORT = 5000;
-app.listen(PORT, () => console.log(`Api app listening on port ${PORT}...`));
+// eslint-disable-next-line no-console
+const server = app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
-module.exports = app;
+process.on("unhandledRejection", (err) => {
+  console.log(err.name, err.message);
+  console.log(err);
+
+  // console.log("UNHANDLED REJECTION! SHUTTING DOWN...");
+  // server.close(() => {
+  //   process.exit(1);
+  // });
+});

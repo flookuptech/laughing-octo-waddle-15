@@ -44,7 +44,7 @@ const uri = dbUriFuncAuth(dbName);
 mongoose
   .connect(uri)
   .then(() => console.log(`Connected to auth database..`))
-  .catch(err => console.log("Could not connect to auth database: ", err));
+  .catch((err) => console.log("Could not connect to auth database: ", err));
 
 // Routes
 app.use("/login", auth);
