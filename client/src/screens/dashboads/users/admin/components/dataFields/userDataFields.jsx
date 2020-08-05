@@ -1,12 +1,19 @@
 import React, { Component } from "react";
 import { Grid, Button } from "@material-ui/core";
-
 import InputField from "components/form/inputField";
+import { SelectField } from "components/form/select";
+import CustomButton from "components/form/button";
 
 class userDataFields extends Component {
   state = {};
 
   render() {
+    const role = [
+      {
+        value: "client",
+        label: "Client"
+      }
+    ];
     const { onChange, onSubmit } = this.props;
 
     return (
@@ -60,25 +67,16 @@ class userDataFields extends Component {
                 onChange={onChange}
               />
             </Grid>
-            <Grid item xs={6} md={3} lg={4} className="select-button-padding">
-              <select
-                name="role"
+            <Grid item xs={6} md={4} lg={6}>
+              <SelectField
                 onChange={onChange}
-                required
-                className="select-button-styles"
-              >
-                <option disabled selected value={null}>
-                  Type
-                </option>
-                <option value="client">Client</option>
-              </select>
+                options={role}
+                label="Role"
+                name="role"
+              />
             </Grid>
             <Grid item xs={12} md={4} lg={4}>
-              <div>
-                <Button variant="contained" color="secondary" type="submit">
-                  Register Client
-                </Button>
-              </div>
+              <CustomButton name="Register User" type="submit" />
             </Grid>
           </Grid>
         </div>

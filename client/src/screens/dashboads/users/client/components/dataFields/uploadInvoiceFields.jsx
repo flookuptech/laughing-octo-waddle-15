@@ -62,7 +62,7 @@ const UploadInvoiceDataFields = ({ onSubmit, onChange }) => {
               onChange={onChange}
               placeholder="Type your remarks here, if any"
               style={{
-                backgroundColor: "#f5feff",
+                backgroundColor: "rgba(64, 101, 224, 0.1)",
                 boxShadow: "inset 2px 2px 2px 0px #ddd",
                 borderRadius: "3px",
                 outline: "none",

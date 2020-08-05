@@ -82,8 +82,8 @@ const config = {
       anchor: "left",
       hidden: false,
       inset: false,
-      variant: "persistent",
-      width: 220,
+      variant: "temporary", 
+      width: 256,
       collapsible: true,
       collapsedWidth: 64
     },
@@ -206,7 +206,8 @@ const App = ({ children, user }) => {
               <Container>
                 <Grid container direction="column">
                   <Grid item>
-                    <Paper>{children}</Paper>
+                    {children}
+                    {/* <Paper>{children}</Paper> */}
                   </Grid>
                 </Grid>
               </Container>

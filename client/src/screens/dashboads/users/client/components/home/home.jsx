@@ -1,5 +1,7 @@
 import React, { Fragment, Component } from "react";
 import { Grid, Typography, Container, withStyles, Paper, Box } from "@material-ui/core";
+import HomeTable from './homeTable';
+import { clientHomeTableHead } from 'components/tableHead';
 import HtmlTitle from "components/title";
 
 const styles = {
@@ -26,13 +28,12 @@ const styles = {
   }
 };
 
-class Reports extends Component {
+class Home extends Component {
   render() {
     const { classes } = this.props;
-
     return (
       <Fragment>
-        <HtmlTitle title={"Reports"} />
+        <HtmlTitle title={"Home"} />
         <Grid>
           <main className={classes.content}>
             <Container maxWidth="lg">
@@ -41,9 +42,13 @@ class Reports extends Component {
                 <Box className={classes.boxBorder}>
                   <div>
                     <Typography className={classes.pageHeading} component="h5" variant="h5">
-                      Reports
+                      Home Page
                     </Typography>
+                  </div><br />
+                  <div>
+                      <HomeTable tableHead={clientHomeTableHead} />
                   </div>
+                  <br />
                 </Box>
               </Paper><br />
             </Container>
@@ -54,4 +59,4 @@ class Reports extends Component {
   }
 }
 
-export default withStyles(styles)(Reports);
+export default withStyles(styles)(Home);

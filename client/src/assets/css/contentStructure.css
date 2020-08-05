@@ -1,0 +1,39 @@
+.content{
+    flex-grow: 1px;
+    height: auto;
+    overflow: auto;
+    width: 100%;
+}
+.pageHeading{
+    font-weight: bold !important;
+}
+.boxBorder{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 25px;
+}
+.paper{
+    display: 'flex';
+    flex-direction: 'column';
+    overflow: auto;
+    padding: 32px;
+}
+
+
+@media screen and (max-width: 600px) {
+    .content {
+        max-width: 90vw;
+        height: fit-content;
+    }
+    .paper{
+        display: 'flex';
+        flex-direction: 'column';
+        /* overflow: auto; */
+        padding: 16px;
+    }
+    .boxBorder{
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        padding: 15px;
+    }
+}

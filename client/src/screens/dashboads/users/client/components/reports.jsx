@@ -26,10 +26,9 @@ const styles = {
   }
 };
 
-class Reports extends Component {
+class Dashboard extends Component {
   render() {
     const { classes } = this.props;
-
     return (
       <Fragment>
         <HtmlTitle title={"Reports"} />
@@ -54,4 +53,4 @@ class Reports extends Component {
   }
 }
 
-export default withStyles(styles)(Reports);
+export default withStyles(styles)(Dashboard);

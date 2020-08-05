@@ -1,67 +1,77 @@
-import React, { Component } from "react";
+import React, { Fragment } from "react";
 import { withStyles } from "@material-ui/core";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+  TablePagination,
+  TableHead
+} from "@material-ui/core";
 
 const styles = {
   table: {
-    minWidth: 650
+    minWidth: 650,
   },
-
+  container: {
+    maxHeight: 650,
+    maxWidth: 1200
+  },
+  root: {
+    width: "100%",
+  },
   tableHeader: {
     fontWeight: "bold",
-    fontSize: 16
+    fontSize: 16, 
+    minWidth: 100,
   }
 };
 
-class UserTable extends Component {
-  render() {
-    const { clientsList, classes } = this.props;
-    return (
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="simple table">
+const CustomTable =  ({ classes, tableHead, tbody}) => {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+  return (
+    // <Paper className={classes.root}>
+    <Fragment>
+      <TableContainer className={classes.container} component={Paper}>
+        <Table stickyHeader aria-label="sticky table" className={classes.table}>
           <TableHead>
             <TableRow>
-              <TableCell align="center" className={classes.tableHeader}>
-                Name
-              </TableCell>
-              <TableCell align="center" className={classes.tableHeader}>
-                Email
-              </TableCell>
-              <TableCell align="center" className={classes.tableHeader}>
-                Designation
-              </TableCell>
-              <TableCell align="center" className={classes.tableHeader}>
-                Contact
-              </TableCell>
+              {tableHead.map(function(item) {
+                return (
+                  <TableCell align="center" className={classes.tableHeader}>
+                    {item.value}
+                  </TableCell>
+                );
+              })}
             </TableRow>
           </TableHead>
           <TableBody>
-            {clientsList.map(function(item, i) {
-              return (
-                <React.Fragment>
-                  <TableRow key={item._id}>
-                    <TableCell align="center" component="th" scope="row">
-                      {item.name}
-                    </TableCell>
-                    <TableCell align="center">
-                      <a href={"mailto:" + item.email}>{item.email}</a>
-                    </TableCell>
-                    <TableCell align="center">{item.designation}</TableCell>
-                    <TableCell align="center">{item.contact}</TableCell>
-                  </TableRow>
-                </React.Fragment>
-              );
-            })}
+            {tbody}
           </TableBody>
         </Table>
       </TableContainer>
-    );
-  }
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count={tbody.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+      />
+    </Fragment> 
+  );
 }
-export default withStyles(styles)(UserTable);
+export default withStyles(styles)(CustomTable);

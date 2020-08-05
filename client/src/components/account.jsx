@@ -1,41 +1,25 @@
-import React, { Fragment } from "react";
-import { Grid, Typography, Container, withStyles } from "@material-ui/core";
-
-import Form from "./form/form";
+import React, { Fragment, Component } from "react";
+import { Grid, Typography, Container, Paper, Box } from "@material-ui/core";
 import HtmlTitle from "components/title";
 
-const styles = {
-  boxBorder: {
-    border: "1px solid rgba(0, 0, 0, 0.2)",
-    borderRadius: "10px",
-    opacity: "1",
-    padding: "15px"
-  },
-  content: {
-    flexGrow: 1,
-    overflow: "auto"
-  }
-};
-
-class UploadInvoice extends Form {
-  state = {
-    data: {}
-  };
-
+class Account extends Component {
   render() {
-    const { classes } = this.props;
-
     return (
       <Fragment>
-        <HtmlTitle title="Account page" />
+        <HtmlTitle title={"Account"} />
         <Grid>
-          <main className={classes.content}>
+          <main className="content">
             <Container maxWidth="lg">
               <br />
-              <Typography component="h5" variant="h5">
-                Account Page
-              </Typography>
-              <br />
+              <Paper className="paper" elevation={4}>
+                <Box className="boxBorder">
+                  <div>
+                    <Typography className="pageHeading" component="h5" variant="h5">
+                      Account
+                    </Typography>
+                  </div>
+                </Box>
+              </Paper><br />
             </Container>
           </main>
         </Grid>
@@ -44,4 +28,4 @@ class UploadInvoice extends Form {
   }
 }
 
-export default withStyles(styles)(UploadInvoice);
+export default Account;
