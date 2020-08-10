@@ -194,8 +194,8 @@ const userSchema = new mongoose.Schema(
 //   return token;
 // };
 
-const conn = mongoose.connection.useDb("authDb");
+const authDb = mongoose.connection.useDb("authDb");
 
-const User = conn.model("Users", userSchema);
+const User = authDb.model("Users", userSchema);
 
 module.exports = User;

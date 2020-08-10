@@ -108,6 +108,18 @@ exports.upload15CaOrXml = catchAsync(async (req, res, next) => {
   await z.emptyDir(req.body.user, docType);
 });
 
+exports.getTranscationByID = catchAsync(async (req, res, next) => {
+  const transcation = await Invoice.findById({ _id: req.params.id });
+
+  res.status(201).json({
+    status: "success",
+    results: transcation.length,
+    data: {
+      transcation,
+    },
+  });
+});
+
 exports.getAllTranscations = catchAsync(async (req, res, next) => {
   const features = new ApiFeatures(Invoice.find(), req)
     .filter()
