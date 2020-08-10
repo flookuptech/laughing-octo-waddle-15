@@ -32,8 +32,6 @@ exports.userUploadsInvoice = catchAsync(async (req, res, next) => {
 
   const doc = await Invoice.create(invoiceData);
 
-  await z.emptyDir(req.body.user, docType);
-
   res.status(201).json({
     status: "success",
     data: {
@@ -55,6 +53,7 @@ exports.adminUploads15CB = catchAsync(async (req, res, next) => {
     udin: req.body.udin,
     partyName: req.body.partyName,
     status: "complete",
+    isTranscationComplete: true,
     cbLink: objectS3.Location,
     textFrom15CB: data[0],
   };
@@ -64,8 +63,6 @@ exports.adminUploads15CB = catchAsync(async (req, res, next) => {
     fifteenCbObj,
     { new: true, runValidators: true }
   );
-
-  await z.emptyDir(req.body.user, docType);
 
   res.status(201).json({
     status: "success",
@@ -79,7 +76,6 @@ exports.adminUploads15CB = catchAsync(async (req, res, next) => {
 
 exports.upload15CaOrXml = catchAsync(async (req, res, next) => {
   const docType = req.body.documentType;
-  const buffer = Buffer.from(req.file.path);
 
   const ext = req.file.mimetype.split("/")[1];
 
@@ -109,6 +105,8 @@ exports.upload15CaOrXml = catchAsync(async (req, res, next) => {
 });
 
 exports.getTranscationByID = catchAsync(async (req, res, next) => {
+  console.log(req.body);
+
   const transcation = await Invoice.findById({ _id: req.params.id });
 
   res.status(201).json({
@@ -116,6 +114,25 @@ exports.getTranscationByID = catchAsync(async (req, res, next) => {
     results: transcation.length,
     data: {
       transcation,
+    },
+  });
+});
+
+exports.updateTranscationByID = catchAsync(async (req, res, next) => {
+  const updatedTranscation = await Invoice.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  res.status(201).json({
+    status: "success",
+    results: updatedTranscation.length,
+    data: {
+      updatedTranscation,
     },
   });
 });

@@ -26,6 +26,9 @@ router
   );
 
 router.route("/transcations").get(documentController.getAllTranscations);
-router.route("/transcations/:id").get(documentController.getTranscationByID);
+router
+  .route("/transcations/:id")
+  .get(documentController.getTranscationByID)
+  .patch(documentController.updateTranscationByID);
 
 module.exports = router;

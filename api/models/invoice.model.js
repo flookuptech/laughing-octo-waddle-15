@@ -53,6 +53,10 @@ const invoiceSchema = mongoose.Schema(
       default: "pending",
       enum: ["pending", "complete"],
     },
+    isTranscationComplete: {
+      type: Boolean,
+      default: false,
+    },
     userId: {
       type: String,
     },
