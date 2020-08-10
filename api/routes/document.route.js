@@ -25,7 +25,8 @@ router
     documentController.upload15CaOrXml
   );
 
-router.route("/transcations").get(documentController.getAllTranscations);
+router.route("/transcations").get(documentController.getTranscations);
+
 router
   .route("/transcations/:id")
   .get(documentController.getTranscationByID)

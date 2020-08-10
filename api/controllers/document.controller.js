@@ -105,8 +105,6 @@ exports.upload15CaOrXml = catchAsync(async (req, res, next) => {
 });
 
 exports.getTranscationByID = catchAsync(async (req, res, next) => {
-  console.log(req.body);
-
   const transcation = await Invoice.findById({ _id: req.params.id });
 
   res.status(201).json({
@@ -137,7 +135,7 @@ exports.updateTranscationByID = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getAllTranscations = catchAsync(async (req, res, next) => {
+exports.getTranscations = catchAsync(async (req, res, next) => {
   const features = new ApiFeatures(Invoice.find(), req)
     .filter()
     .sort("-updatedAt")
