@@ -36,8 +36,8 @@ const payloadCreator = (req) => {
       designation: req.body.designation,
     },
     companyDetails: {
-      name: req.body.companyName,
-      email: req.body.companyEmail,
+      companyName: req.body.companyName,
+      companyEmail: req.body.companyEmail,
     },
     userType: req.body.userType,
     userRole: req.body.userRole,
@@ -99,5 +99,24 @@ exports.clientSignupFilter = catchAsyncError(async (req, res, next) => {
 
   if (user) return next(new AppError("Email-id already in use", 401));
 
+  req.body.payload = payload;
+
   next();
 });
+
+exports.loginFilter = (req, res, next) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return next(new AppError("Please provide valid email & password", 400));
+  }
+
+  next();
+};
+
+exports.workspaceFilter = (req, res, next) => {
+  const workspace = req.body.workspace.toLowerCase();
+
+  if (!workspace) return next(new AppError("Provide a workspace-id", 401));
+  next();
+};

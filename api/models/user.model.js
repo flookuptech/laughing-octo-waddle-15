@@ -7,14 +7,9 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const slug = require("url-slug");
 const randomstring = require("randomstring");
+const contextService = require("request-context");
 
 const slugify = (val, padText) => slug(val, { separator: "_" }) + padText;
-
-const randString = () =>
-  randomstring.generate({
-    length: 8,
-    charset: "alphanumeric",
-  });
 
 const userSchema = new mongoose.Schema(
   {
@@ -58,16 +53,18 @@ const userSchema = new mongoose.Schema(
         validate: [validator.isAlphanumeric, "Invalid designation provided"],
       },
     },
+    registeredBy: {
+      type: mongoose.Schema.Types.ObjectId,
+    },
     companyDetails: {
-      name: {
+      companyName: {
         type: String,
         trim: true,
         minlength: 3,
         maxlength: 50,
-        unique: true,
         required: [true, "Company name is required"],
       },
-      email: {
+      companyEmail: {
         type: String,
         trim: true,
         lowercase: true,
@@ -77,7 +74,6 @@ const userSchema = new mongoose.Schema(
     },
     workspace: {
       type: String,
-      unique: true,
       trim: true,
       required: [true, "User workspace cannot be empty"],
       validate: [validator.isSlug, "Invalid workspace slug"],
@@ -100,12 +96,12 @@ const userSchema = new mongoose.Schema(
         values: ["admin", "client", "super"],
         message: "User role can be either `admin` or `client`",
       },
-      validate: {
-        validator(el) {
-          return el === "super" && this.userType === "root";
-        },
-        message: "Only user with role as `super` can have `root` access",
-      },
+      // validate: {
+      //   validator(el) {
+      //     return el === "super" && this.userType === "root";
+      //   },
+      //   message: "Only user with role as `super` can have `root` access",
+      // },
     },
     userType: {
       type: String,
@@ -117,15 +113,11 @@ const userSchema = new mongoose.Schema(
       required: [true, "User type is required"],
       validate: {
         validator(el) {
-          return el === "root" && this.userRole === "super";
+          if (el === "client" && this.userRole !== "super") return true;
+          if (el === "root" && this.userRole === "super") return true;
         },
         message: "Root user role must be `super`",
       },
-      // registeredBy: {
-      //   type: String,
-      //   minlength: 3,
-      //   required: [true, "User email-id  is required"],
-      // },
     },
   },
   {
@@ -139,11 +131,15 @@ const userSchema = new mongoose.Schema(
 
 userSchema.pre("validate", async function (next) {
   if (this.userType === "root" && this.userRole === "super") {
+    this.registeredBy = contextService.get("req.user._id");
     this.workspace = "15cacb_main_db";
   } else if (this.userType === "client" && this.userRole === "admin") {
-    this.workspace = slugify(this.companyDetails.name, "_t");
+    this.registeredBy = contextService.get("req.user._id");
+    this.workspace = slugify(this.companyDetails.companyName, "_t");
   } else if (this.userType === "client" && this.userRole === "client") {
-    this.workspace = "CONTEXT";
+    this.workspace = contextService.get("req.user.workspace");
+    console.log(contextService.get("req.user._id"));
+    this.registeredBy = contextService.get("req.user._id");
   }
 
   next();
@@ -170,7 +166,7 @@ userSchema.methods.generateAuthToken = function () {
     {
       _id: this._id,
       userDetails: this.userDetails,
-      companyName: this.companyName,
+      companyName: this.companyDetails.companyName,
       workspace: this.workspace,
       userRole: this.userRole,
       userType: this.userType,
@@ -180,6 +176,6 @@ userSchema.methods.generateAuthToken = function () {
   return token;
 };
 
-const User = mongoose.model("Users", userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;

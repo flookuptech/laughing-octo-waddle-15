@@ -5,6 +5,7 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const slug = require("url-slug");
 const randomstring = require("randomstring");
+const contextService = require("request-context");
 
 const slugify = (val, padText) => slug(val, { separator: "_" }) + padText;
 
@@ -57,7 +58,7 @@ const tenantSchema = mongoose.Schema(
       },
     },
     companyDetails: {
-      name: {
+      companyName: {
         type: String,
         trim: true,
         minlength: 3,
@@ -65,7 +66,7 @@ const tenantSchema = mongoose.Schema(
         unique: true,
         required: [true, "Company name is required"],
       },
-      email: {
+      companyEmail: {
         type: String,
         trim: true,
         lowercase: true,
@@ -75,7 +76,6 @@ const tenantSchema = mongoose.Schema(
     },
     workspace: {
       type: String,
-      unique: true,
       trim: true,
       required: [true, "Tenant workspace cannot be empty"],
       validate: [validator.isSlug, "Invalid workspace slug"],
@@ -119,7 +119,8 @@ const tenantSchema = mongoose.Schema(
 );
 
 tenantSchema.pre("validate", async function (next) {
-  this.workspace = slugify(this.companyDetails.name, "_t");
+  this.workspace = slugify(this.companyDetails.companyName, "_t");
+  this.registeredBy = contextService.get("req.user._id");
   next();
 });
 
@@ -135,7 +136,7 @@ tenantSchema.methods.generateAuthToken = function () {
     {
       _id: this._id,
       userDetails: this.userDetails,
-      companyName: this.companyName,
+      companyName: this.companyDetails.companyName,
       workspace: this.workspace,
       userRole: this.userRole,
       userType: this.userType,

@@ -11,20 +11,43 @@ const catchAsyncError = require("../utils/catchAsync.util");
 const { checkDbExists } = require("../utils/dbFinder.util");
 const { tenantSchema, Tenant } = require("../models/tenant.model");
 
+exports.connectToWorkspace = catchAsyncError(async (req, res, next) => {
+  const workspaceExists = checkDbExists(req.body.workspace);
+
+  res.status(201).json({
+    status: "success",
+    data: {
+      workspaceExists,
+    },
+  });
+});
+
 exports.clientSignup = catchAsyncError(async (req, res, next) => {
-  // const message = `<h3>Welcome aboard!</h3><p>Below are your credentials to log in:</p><p>
-  //     <b>Email:</b> ${user.email}
-  //     </p><p><b>Password:</b> ${key}
-  //     </p><p>Do not share this email with anyone.</p>`;
-  // await email({
-  //   email: user.email,
-  //   subject: `15CACB XML Generator - Login ${user.userType} credentials`,
-  //   message,
-  // });
-  // res.status(201).json({
-  //   status: "success",
-  //   message: "User created successfully",
-  // });
+  console.log(req.user);
+  const { payload } = req.body;
+  const { password, key } = await rand.generatePassword();
+
+  let user = new User(payload);
+  user.password = password;
+
+  const userData = await user.save(); // Save user type:owner to `users` collection
+
+  const message = `<h3>Welcome aboard!</h3><p>Below are your credentials to log in:</p><p>
+    <b>Workspace:</b> ${userData.workspace}
+    <b>Email:</b> ${userData.userDetails.email}
+    </p><p><b>Password:</b> ${key}
+    </p><p>Do not share this email with anyone.</p>`;
+
+  await email({
+    email: userData.userDetails.email,
+    subject: `15CACB Utility - Your login credentials`,
+    message,
+  });
+
+  return res.status(201).json({
+    status: "success",
+    data: { userData },
+  });
 });
 
 exports.tenantSignup = catchAsyncError(async (req, res, next) => {
@@ -99,10 +122,6 @@ exports.tenantSignup = catchAsyncError(async (req, res, next) => {
 exports.login = catchAsyncError(async (req, res, next) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    return next(new AppError("Please provide valid email & password", 400));
-  }
-
   const user = await User.findOne({ "userDetails.email": email }).select(
     "+password"
   );
@@ -138,17 +157,12 @@ exports.protectRoute = catchAsyncError(async (req, res, next) => {
 
   if (!token) return next(new AppError("You are not logged in!", 401));
 
-  // const decoded = await promisify(jwt.verify)(
-  //   token,
-  //   process.env.CACB_JWT_PRIVATEKEY
-  // );
-
   const decoded = await promisify(jwt.verify)(
     token,
     process.env.CACB_JWT_PRIVATEKEY
   );
 
-  const currectUser = await User.findById(decoded._id);
+  const currectUser = await User.exists({ _id: decoded._id });
   if (!currectUser) {
     return next(
       new AppError(
@@ -162,21 +176,9 @@ exports.protectRoute = catchAsyncError(async (req, res, next) => {
   //   return next(new AppError("Password changed! Login again..", 401));
   // }
 
-  contextService.set("request:user", currectUser);
+  contextService.set("req:user", decoded);
 
-  req.user = currectUser;
+  req.user = decoded;
 
   next();
-});
-
-exports.connectToWorkspace = catchAsyncError(async (req, res, next) => {
-  const workspace = req.body.workspace.toString().toLowerCase();
-  const workspaceExists = checkDbExists(workspace);
-
-  res.status(201).json({
-    status: "success",
-    data: {
-      workspaceExists,
-    },
-  });
 });

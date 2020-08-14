@@ -8,7 +8,13 @@ const reqController = require("../controllers/req.controller");
 
 // router.param('id', userController.checkForId);
 
-router.post("/workspace", authController.connectToWorkspace);
+router.post(
+  "/workspace",
+  reqController.workspaceFilter,
+  authController.connectToWorkspace
+);
+
+router.post("/login", reqController.loginFilter, authController.login);
 
 router.post(
   "/tenantsignup",
@@ -18,11 +24,10 @@ router.post(
 
 router.post(
   "/clientsignup",
+  authController.protectRoute,
   reqController.clientSignupFilter,
   authController.clientSignup
 );
-
-router.post("/login", authController.login);
 
 // router.post("/forgotPassword", authController.forgotPassword);
 // router.patch("/resetPassword/:token", authController.resetPassword);
