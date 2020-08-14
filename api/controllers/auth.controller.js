@@ -31,7 +31,7 @@ exports.clientSignup = catchAsyncError(async (req, res, next) => {
 
   let user = new User(payload);
   user.password = password;
-
+  console.log("Password: ", key);
   const userData = await user.save(); // Save user type:owner to `users` collection
 
   const message = `<h3>Welcome aboard!</h3><p>Below are your credentials to log in:</p><p>
@@ -57,6 +57,7 @@ exports.tenantSignup = catchAsyncError(async (req, res, next) => {
 
   if (payload.userType === "root") {
     const { password, key } = await rand.generatePassword();
+    console.log("Password: ", key);
 
     let user = new User(payload);
     user.password = password;
