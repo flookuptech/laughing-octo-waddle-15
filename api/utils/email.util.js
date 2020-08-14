@@ -1,13 +1,17 @@
 const nodemailer = require("nodemailer");
 
+const host = process.env.MAILTRAP_HOST.toString();
+const port = process.env.MAILTRAP_PORT.toString();
+const user = process.env.MAILTRAP_USERNAME.toString();
+const pass = process.env.MAILTRAP_PASSWORD.toString();
+
 const sendEmail = async (options) => {
   const transporter = nodemailer.createTransport({
-    host: process.env.MAILTRAP_HOST,
-    port: process.env.MAILTRAP_PORT,
-    secure: true,
+    host,
+    port,
     auth: {
-      user: process.env.MAILTRAP_USERNAME,
-      pass: process.env.MAILTRAP_PASSWORD,
+      user,
+      pass,
     },
   });
 
