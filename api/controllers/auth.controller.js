@@ -12,7 +12,9 @@ const { checkDbExists } = require("../utils/dbFinder.util");
 const { tenantSchema, Tenant } = require("../models/tenant.model");
 
 exports.connectToWorkspace = catchAsyncError(async (req, res, next) => {
-  const workspaceExists = checkDbExists(req.body.workspace);
+  const { workspace } = req.body;
+
+  const workspaceExists = checkDbExists(workspace);
 
   res.status(201).json({
     status: "success",

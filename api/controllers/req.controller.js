@@ -115,8 +115,11 @@ exports.loginFilter = (req, res, next) => {
 };
 
 exports.workspaceFilter = (req, res, next) => {
-  const workspace = req.body.workspace.toLowerCase();
+  let { workspace } = req.body;
 
   if (!workspace) return next(new AppError("Provide a workspace-id", 401));
+
+  req.body.workspace = workspace.toLowerCase();
+
   next();
 };
