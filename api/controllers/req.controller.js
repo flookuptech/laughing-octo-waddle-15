@@ -1,6 +1,9 @@
 const ObjectID = require("mongoose").Types.ObjectId;
 
+const User = require("../models/user.model");
+const { Tenant } = require("../models/tenant.model");
 const AppError = require("../utils/appError.util");
+const catchAsyncError = require("../utils/catchAsync.util");
 
 const objectID = (id, next) => {
   const message = `Invalid id provided`;
@@ -21,6 +24,24 @@ const fields = (ackNumber, udin, partyName, next) => {
   const message = `Fields are missing`;
   if (!ackNumber || !udin || !partyName)
     return next(new AppError(message, 400));
+};
+
+const payloadCreator = (req) => {
+  return {
+    userDetails: {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      phone: req.body.phone,
+      designation: req.body.designation,
+    },
+    companyDetails: {
+      name: req.body.companyName,
+      email: req.body.companyEmail,
+    },
+    userType: req.body.userType,
+    userRole: req.body.userRole,
+  };
 };
 
 exports.form15CB = (req, res, next) => {
@@ -47,3 +68,36 @@ exports.form15CAOrXml = (req, res, next) => {
 
   next();
 };
+
+exports.tenantSignupFilter = catchAsyncError(async (req, res, next) => {
+  const payload = payloadCreator(req);
+
+  let user = await User.findOne({
+    "userDetails.email": payload.userDetails.email,
+  });
+
+  if (user) return next(new AppError("Email-id already in use", 401));
+
+  let isTenantRegistered = await Tenant.findOne({
+    "userDetails.email": payload.userDetails.email,
+  });
+
+  if (isTenantRegistered)
+    return next(new AppError("Email-id already in use", 401));
+
+  req.body.payload = payload;
+
+  next();
+});
+
+exports.clientSignupFilter = catchAsyncError(async (req, res, next) => {
+  const payload = payloadCreator(req);
+
+  let user = await User.findOne({
+    "userDetails.email": payload.userDetails.email,
+  });
+
+  if (user) return next(new AppError("Email-id already in use", 401));
+
+  next();
+});

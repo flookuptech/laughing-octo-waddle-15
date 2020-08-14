@@ -9,16 +9,10 @@ process.on("uncaughtException", (err) => {
 
 const app = require("./app");
 
-const uri = process.env.MONGO_LOCAL_URI;
-
-mongoose
-  .connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  })
-  .then(() => console.log("Connected to 15cacb-api database"));
+mongoose.set("useNewUrlParser", true);
+mongoose.set("useFindAndModify", false);
+mongoose.set("useCreateIndex", true);
+mongoose.set("useUnifiedTopology", true);
 
 const PORT = 5000;
 // eslint-disable-next-line no-console

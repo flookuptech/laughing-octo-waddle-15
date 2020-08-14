@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 const { generateRandNumber } = require("../utils/randNumber.util");
+const contextService = require("request-context");
+
+// const con = require("../utils/reqContext.util");
 
 function dateFormatter(val) {
   if (!val) return val;
@@ -157,10 +160,13 @@ const invoiceSchema = mongoose.Schema(
 );
 
 invoiceSchema.pre("save", function (next) {
+  // db = contextService.get("request:user.db");
   this.trackingNumber = generateRandNumber(8, "numeric");
   next();
 });
 
-const Invoice = mongoose.model("Invoice", invoiceSchema);
+// const userDb = mongoose.connection.useDb();
+
+const Invoice = mongoose.model("Invoices", invoiceSchema);
 
 module.exports = Invoice;

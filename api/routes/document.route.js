@@ -2,12 +2,17 @@ const express = require("express");
 const router = express.Router();
 
 const uploadMulti = require("../utils/uploadMulti.util");
+const authController = require("../controllers/auth.controller");
 const requestValidator = require("../controllers/req.controller");
 const documentController = require("../controllers/document.controller");
 
 router
   .route("/invoice")
-  .post(uploadMulti.uploadMultiFiles, documentController.userUploadsInvoice);
+  .post(
+    authController.protectRoute,
+    uploadMulti.uploadMultiFiles,
+    documentController.userUploadsInvoice
+  );
 
 router
   .route("/15cb/:id")
@@ -25,7 +30,9 @@ router
     documentController.upload15CaOrXml
   );
 
-router.route("/transcations").get(documentController.getTranscations);
+router
+  .route("/transcations")
+  .get(authController.protectRoute, documentController.getTranscations);
 
 router
   .route("/transcations/:id")

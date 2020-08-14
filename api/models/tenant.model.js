@@ -1,7 +1,5 @@
-/* eslint-disable comma-dangle */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable func-names */
 const mongoose = require("mongoose");
+const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
@@ -16,7 +14,7 @@ const randString = () =>
     charset: "alphanumeric",
   });
 
-const userSchema = new mongoose.Schema(
+const tenantSchema = mongoose.Schema(
   {
     userDetails: {
       firstName: {
@@ -79,7 +77,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       unique: true,
       trim: true,
-      required: [true, "User workspace cannot be empty"],
+      required: [true, "Tenant workspace cannot be empty"],
       validate: [validator.isSlug, "Invalid workspace slug"],
     },
     password: {
@@ -95,37 +93,20 @@ const userSchema = new mongoose.Schema(
     userRole: {
       type: String,
       minlength: 3,
-      required: [true, "User role is required"],
+      required: [true, "Tenant role is required"],
       enum: {
-        values: ["admin", "client", "super"],
-        message: "User role can be either `admin` or `client`",
-      },
-      validate: {
-        validator(el) {
-          return el === "super" && this.userType === "root";
-        },
-        message: "Only user with role as `super` can have `root` access",
+        values: ["admin"],
+        message: "Tenant role can be `admin` only",
       },
     },
     userType: {
       type: String,
       minlength: 3,
       enum: {
-        values: ["client", "root"],
-        message: "User type can be either `root` or `client`",
+        values: ["client"],
+        message: "Tenant type can be `client` only.",
       },
-      required: [true, "User type is required"],
-      validate: {
-        validator(el) {
-          return el === "root" && this.userRole === "super";
-        },
-        message: "Root user role must be `super`",
-      },
-      // registeredBy: {
-      //   type: String,
-      //   minlength: 3,
-      //   required: [true, "User email-id  is required"],
-      // },
+      required: [true, "Tenant type is required"],
     },
   },
   {
@@ -137,35 +118,19 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.pre("validate", async function (next) {
-  if (this.userType === "root" && this.userRole === "super") {
-    this.workspace = "15cacb_main_db";
-  } else if (this.userType === "client" && this.userRole === "admin") {
-    this.workspace = slugify(this.companyDetails.name, "_t");
-  } else if (this.userType === "client" && this.userRole === "client") {
-    this.workspace = "CONTEXT";
-  }
-
+tenantSchema.pre("validate", async function (next) {
+  this.workspace = slugify(this.companyDetails.name, "_t");
   next();
 });
 
-// tenantSchema.pre("save", function (next) {
-//   if (!this.isModified("password") || this.isNew) {
-//     return next();
-//   }
-
-//   this.passwordChangedAt = Date.now() - 1000;
-//   next();
-// });
-
-userSchema.methods.checkPassword = async function (
+tenantSchema.methods.checkPassword = async function (
   candidatePassword,
   userPassword
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
-userSchema.methods.generateAuthToken = function () {
+tenantSchema.methods.generateAuthToken = function () {
   const token = jwt.sign(
     {
       _id: this._id,
@@ -180,6 +145,9 @@ userSchema.methods.generateAuthToken = function () {
   return token;
 };
 
-const User = mongoose.model("Users", userSchema);
+const Tenant = mongoose.model("Tenants", tenantSchema);
 
-module.exports = User;
+module.exports = {
+  tenantSchema,
+  Tenant,
+};

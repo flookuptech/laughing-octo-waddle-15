@@ -4,12 +4,26 @@ const router = express.Router();
 
 // const userController = require("../controllers/user.controller");
 const authController = require("../controllers/auth.controller");
+const reqController = require("../controllers/req.controller");
 
 // router.param('id', userController.checkForId);
 
-router.post("/signup", authController.signup);
+router.post("/workspace", authController.connectToWorkspace);
 
-// router.post("/login", authController.login);
+router.post(
+  "/tenantsignup",
+  reqController.tenantSignupFilter,
+  authController.tenantSignup
+);
+
+router.post(
+  "/clientsignup",
+  reqController.clientSignupFilter,
+  authController.clientSignup
+);
+
+router.post("/login", authController.login);
+
 // router.post("/forgotPassword", authController.forgotPassword);
 // router.patch("/resetPassword/:token", authController.resetPassword);
 

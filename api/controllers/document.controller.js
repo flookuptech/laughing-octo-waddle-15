@@ -75,14 +75,14 @@ exports.adminUploads15CB = catchAsync(async (req, res, next) => {
 });
 
 exports.upload15CaOrXml = catchAsync(async (req, res, next) => {
-  const docType = req.body.documentType;
+  const docType = req.body.documentType.toLowerCase();
 
-  const ext = req.file.mimetype.split("/")[1];
+  const ext = req.file.mimetype.split("/")[1].toLowerCase();
 
   const objectS3 = await z.upload(req.body.user, docType);
   let fileLink = {};
 
-  if (ext === "xml") {
+  if (ext === "xml" && docType === "xml") {
     fileLink["xmlLink"] = objectS3.Location;
   } else {
     fileLink["caLink"] = objectS3.Location;
