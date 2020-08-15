@@ -138,7 +138,6 @@ userSchema.pre("validate", async function (next) {
     this.workspace = slugify(this.companyDetails.companyName, "_t");
   } else if (this.userType === "client" && this.userRole === "client") {
     this.workspace = contextService.get("req.user.workspace");
-    console.log(contextService.get("req.user._id"));
     this.registeredBy = contextService.get("req.user._id");
   }
 

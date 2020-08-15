@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const contextService = require("request-context");
 
+const dbConfig = require("../config/config");
 const email = require("../utils/email.util");
 const User = require("../models/user.model");
 const rand = require("../utils/randNumber.util");
@@ -10,6 +11,8 @@ const AppError = require("../utils/appError.util");
 const catchAsyncError = require("../utils/catchAsync.util");
 const { checkDbExists } = require("../utils/dbFinder.util");
 const { tenantSchema, Tenant } = require("../models/tenant.model");
+
+const dbListURI = dbConfig.dbURL;
 
 exports.connectToWorkspace = catchAsyncError(async (req, res, next) => {
   const { workspace } = req.body;
@@ -25,13 +28,12 @@ exports.connectToWorkspace = catchAsyncError(async (req, res, next) => {
 });
 
 exports.clientSignup = catchAsyncError(async (req, res, next) => {
-  console.log(req.user);
   const { payload } = req.body;
   const { password, key } = await rand.generatePassword();
 
   let user = new User(payload);
   user.password = password;
-  console.log("Password: ", key);
+
   const userData = await user.save(); // Save user type:owner to `users` collection
 
   const message = `<h3>Welcome aboard!</h3><p>Below are your credentials to log in:</p><p>
@@ -57,7 +59,6 @@ exports.tenantSignup = catchAsyncError(async (req, res, next) => {
 
   if (payload.userType === "root") {
     const { password, key } = await rand.generatePassword();
-    console.log("Password: ", key);
 
     let user = new User(payload);
     user.password = password;
@@ -90,7 +91,7 @@ exports.tenantSignup = catchAsyncError(async (req, res, next) => {
 
     // Save tenant details in tenant db
     const initiateTenantDbCon = await mongoose.createConnection(
-      `mongodb://localhost:27017/${registerTenant.workspace}`
+      dbListURI + registerTenant.workspace
     );
     const tenantDb = initiateTenantDbCon.useDb(registerTenant.workspace, {});
     const TenantDbModel = tenantDb.model("Users", tenantSchema);
@@ -143,7 +144,7 @@ exports.login = catchAsyncError(async (req, res, next) => {
 
   const token = user.generateAuthToken();
 
-  res.header("x-auth-token", token).status(201).json({
+  res.header("x-auth-token", token).status(200).json({
     status: "success",
   });
 });

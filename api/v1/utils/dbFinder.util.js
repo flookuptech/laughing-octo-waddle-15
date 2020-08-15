@@ -1,10 +1,10 @@
-const { promisify } = require("util");
 const mongoose = require("mongoose");
 const Admin = mongoose.mongo.Admin;
 const deasync = require("deasync");
-const AppError = require("./appError.util");
 
-const dbListURI = process.env.MONGO_DB_LIST_DEV;
+const dbConfig = require("../config/config");
+
+const dbListURI = dbConfig.dbURL;
 
 exports.checkDbExists = (dbName) => {
   let check;
@@ -28,7 +28,7 @@ exports.checkDbExists = (dbName) => {
                 useCreateIndex: true,
                 useFindAndModify: false,
               })
-              .then(() => console.log(`Connected to ${uri} database`));
+              .then(() => console.log(`Connected to '${dbName}' database`));
           }
         })
         .catch(() => console.log("Failed to search for workspaces"));
