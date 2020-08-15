@@ -20,9 +20,10 @@ exports.connectToWorkspace = catchAsyncError(async (req, res, next) => {
 
   const workspaceExists = checkDbExists(workspace);
 
-  res.status(201).json({
+  res.status(200).json({
     status: "success",
     data: {
+      workspaceId: { workspace },
       workspaceExists,
     },
   });
