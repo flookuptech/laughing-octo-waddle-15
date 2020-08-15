@@ -121,5 +121,7 @@ exports.workspaceFilter = (req, res, next) => {
 
   req.body.workspace = workspace.toLowerCase();
 
+  console.log("Filter: ", req.body.workspace);
+
   next();
 };

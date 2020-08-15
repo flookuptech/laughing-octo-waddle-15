@@ -16,6 +16,7 @@ const dbListURI = dbConfig.dbURL;
 
 exports.connectToWorkspace = catchAsyncError(async (req, res, next) => {
   const { workspace } = req.body;
+  console.log("Controller: ", workspace);
 
   const workspaceExists = checkDbExists(workspace);
 
