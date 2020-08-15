@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
-import { Grid, TextareaAutosize } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import InputField from "components/form/inputField";
+import CustomTextArea from "components/form/textArea";
 
 const UploadInvoiceDataFields = ({ onSubmit, onChange }) => {
   return (
@@ -9,7 +10,6 @@ const UploadInvoiceDataFields = ({ onSubmit, onChange }) => {
         <Grid container direction="row" spacing={2} justify="space-between">
           <Grid item lg={4} md={6} xs={12}>
             <InputField
-              required
               name="tdsRate"
               onChange={onChange}
               placeholder="Enter rate of TDS"
@@ -17,7 +17,6 @@ const UploadInvoiceDataFields = ({ onSubmit, onChange }) => {
           </Grid>
           <Grid item lg={4} md={6} xs={12}>
             <InputField
-              required
               name="remittanceCurrency"
               onChange={onChange}
               placeholder="Currency in which remittance is made"
@@ -25,7 +24,6 @@ const UploadInvoiceDataFields = ({ onSubmit, onChange }) => {
           </Grid>
           <Grid item lg={4} md={6} xs={12}>
             <InputField
-              required
               name="remittanceNature"
               onChange={onChange}
               placeholder="Nature of remittance"
@@ -33,16 +31,14 @@ const UploadInvoiceDataFields = ({ onSubmit, onChange }) => {
           </Grid>
           <Grid item lg={4} md={6} xs={12}>
             <InputField
-              required
-              name="codePurpose"
+              name="purposeCode"
               onChange={onChange}
               placeholder="Purpose of code"
             />
           </Grid>
           <Grid item lg={4} md={6} xs={12}>
             <InputField
-              required
-              name="paidTax"
+              name="taxPaid"
               onChange={onChange}
               placeholder="Please confirm is tax paid is to be grossed up"
             />
@@ -56,20 +52,12 @@ const UploadInvoiceDataFields = ({ onSubmit, onChange }) => {
             />
           </Grid>
           <Grid item lg={12} xs={12}>
-            <TextareaAutosize
-              rowsMin={5}
-              name="remarks"
+            <CustomTextArea
+              variant="pending"
               onChange={onChange}
+              name="clientRemarks"
+              rows={3}
               placeholder="Type your remarks here, if any"
-              style={{
-                backgroundColor: "rgba(64, 101, 224, 0.1)",
-                boxShadow: "inset 2px 2px 2px 0px #ddd",
-                borderRadius: "3px",
-                outline: "none",
-                resize: "none",
-                width: "100%",
-                fontSize: "16px"
-              }}
             />
           </Grid>
         </Grid>

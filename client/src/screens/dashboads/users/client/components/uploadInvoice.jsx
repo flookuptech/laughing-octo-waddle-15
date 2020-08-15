@@ -1,89 +1,122 @@
 import React, { Fragment } from "react";
-import { Grid, Typography, Container, withStyles, Paper, Box } from "@material-ui/core";
+import { Grid, Typography, Container, Paper } from "@material-ui/core";
+import { ToastContainer, toast } from "react-toastify";
 import Form from "components/form/form";
-import http from "services/httpServices";
+import { uploadClientInvoice } from "services/uploadClientInvoice";
 import FileUpload from "components/fileUpload";
+import { Publish, Send } from "@material-ui/icons";
 import CustomButton from "components/form/button";
 import UploadInvoiceDataFields from "./dataFields/uploadInvoiceFields";
 import HtmlTitle from "components/title";
 
-const styles = {
-  pageHeading: {
-    fontWeight: 'bold'
-  },
-  boxBorder: {
-    border: "1px solid rgba(0, 0, 0, 0.2)",
-    borderRadius: "10px",
-    opacity: "1",
-    padding: "15px"
-  },
-  content: {
-    flexGrow: 1,
-    height: "auto",
-    overflow: "none",
-    width: '75vw'
-  },
-  paper:{
-    display: 'flex',
-    flexDirection: "column",
-    overflow: 'auto',
-    padding: 32
-  }
-};
-
 class UploadInvoice extends Form {
   state = {
-    data: {}
+    data: {},
+    loading: false,
+    user: {},
   };
 
-  onSubmit = () => {
-    console.log(this.state.data);
+  componentDidMount() {
+    const { user } = this.props;
+    console.log(user);
+    this.setState({ user });
+  }
+
+  onSubmit = async () => {
+    const invoiceData = { ...this.state.data };
+    const user = this.state.user;
+    if (invoiceData.files) {
+      this.setState({ loading: !this.state.loading });
+      try {
+        const data = new FormData();
+        data.append("documentType", "invoice");
+        data.append("tdsRate", invoiceData.tdsRate);
+        data.append("remittanceCurrency", invoiceData.remittanceCurrency);
+        data.append("remittanceNature", invoiceData.remittanceNature);
+        data.append("purposeCode", invoiceData.purposeCode);
+        data.append("taxPaid", invoiceData.taxPaid);
+        data.append("trc", invoiceData.trc);
+        data.append("user", user._id);
+        data.append("clientRemarks", invoiceData.clientRemarks);
+        for (var x = 0; x < invoiceData.files.length; x++) {
+          data.append("invoices", invoiceData.files[x]);
+        }
+        const result = await uploadClientInvoice(data);
+        if (result.status === 201) {
+          toast.success("Invoice files uploaded succesfully");
+          this.setState({
+            data: {},
+            loading: !this.state.loading,
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        this.setState({ loading: !this.state.loading });
+      }
+    } else {
+      toast.error("Please upload Invoice files");
+    }
   };
 
   render() {
-    const { classes } = this.props;
     return (
       <Fragment>
+        <ToastContainer autoClose={1500} />
         <HtmlTitle title={"Upload Invoice"} />
         <Grid>
-          <main className={classes.content}>
+          <main className="content">
             <Container maxWidth="lg">
               <br />
-              <Paper className={classes.paper} elevation={4}>
-                <Box className={classes.boxBorder}>
-                  <div>
-                    <Typography className={classes.pageHeading} component="h5" variant="h5">
-                      Initiate Invoice file
-                    </Typography>
-                  </div><br />
-                  <div>
-                    <form onSubmit={this.handleSubmit}>
-                      <Fragment>
-                        <UploadInvoiceDataFields
-                          onChange={this.handleOnChange}
-                          onSubmit={this.handleSubmit}
-                        />
-                      </Fragment>
-                      <Fragment>
-                        <Grid container direction="row" justify="flex-end">
-                          <Grid item>
-                            <FileUpload
-                              handleClose={this.handleClose}
-                              handleOpen={this.handleOpen}
-                              handleSave={this.handleSave}
-                              open={this.state.data.open}
-                            />
-                          </Grid>
-                          <Grid item>
-                            <CustomButton name="Submit" type="submit" />
-                          </Grid>
-                        </Grid>
-                      </Fragment>
-                    </form>
-                  </div>
-                  <br />
-                </Box>
-              </Paper><br />
+              <Paper className="paper" elevation={4}>
+                <div>
+                  <Typography
+                    className="pageHeading"
+                    component="h5"
+                    variant="h5"
+                  >
+                    INITIATE TRANSACTION
+                  </Typography>
+                </div>
+                <br />
+                <br />
+                <div>
+                  <form onSubmit={this.handleSubmit}>
+                    <Fragment>
+                      <UploadInvoiceDataFields
+                        onChange={this.handleOnChange}
+                        onSubmit={this.handleSubmit}
+                      />
+                    </Fragment>
+                    <br />
+                    <CustomButton
+                      variant="outlined"
+                      color="secondary"
+                      icon={<Publish />}
+                      onClick={this.handleOpen}
+                      label="Invoice"
+                    />
+                    <FileUpload
+                      handleClose={this.handleClose}
+                      filesLimit={5}
+                      handleOpen={this.handleOpen}
+                      handleSave={this.handleSave}
+                      open={this.state.data.open}
+                    />
+                    <div style={{ float: "right" }}>
+                      <CustomButton
+                        color="primary"
+                        variant="contained"
+                        label="Submit"
+                        icon={<Send />}
+                        type="submit"
+                        loading={this.state.loading}
+                      />
+                    </div>
+                  </form>
+                </div>
+                <br />
+              </Paper>
+              <br />
             </Container>
           </main>
         </Grid>
@@ -92,4 +125,4 @@ class UploadInvoice extends Form {
   }
 }
 
-export default withStyles(styles)(UploadInvoice);
+export default UploadInvoice;

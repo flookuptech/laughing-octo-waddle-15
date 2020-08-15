@@ -11,8 +11,12 @@ class userDataFields extends Component {
     const role = [
       {
         value: "client",
-        label: "Client"
-      }
+        label: "Client",
+      },
+      {
+        value: "admin",
+        label: "Admin",
+      },
     ];
     const { onChange, onSubmit } = this.props;
 
@@ -23,9 +27,19 @@ class userDataFields extends Component {
             <Grid item xs={12} md={8} lg={6}>
               <InputField
                 required
-                id="name"
-                label="Name"
-                name="name"
+                id="firstName"
+                label="First Name"
+                name="firstName"
+                autoFocus
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid item xs={12} md={8} lg={6}>
+              <InputField
+                required
+                id="lastName"
+                label="Last Name"
+                name="lastName"
                 autoFocus
                 onChange={onChange}
               />
@@ -43,9 +57,9 @@ class userDataFields extends Component {
             <Grid item xs={12} md={8} lg={6}>
               <InputField
                 required
-                id="contact"
+                id="phone"
                 label="Contact"
-                name="contact"
+                name="phone"
                 onChange={onChange}
               />
             </Grid>
@@ -61,9 +75,19 @@ class userDataFields extends Component {
             <Grid item xs={12} md={8} lg={6}>
               <InputField
                 required
-                id="panNumber"
-                label="Pan number"
-                name="panNumber"
+                id="companyName"
+                label="Company Name"
+                name="companyName"
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid item xs={12} md={8} lg={6}>
+              <InputField
+                required
+                id="companyEmail"
+                label="Company Email"
+                type="email"
+                name="companyEmail"
                 onChange={onChange}
               />
             </Grid>
@@ -72,11 +96,16 @@ class userDataFields extends Component {
                 onChange={onChange}
                 options={role}
                 label="Role"
-                name="role"
+                name="userRole"
               />
             </Grid>
             <Grid item xs={12} md={4} lg={4}>
-              <CustomButton name="Register User" type="submit" />
+              <CustomButton
+                label="Register User"
+                type="submit"
+                variant="contained"
+                color="primary"
+              />
             </Grid>
           </Grid>
         </div>

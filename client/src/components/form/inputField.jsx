@@ -15,7 +15,7 @@ const Input = ({
   InputProps,
   className,
   variant,
-  margin
+  margin,
 }) => {
   return (
     <div className="">
@@ -45,7 +45,7 @@ Input.defaultProps = {
   type: "text",
   variant: "outlined",
   margin: "none",
-  size: "small"
+  size: "small",
 };
 
 export default Input;

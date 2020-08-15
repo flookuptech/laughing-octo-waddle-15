@@ -1,18 +1,29 @@
 import http from "./httpServices";
 import config from "../config";
 import jwtDecode from "jwt-decode";
+import { getToken } from "./getToken";
 
-const authApiEndpoint = config.authApiUrl + "/login";
+const workspaceApiEndpoint = config.apiUrl + "/v1/api/auth/workspace";
+const loginApiEndpoint = config.apiUrl + "/v1/api/auth/login";
+
 const token = "token";
 const userDetails = "User";
 
-export async function login(email, password) {
+export function workspaceAuthentication(workspace) {
+  const result = http.post(workspaceApiEndpoint, workspace);
+  return result;
+}
+
+export async function emailPassAuthentication(data) {
   try {
-    const data = await http.post(authApiEndpoint, { email, password });
-    localStorage.setItem(token, data.data);
-    const user = JSON.stringify(jwtDecode(data.data));
+    const result = await http.post(loginApiEndpoint, data);
+    const xAuthToken = result.headers["x-auth-token"];
+    const bearerToken = "Bearer " + xAuthToken;
+    localStorage.setItem(token, bearerToken);
+    http.setToken(xAuthToken);
+    const user = JSON.stringify(jwtDecode(xAuthToken));
     localStorage.setItem(userDetails, user);
-    return data;
+    return result;
   } catch (error) {
     return null;
   }
@@ -25,7 +36,7 @@ export function logoutUser() {
 
 export function getCurrentUser() {
   try {
-    const jwt = localStorage.getItem(token);
+    const jwt = getToken();
     if (jwt) {
       return jwtDecode(jwt);
     } else {
