@@ -16,14 +16,16 @@ const dbListURI = dbConfig.dbURL;
 
 exports.connectToWorkspace = catchAsyncError(async (req, res, next) => {
   const { workspace } = req.body;
-  console.log("Controller: ", workspace);
 
-  const workspaceExists = checkDbExists(workspace);
+  const workspaceExists = checkDbExists(workspace, next);
+
+  // if (mongoose.connections[0].readyState !== 2)
+  //   return next(new AppError("Failed to connect to db", 500));
 
   res.status(200).json({
     status: "success",
     data: {
-      workspaceId: { workspace },
+      workspace,
       workspaceExists,
     },
   });

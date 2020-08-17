@@ -25,7 +25,7 @@ exports.userUploadsInvoice = catchAsync(async (req, res, next) => {
       trc: req.body.trc,
       clientRemarks: req.body.clientRemarks,
     },
-    userId: req.body.user,
+    userId: req.user._id,
     invoiceCount: req.files.length,
     invoiceLink: objectS3.Location,
   };

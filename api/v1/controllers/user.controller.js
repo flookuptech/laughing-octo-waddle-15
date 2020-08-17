@@ -1,7 +1,9 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-unused-vars */
+const mongoose = require("mongoose");
 const User = require("../models/user.model");
 const AppError = require("../utils/appError.util");
+const Invoice = require("../models/invoice.model");
 const catchAsyncError = require("../utils/catchAsync.util");
 
 // exports.checkForId = (req, res, next, val) => {
@@ -74,5 +76,55 @@ exports.deleteUser = catchAsyncError(async (req, res, next) => {
     status: "success",
     message: "User deleted",
     data: null,
+  });
+});
+
+exports.userSummary = catchAsyncError(async (req, res, next) => {
+  const { status } = req.query;
+
+  const data = await Invoice.aggregate([
+    { $match: { status } },
+    { $group: { _id: "$userId", count: { $sum: 1 } } },
+    {
+      $lookup: {
+        from: "users",
+        localField: "_id",
+        foreignField: "_id",
+        as: "clientDetails",
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        userId: "$_id",
+        count: 1,
+        clientDetails: {
+          userDetails: { firstName: 1, lastName: 1, email: 1 },
+          companyDetails: 1,
+        },
+      },
+    },
+  ]);
+
+  res.status(201).json({
+    status: "success",
+    results: data.length,
+    data,
+  });
+});
+
+exports.userMonthSummary = catchAsyncError(async (req, res, next) => {
+  const id = mongoose.Types.ObjectId(req.params.id);
+
+  const data = await Invoice.aggregate([
+    { $match: { userId: id } },
+    { $group: { _id: { $month: "$createdAt" }, count: { $sum: 1 } } },
+    { $project: { _id: 0, month: "$_id", count: 1 } },
+  ]);
+
+  res.status(201).json({
+    status: "success",
+    results: data.length,
+    data,
   });
 });

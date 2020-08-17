@@ -2,11 +2,22 @@ const mongoose = require("mongoose");
 const Admin = mongoose.mongo.Admin;
 const deasync = require("deasync");
 
+const AppError = require("./appError.util");
 const dbConfig = require("../config/config");
 
 const dbListURI = dbConfig.dbURL;
 
-exports.checkDbExists = (dbName) => {
+let con = {};
+
+const mongoOptions = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+  poolSize: 10,
+};
+
+exports.checkDbExists = (dbName, next) => {
   let check;
   mongoose
     .connect(dbListURI, {
@@ -21,14 +32,11 @@ exports.checkDbExists = (dbName) => {
           check = databases.some((db) => db.name === dbName);
           if (check) {
             const uri = dbListURI + dbName;
-            mongoose
-              .connect(uri, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-                useCreateIndex: true,
-                useFindAndModify: false,
-              })
-              .then(() => console.log(`Connected to '${dbName}' database`));
+            mongoose.connect(uri, mongoOptions).then((db) => {
+              con.isConnected = db.connections[0].readyState;
+
+              console.log(`Connected to '${dbName}' database`);
+            });
           }
         })
         .catch(() => console.log("Failed to search for workspaces"));
