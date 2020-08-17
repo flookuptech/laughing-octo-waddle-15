@@ -61,7 +61,7 @@ const invoiceSchema = mongoose.Schema(
       default: false,
     },
     userId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
     },
     partyName: {
       type: String,
