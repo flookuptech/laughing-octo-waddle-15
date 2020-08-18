@@ -6,11 +6,10 @@ import NotFound from "components/pageNotFound";
 import DashboardLayout from "components/drawer";
 import Account from "components/account";
 import AddUsers from "./components/addClients";
-import Completed15cb from './components/completed15cb/completed15cb';
-import Completed15cbDetails from './components/completed15cb/15cbDetails';
-import Pending15cb from './components/pending15cb/pending15cb';
-import Pending15cbDetails from './components/pending15cb/15cbDetails';
-
+import Completed15cb from "./components/completed15cb/completed15cb";
+import Completed15cbDetails from "./components/completed15cb/15cbDetails";
+import Pending15cb from "./components/pending15cb/pending15cb";
+import Pending15cbDetails from "./components/pending15cb/15cbDetails";
 
 class AdminUserDS extends Component {
   render() {
@@ -20,35 +19,31 @@ class AdminUserDS extends Component {
         <Switch>
           <Route
             path="/dashboard/addUsers"
-            render={props => <AddUsers user={user} {...props} />}
+            render={(props) => <AddUsers user={user} {...props} />}
           />
           <Route
             path="/dashboard/usersList"
-            render={props => <UsersList user={user} {...props} />}
+            render={(props) => <UsersList user={user} {...props} />}
           />
           <Route exact path="/dashboard/account" component={Account} />
           <Route
             exact
             path="/dashboard/"
-            render={props => <Home user={user} {...props} />}
+            render={(props) => <Home user={user} {...props} />}
           />
           <Route
             exact
             path="/dashboard/completed15CB"
-            component={Completed15cb}
+            render={(props) => <Completed15cb user={user} {...props} />}
           />
+          <Route exact path="/dashboard/pending15CB" component={Pending15cb} />
           <Route
-            exact
-            path="/dashboard/pending15CB"
-            component={Pending15cb}
-          />
-          <Route
-            path="/dashboard/pending15CB/:trackingNo"
+            path="/dashboard/pending15CB/:id"
             component={Pending15cbDetails}
           />
           <Route
-            path="/dashboard/completed15CB/:trackingNo"
-            component={Completed15cbDetails} 
+            path="/dashboard/completed15CB/:id"
+            render={(props) => <Completed15cbDetails user={user} {...props} />}
           />
           <Route component={NotFound} />
         </Switch>

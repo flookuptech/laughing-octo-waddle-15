@@ -1,50 +1,28 @@
 import React, { Fragment, Component } from "react";
-import { Grid, Typography, Container, withStyles, Paper, Box } from "@material-ui/core";
+import { Grid, Typography, Container, Paper } from "@material-ui/core";
 import HtmlTitle from "components/title";
 
-const styles = {
-  pageHeading: {
-    fontWeight: 'bold'
-  },
-  boxBorder: {
-    border: "1px solid rgba(0, 0, 0, 0.2)",
-    borderRadius: "10px",
-    opacity: "1",
-    padding: "15px"
-  },
-  content: {
-    flexGrow: 1,
-    height: "auto",
-    overflow: "none",
-    width: '75vw'
-  },
-  paper:{
-    display: 'flex',
-    flexDirection: "column",
-    overflow: 'auto',
-    padding: 32
-  }
-};
-
-class Dashboard extends Component {
+class Reports extends Component {
   render() {
-    const { classes } = this.props;
     return (
       <Fragment>
         <HtmlTitle title={"Reports"} />
         <Grid>
-          <main className={classes.content}>
+          <main className="content">
             <Container maxWidth="lg">
               <br />
-              <Paper className={classes.paper} elevation={4}>
-                <Box className={classes.boxBorder}>
-                  <div>
-                    <Typography className={classes.pageHeading} component="h5" variant="h5">
-                      Reports
-                    </Typography>
-                  </div>
-                </Box>
-              </Paper><br />
+              <Paper className="paper" elevation={4}>
+                <div>
+                  <Typography
+                    className="pageHeading"
+                    component="h5"
+                    variant="h5"
+                  >
+                    REPORTS
+                  </Typography>
+                </div>
+              </Paper>
+              <br />
             </Container>
           </main>
         </Grid>
@@ -53,4 +31,4 @@ class Dashboard extends Component {
   }
 }
 
-export default withStyles(styles)(Dashboard);
+export default Reports;

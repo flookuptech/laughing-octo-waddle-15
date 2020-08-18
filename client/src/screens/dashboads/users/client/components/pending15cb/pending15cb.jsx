@@ -1,72 +1,69 @@
-import React, { Component, Fragment } from 'react';
-import {
-  Typography,
-  Container,
-  Box,
-  withStyles,
-  Grid,
-  Paper
-} from "@material-ui/core";
+import React, { Component, Fragment } from "react";
+import { Typography, Container, Grid, Paper } from "@material-ui/core";
 import "react-toastify/dist/ReactToastify.css";
-import PendingDetailedTable from './pendingDetailedTable';
-import { clientPendingDetailedTableHead } from 'components/tableHead';
+import PendingDetailedTable from "./pendingDetailedTable";
+import { clientPendingDetailedTableHead } from "components/tableHead";
 import HtmlTitle from "components/title";
+import { getAllTransactionsForClient } from "services/getAllTransactions";
 
-const styles = {
-  pageHeading: {
-    fontWeight: 'bold'
-  },
-  boxBorder: {
-    border: "1px solid rgba(0, 0, 0, 0.2)",
-    borderRadius: "10px",
-    opacity: "1",
-    padding: "15px"
-  },
-  content: {
-    flexGrow: 1,
-    height: "auto",
-    overflow: "none",
-    maxWidth: '75vw'
-  },
-  paper:{
-    display: 'flex',
-    flexDirection: "column",
-    padding: 32
-  }
-};
+class Pending15cb extends Component {
+  state = {
+    transactionList: [],
+  };
 
-class Completed15cb extends Component {
-    render(){
-        const { classes } = this.props;
-        return(
-          <Fragment>
-            <HtmlTitle title={"Pending 15CB"} />
-            <Grid>
-              <main className={classes.content}>
-                <Container maxWidth="lg">
-                  <br />
-                  <Paper className={classes.paper} elevation={4}>
-                    <Box className={classes.boxBorder}>
-                      <div>
-                        <Typography className={classes.pageHeading} component="h5" variant="h5">
-                          Pending 15CB
-                        </Typography>
-                      </div><br />
-                      <div>
-                        <Typography component="h5" variant="h6">
-                          Total Number of 15CB pending:  
-                        </Typography><br />
-                        <PendingDetailedTable tableHead={clientPendingDetailedTableHead} />
-                      </div>
-                      <br />
-                    </Box>
-                  </Paper><br />
-                </Container>
-              </main>
-            </Grid>
-          </Fragment>
-        );
+  async componentDidMount() {
+    const { user } = this.props;
+    const status = "pending";
+    const userId = user._id;
+    const result = await getAllTransactionsForClient(status, userId);
+    if (result.status === 201) {
+      this.setState({
+        transactionList: result.data.data.transcations,
+      });
     }
+  }
+
+  render() {
+    const { transactionList } = this.state;
+
+    return (
+      <Fragment>
+        <HtmlTitle title={"Pending 15CB"} />
+        <Grid>
+          <main className="content">
+            <Container maxWidth="lg">
+              <br />
+              <Paper className="paper" elevation={4}>
+                <div>
+                  <Typography
+                    className="pageHeading"
+                    component="h5"
+                    variant="h5"
+                  >
+                    PENDING 15CB
+                  </Typography>
+                </div>
+                <br />
+                <div>
+                  <Typography component="h5" variant="h6">
+                    Total Number of 15CB pending: {transactionList.length}
+                  </Typography>
+                  <br />
+                  {transactionList.length > 0 ? (
+                    <PendingDetailedTable
+                      transactionList={transactionList}
+                      tableHead={clientPendingDetailedTableHead}
+                    />
+                  ) : null}
+                </div>
+              </Paper>
+              <br />
+            </Container>
+          </main>
+        </Grid>
+      </Fragment>
+    );
+  }
 }
 
-export default withStyles(styles)(Completed15cb);
+export default Pending15cb;

@@ -25,7 +25,7 @@ class App extends Component {
   UNSAFE_componentWillMount() {
     try {
       const user = getCurrentUser();
-      if (user) this.setState({ user, role: user.role });
+      if (user) this.setState({ user, role: user.userRole });
     } catch (error) {
       return null;
     }
@@ -33,8 +33,7 @@ class App extends Component {
 
   render() {
     const { user } = this.state;
-
-    const Login = lazy(() => import("./screens/home/login"));
+    const Login = lazy(() => import("./screens/home/login/login"));
     const Logout = lazy(() => import("./components/logout"));
 
     return (
@@ -49,26 +48,26 @@ class App extends Component {
                   path="/dashboard/"
                   render={(props) => {
                     if (!user) return <Redirect exact to="/" />;
-                    if (user.role === "root")
+                    if (user.userRole === "root")
                       return (
                         <RootUserDashboard
-                          roleValue={this.state.user.role}
+                          roleValue={this.state.role}
                           user={this.state.user}
                           {...props}
                         />
                       );
-                    if (user.role === "admin")
+                    if (user.userRole === "admin")
                       return (
                         <AdminUserDashboard
-                          roleValue={this.state.user.role}
+                          roleValue={this.state.role}
                           user={this.state.user}
                           {...props}
                         />
                       );
-                    if (user.role === "client")
+                    if (user.userRole === "client")
                       return (
                         <ClientDashboard
-                          roleValue={this.state.user.role}
+                          roleValue={this.state.role}
                           user={this.state.user}
                           {...props}
                         />

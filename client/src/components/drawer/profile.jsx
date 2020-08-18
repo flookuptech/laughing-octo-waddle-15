@@ -1,12 +1,12 @@
 import React, { Fragment } from "react";
 import { Avatar, Typography, Divider, makeStyles } from "@material-ui/core";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   white: {
     color: "#000",
     opacity: 0.95,
-    backgroundColor: "#fff"
-  }
+    backgroundColor: "#fff",
+  },
 }));
 
 const NavHeaderEx = ({ collapsed, userData }) => {
@@ -18,23 +18,26 @@ const NavHeaderEx = ({ collapsed, userData }) => {
           style={{
             width: collapsed ? 48 : 60,
             height: collapsed ? 48 : 60,
-            transition: "0.3s"
+            transition: "0.3s",
           }}
           className={classes.white}
         >
-          {userData.name.charAt(0)}
+          {userData.userDetails.firstName.charAt(0) +
+            userData.userDetails.lastName.charAt(0)}
         </Avatar>
         <div style={{ paddingBottom: 16 }} />
         {!collapsed && (
           <Fragment>
             <Typography variant={"h6"} noWrap style={{ color: "white" }}>
-              {userData.name}
+              {userData.userDetails.firstName +
+                `\n` +
+                userData.userDetails.lastName}
             </Typography>
             <Typography style={{ color: "white" }} noWrap gutterBottom>
-              {userData.email}
+              {userData.userDetails.email}
             </Typography>
             <Typography style={{ color: "white" }} noWrap gutterBottom>
-              {userData.role}
+              {userData.userRole}
             </Typography>
           </Fragment>
         )}

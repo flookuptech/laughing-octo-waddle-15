@@ -3,16 +3,16 @@ import { Component } from "react";
 class Form extends Component {
   state = {
     data: {
-      open: false
-    }
+      open: false,
+    },
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     this.onSubmit();
   };
 
-  overrideHandleSubmit = e => {
+  overrideHandleSubmit = (e) => {
     e.preventDefault();
     this.overrideOnSubmit();
   };
@@ -20,7 +20,6 @@ class Form extends Component {
   handleOnChange = ({ target }) => {
     const data = { ...this.state.data };
     data[target.name] = target.value;
-
     this.setState({ data });
   };
 
@@ -28,16 +27,16 @@ class Form extends Component {
     const data = { ...this.state.data };
     data.open = false;
     this.setState({
-      data
+      data,
     });
   };
 
-  handleSave = files => {
+  handleSave = (files) => {
     const data = { ...this.state.data };
-    data.files = files[0];
+    data.files = files;
     data.open = false;
     this.setState({
-      data
+      data,
     });
   };
 
@@ -45,7 +44,7 @@ class Form extends Component {
     const data = { ...this.state.data };
     data.open = true;
     this.setState({
-      data
+      data,
     });
   };
 

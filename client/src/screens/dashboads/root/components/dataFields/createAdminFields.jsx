@@ -7,9 +7,20 @@ class CreateAdminFields extends Component {
   render() {
     const role = [
       {
-        role: "admin",
-        label: "Admin"
-      }
+        value: "admin",
+        label: "Admin",
+      },
+      {
+        value: "super",
+        label: "Super",
+      },
+    ];
+
+    const userType = [
+      {
+        value: "client",
+        label: "Client",
+      },
     ];
 
     const { onSubmit, onChange, hasError } = this.props;
@@ -31,18 +42,18 @@ class CreateAdminFields extends Component {
               <Grid item xs={6} md={4} lg={4}>
                 <InputField
                   required
-                  id="panNumber"
-                  label="Pan Number"
-                  name="panNumber"
+                  id="firstName"
+                  label="First Name"
+                  name="firstName"
                   onChange={onChange}
                 />
               </Grid>
               <Grid item xs={6} md={4} lg={4}>
                 <InputField
                   required
-                  id="orgEmail"
+                  id="companyEmail"
                   label="Company Email"
-                  name="orgEmail"
+                  name="companyEmail"
                   type="email"
                   onChange={onChange}
                 />
@@ -50,27 +61,18 @@ class CreateAdminFields extends Component {
               <Grid item xs={6} md={4} lg={4}>
                 <InputField
                   required
-                  id="contact"
+                  id="phone"
                   label="Contact number"
-                  name="contact"
+                  name="phone"
                   onChange={onChange}
                 />
               </Grid>
               <Grid item xs={6} md={4} lg={4}>
                 <InputField
                   required
-                  id="address"
-                  label="Address"
-                  name="address"
-                  onChange={onChange}
-                />
-              </Grid>
-              <Grid item xs={6} md={4} lg={4}>
-                <InputField
-                  required
-                  id="name"
-                  label="Name of Admin"
-                  name="name"
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
                   onChange={onChange}
                 />
               </Grid>
@@ -98,7 +100,15 @@ class CreateAdminFields extends Component {
                   onChange={onChange}
                   options={role}
                   label="Role"
-                  name="role"
+                  name="userRole"
+                />
+              </Grid>
+              <Grid item xs={6} md={4} lg={4}>
+                <SelectField
+                  onChange={onChange}
+                  options={userType}
+                  label="User Type"
+                  name="userType"
                 />
               </Grid>
               <Grid item xs={12} lg={12}>

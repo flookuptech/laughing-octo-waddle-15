@@ -6,7 +6,7 @@ import {
   Toolbar,
   makeStyles,
   Container,
-  Grid
+  Grid,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
@@ -18,13 +18,13 @@ import {
   Content,
   CollapseBtn,
   SidebarTrigger,
-  SidebarTriggerIcon
+  SidebarTriggerIcon,
 } from "@mui-treasury/layout";
 
 import {
   ListRootDrawerItems,
   ListAdminDrawerItems,
-  ListClientDrawerItems
+  ListClientDrawerItems,
 } from "components/drawer/drawerItems";
 
 import NavBar from "components/drawer/navBar";
@@ -32,14 +32,14 @@ import NavHeader from "components/drawer/profile";
 // import { TextSidebar } from "@mui-treasury/mockup/sidebars";
 // import Content from "components/drawer/content";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   header: {
     backgroundColor: "#fff",
-    boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.08)"
+    boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.08)",
   },
   // appBarSpacer: theme.mixins.toolbar,
   appBarSpacer: {
-    marginTop: 30
+    marginTop: 30,
   },
   collapseBtn: {
     color: "#fff",
@@ -50,27 +50,27 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "rgba(0,0,0,0.24)",
     margin: "0 auto 16px",
     "&:hover": {
-      backgroundColor: "rgba(0,0,0,0.38)"
-    }
+      backgroundColor: "rgba(0,0,0,0.38)",
+    },
   },
   content: {
     flexGrow: 1,
     height: "100vh",
-    overflow: "auto"
+    overflow: "auto",
   },
   sidebar: {
     backgroundColor: "#4065E0",
-    border: "none"
+    border: "none",
   },
   content: {
-    backgroundColor: "#f9f9f9"
+    backgroundColor: "#f9f9f9",
   },
   paper: {
     padding: theme.spacing(1),
     display: "flex",
     overflow: "auto",
-    flexDirection: "column"
-  }
+    flexDirection: "column",
+  },
 }));
 
 const config = {
@@ -82,23 +82,23 @@ const config = {
       anchor: "left",
       hidden: false,
       inset: false,
-      variant: "temporary", 
+      variant: "temporary",
       width: 256,
       collapsible: true,
-      collapsedWidth: 64
+      collapsedWidth: 64,
     },
     header: {
       position: "sticky",
       clipped: true,
       offsetHeight: 56,
-      persistentBehavior: "fit"
+      persistentBehavior: "fit",
     },
     content: {
-      persistentBehavior: "fit"
+      persistentBehavior: "fit",
     },
     footer: {
-      persistentBehavior: "fit"
-    }
+      persistentBehavior: "fit",
+    },
   },
   sm: {
     sidebar: {
@@ -108,20 +108,20 @@ const config = {
       variant: "temporary",
       width: 256,
       collapsible: true,
-      collapsedWidth: 64
+      collapsedWidth: 64,
     },
     header: {
       position: "sticky",
       clipped: true,
       offsetHeight: 64,
-      persistentBehavior: "fit"
+      persistentBehavior: "fit",
     },
     content: {
-      persistentBehavior: "fit"
+      persistentBehavior: "fit",
     },
     footer: {
-      persistentBehavior: "fit"
-    }
+      persistentBehavior: "fit",
+    },
   },
   md: {
     sidebar: {
@@ -131,26 +131,26 @@ const config = {
       variant: "permanent",
       width: 256,
       collapsible: true,
-      collapsedWidth: 64
+      collapsedWidth: 64,
     },
     header: {
       position: "sticky",
       clipped: true,
       offsetHeight: 64,
-      persistentBehavior: "fit"
+      persistentBehavior: "fit",
     },
     content: {
-      persistentBehavior: "fit"
+      persistentBehavior: "fit",
     },
     footer: {
-      persistentBehavior: "fit"
-    }
-  }
+      persistentBehavior: "fit",
+    },
+  },
 };
 
 const App = ({ children, user }) => {
   const userData = user || {};
-  const role = userData.role;
+  const role = userData.userRole;
   const companyName = userData.companyName;
   let drawerList;
   const styles = useStyles();

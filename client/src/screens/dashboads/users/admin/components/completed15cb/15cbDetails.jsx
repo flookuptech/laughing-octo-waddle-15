@@ -1,160 +1,187 @@
 import React, { Fragment } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import HtmlTitle from "components/title";
-import { Typography, Box, Container, Grid, Paper, Button, TextareaAutosize } from "@material-ui/core";
-import Form from 'components/form/form';
-import GetAppIcon from '@material-ui/icons/GetApp';
-import {readOnlyFields, editableFields} from '../15cbDetailsFields';
-import { DropzoneDialog } from "material-ui-dropzone";
+import { Typography, Container, Grid, Paper } from "@material-ui/core";
+import Form from "components/form/form";
+import { extractedTextFields } from "../15cbDetailsFields";
 import InputField from "components/form/inputField";
-import PublishIcon from '@material-ui/icons/Publish';
-import SendIcon from '@material-ui/icons/Send';
+import { GetApp } from "@material-ui/icons";
+import CustomButton from "components/form/button";
+import { getTransactionById } from "services/getTransactionById";
+import { upload15cb } from "services/upload15cb";
+import TransactionDataFields from "./transactionDataFields";
 
-class Details extends Form{
+class Details extends Form {
   state = {
-    data: {}
+    data: {},
+    transactionId: "",
+    userId: "",
+    loading15cb: false,
   };
 
-  onSubmit(){
-    toast.info('Check Console');  
-    console.log(this.state.data);
+  async componentDidMount() {
+    try {
+      const user = this.props.user;
+      this.setState({ userId: user._id });
+      const { id } = this.props.match.params;
+      this.setState({ transactionId: id });
+      const result = await getTransactionById(id);
+      this.setState({
+        data: result.data.data.transcation,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  render(){
+  onSubmit = async () => {
+    const { transactionId, userId, data, loading15cb } = this.state;
+    const { ackNumber, udin, partyName, adminRemarks } = this.state.data;
+    if (data.files) {
+      this.setState({ loading15cb: !loading15cb });
+      try {
+        const update15cb = new FormData();
+        update15cb.append("documentType", "15cb");
+        update15cb.append("user", userId);
+        update15cb.append("ackNumber", ackNumber);
+        update15cb.append("udin", udin);
+        update15cb.append("adminRemarks", adminRemarks);
+        update15cb.append("partyName", partyName);
+        update15cb.append("file", data.files[0]);
+        const result = await upload15cb(transactionId, update15cb);
+        if (result.status === 201) {
+          toast.success("15CB updated succesfully");
+          this.setState({ loading15cb: !this.state.loading15cb });
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error("Error Occured");
+        this.setState({ loading15cb: !this.state.loading15cb });
+      }
+    } else {
+      toast.error("Please upload 15CB");
+    }
+  };
+
+  render() {
+    const { data, loading15cb } = this.state;
     return (
       <Fragment>
-        <HtmlTitle title={"Add Client"} />
-        <Grid>
-          <ToastContainer autoClose={1500} closeButton={false} />
-          <main className="content">
-            <Container maxWidth="lg">
-              <br />
-              <Paper className="paper" elevation={4}>
-                <Box className="boxBorder">
+        <HtmlTitle title={"15CB Details"} />
+        {Object.keys(data).length ? (
+          <Grid>
+            <ToastContainer autoClose={1500} closeButton={false} />
+            <main className="content">
+              <Container maxWidth="lg">
+                <br />
+                <Paper className="paper" elevation={4}>
                   <Fragment>
-                    <Typography className="pageHeading" component="h6" variant="h6">Downloads Available</Typography><br />
+                    <Typography
+                      className="pageHeading"
+                      component="h6"
+                      variant="h6"
+                    >
+                      Downloads Available
+                    </Typography>
+                    <br />
                   </Fragment>
                   <Grid
                     container
                     direction="row"
                     justify="space-around"
                     alignItems="center"
-                   >
-                       <Grid item>
-                         <Button
-                            variant="outlined"
-                            color="secondary"
-                            startIcon={<GetAppIcon />}
-                          >
-                           <b>Download Invoice</b>
-                          </Button>
-                        </Grid> 
-                        <Grid item>
-                         <Button
-                            variant="outlined"
-                            color="secondary"
-                            startIcon={<GetAppIcon />}
-                          >
-                           <b>Download 15CB</b>
-                          </Button>
-                        </Grid> 
-                   </Grid>
-                </Box>
-              </Paper><br />
-              <Paper className="paper" elevation={4}>
-                <Box className="boxBorder">
-                    <Fragment>
-                        <Typography className="pageHeading" component="h6" variant="h6">Transaction Details</Typography><br />
-                    </Fragment>
-                    <Grid  container spacing={3}>
-                      {readOnlyFields.map(item => {
-                        return (
-                          <Grid item xs={6} md={4} lg={4}>
-                            <InputField
-                              id="standard-read-only-input"
-                              // value=""
-                              helperText={item.helperText}
-                              InputProps={{ readOnly: true }}
-                              // name={item.helperText}
-                            />
-                          </Grid>
-                        );
-                      })}
-                    </Grid>
-                    <br />
-                    <Fragment>
-                        <form onSubmit={this.handleSubmit}>
-                        <Grid  container spacing={3}>
-                            {editableFields.map(item => {
-                            return (
-                                <Grid item xs={6} md={4} lg={4}>
-                                <InputField
-                                    required
-                                    className="editable-field-background"
-                                    id="standard-read-only-input"
-                                    // value='asadsaasdasdd'
-                                    helperText={item.helperText}
-                                    InputProps={{ readOnly: false }}
-                                    name={item.value}
-                                    onChange={this.handleOnChange}
-                                />
-                                </Grid>
-                            );
-                            })}
-                        </Grid><br />
-                        <TextareaAutosize
-                            rowsMin={3}
-                            name="remarks"
-                            onChange={this.handleOnChange}
-                            placeholder="Type your remarks here, if any"
-                            style={{
-                            backgroundColor: "rgba(64, 101, 224, 0.1)",
-                            boxShadow: "inset 2px 2px 2px 0px #ddd",
-                            borderColor: '#4065E0',
-                            borderWidth: 2,
-                            borderRadius: "3px",
-                            outline: "none",
-                            resize: "none",
-                            width: "100%",
-                            // margin: 10,
-                            fontSize: "16px"
-                            }}
-                        /><br /><br />
-                        <Button
-                            variant="outlined"
-                            color="secondary"
-                            startIcon={<PublishIcon/>}
-                            onClick={this.handleOpen}
-                            display
-                        >
-                            <b>Upload 15CB</b>
-                        </Button><br /><br />
-                        <DropzoneDialog
-                            open={this.state.data.open}
-                            onSave={this.handleSave}
-                            acceptedFiles={["image/*", "application/*"]}
-                            showPreviews={true}
-                            maxFileSize={5000000}
-                            onClose={this.handleClose}
-                            useChipsForPreview={true}
+                  >
+                    <Grid item>
+                      <a
+                        href={data.invoiceLink}
+                        target="_blank"
+                        style={{ textDecoration: "none" }}
+                        rel="noopener noreferrer"
+                      >
+                        <CustomButton
+                          variant="outlined"
+                          color="secondary"
+                          icon={<GetApp />}
+                          label="Invoice"
                         />
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            type="submit"
-                            startIcon={<SendIcon/>}
-                        >
-                            Submit Corrections
-                        </Button> 
-                        </form>
-                    </Fragment>
-                </Box>
-              </Paper><br />
-            </Container>
-          </main>
-        </Grid>
+                      </a>
+                    </Grid>
+                    <Grid item>
+                      <a
+                        style={{ textDecoration: "none" }}
+                        href={data.cbLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <CustomButton
+                          variant="outlined"
+                          color="secondary"
+                          icon={<GetApp />}
+                          label="15CB"
+                        />
+                      </a>
+                    </Grid>
+                  </Grid>
+                </Paper>
+                <br />
+                <Paper className="paper" elevation={4}>
+                  <Fragment>
+                    <Typography
+                      className="pageHeading"
+                      component="h6"
+                      variant="h6"
+                    >
+                      Transaction Details
+                    </Typography>
+                    <br />
+                    <TransactionDataFields
+                      data={data}
+                      handleSubmit={this.handleSubmit}
+                      handleOnChange={this.handleOnChange}
+                      handleOpen={this.handleOpen}
+                      handleSave={this.handleSave}
+                      open={data.open}
+                      loading15cb={loading15cb}
+                    />
+                  </Fragment>
+                </Paper>
+                <br />
+                <Paper className="paper" elevation={4}>
+                  <Fragment>
+                    <Typography
+                      className="pageHeading"
+                      component="h6"
+                      variant="h6"
+                    >
+                      Text extracted from 15CB
+                    </Typography>
+                    <br />
+                  </Fragment>
+                  <Grid container spacing={3}>
+                    {extractedTextFields.map((item) => {
+                      return (
+                        <Grid item xs={12} sm={6} md={4} lg={4}>
+                          <InputField
+                            value={data.textFrom15CB[item.value]}
+                            helperText={item.helperText}
+                            InputProps={{ readOnly: true }}
+                            name={item.value}
+                          />
+                        </Grid>
+                      );
+                    })}
+                  </Grid>
+                  <br />
+                </Paper>
+                <br />
+                <br />
+              </Container>
+            </main>
+          </Grid>
+        ) : (
+          <h1>Loading...</h1>
+        )}
       </Fragment>
-
     );
   }
 }
