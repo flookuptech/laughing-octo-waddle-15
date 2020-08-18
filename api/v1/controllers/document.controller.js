@@ -8,29 +8,13 @@ const catchAsync = require("../utils/catchAsync.util");
 const ApiFeatures = require("../utils/apiFeatures.util");
 
 exports.userUploadsInvoice = catchAsync(async (req, res, next) => {
-  if (!req.files.length)
-    return next(new AppError("Invoice file not provided", 400));
+  let { payload } = req.body;
 
-  const docType = req.body.documentType;
+  const objectS3 = await z.upload(payload.user, payload.documentType);
 
-  const objectS3 = await z.upload(req.body.user, docType);
+  payload.invoiceLink = objectS3.Location;
 
-  let invoiceData = {
-    userRemarks: {
-      tdsRate: req.body.tdsRate,
-      remittanceCurrency: req.body.remittanceCurrency,
-      remittanceNature: req.body.remittanceNature,
-      purposeCode: req.body.purposeCode,
-      taxPaid: req.body.taxPaid,
-      trc: req.body.trc,
-      clientRemarks: req.body.clientRemarks,
-    },
-    userId: req.user._id,
-    invoiceCount: req.files.length,
-    invoiceLink: objectS3.Location,
-  };
-
-  const doc = await Invoice.create(invoiceData);
+  const doc = await Invoice.create(payload);
 
   res.status(201).json({
     status: "success",
@@ -38,31 +22,30 @@ exports.userUploadsInvoice = catchAsync(async (req, res, next) => {
       doc,
     },
   });
-  await z.emptyDir(req.body.user, docType);
+
+  await z.emptyDir(payload.user, payload.documentType);
 });
 
 exports.adminUploads15CB = catchAsync(async (req, res, next) => {
-  const docType = req.body.documentType;
+  let { payload } = req.body;
 
   const data = await ocr(req.file);
 
-  const objectS3 = await z.upload(req.body.user, docType);
-
-  const fifteenCbObj = {
-    ackNumber: req.body.ackNumber,
-    udin: req.body.udin,
-    partyName: req.body.partyName,
-    status: "complete",
-    isTranscationComplete: true,
-    cbLink: objectS3.Location,
-    textFrom15CB: data[0],
-  };
-
-  const doc = await Invoice.findByIdAndUpdate(
-    { _id: req.params.id },
-    fifteenCbObj,
-    { new: true, runValidators: true }
+  const objectS3 = await z.upload15CB(
+    payload.admin,
+    payload.documentType,
+    payload.user
   );
+
+  payload.status = "complete";
+  payload.isTranscationComplete = true;
+  payload.cbLink = objectS3.Location;
+  payload.textFrom15CB = data[0];
+
+  const doc = await Invoice.findByIdAndUpdate({ _id: req.params.id }, payload, {
+    new: true,
+    runValidators: true,
+  });
 
   res.status(201).json({
     status: "success",
@@ -71,20 +54,20 @@ exports.adminUploads15CB = catchAsync(async (req, res, next) => {
       doc,
     },
   });
-  await z.emptyDir(req.body.user, docType);
+
+  await z.emptyDir(payload.admin, payload.documentType);
 });
 
 exports.upload15CaOrXml = catchAsync(async (req, res, next) => {
-  const docType = req.body.documentType.toLowerCase();
+  const { payload } = req.body;
 
   const ext = req.file.mimetype.split("/")[1].toLowerCase();
+  const objectS3 = await z.upload(payload.user, payload.documentType);
 
-  const objectS3 = await z.upload(req.body.user, docType);
   let fileLink = {};
-
-  if (ext === "xml" && docType === "xml") {
+  if (ext === "xml" && payload.documentType === "xml") {
     fileLink["xmlLink"] = objectS3.Location;
-  } else {
+  } else if (ext === "pdf" && payload.documentType === "15ca") {
     fileLink["caLink"] = objectS3.Location;
   }
 
@@ -101,7 +84,8 @@ exports.upload15CaOrXml = catchAsync(async (req, res, next) => {
       doc,
     },
   });
-  await z.emptyDir(req.body.user, docType);
+
+  await z.emptyDir(payload.user, payload.documentType);
 });
 
 exports.getTranscationByID = catchAsync(async (req, res, next) => {

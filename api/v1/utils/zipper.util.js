@@ -11,6 +11,12 @@ exports.upload = async (user, docType) => {
   return data;
 };
 
+exports.upload15CB = async (admin, docType, user) => {
+  const buff = await zip(admin, docType);
+  const data = await s3.s3Upload(user, docType, buff);
+  return data;
+};
+
 const zip = (user, docType) => {
   return new Promise((resolve, reject) => {
     zipper.zip(`tmp/${user}/${docType}`, function (err, zipped) {

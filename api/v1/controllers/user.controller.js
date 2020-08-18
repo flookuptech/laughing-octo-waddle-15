@@ -6,25 +6,6 @@ const AppError = require("../utils/appError.util");
 const Invoice = require("../models/invoice.model");
 const catchAsyncError = require("../utils/catchAsync.util");
 
-// exports.checkForId = (req, res, next, val) => {
-//   console.log(val);
-//   // return res.status(404).json({
-//   //   status: 'fail',
-//   //   message: 'Id not present',
-//   // });
-//   next();
-// };
-
-// exports.checkBody = (req, res, next) => {
-//   if (!req.body.name) {
-//     return res.status(404).json({
-//       status: 'fail',
-//       message: 'Missing name or price',
-//     });
-//   }
-//   next();
-// };
-
 exports.getAllUsers = catchAsyncError(async (req, res, next) => {
   const users = await User.find();
 
@@ -79,7 +60,38 @@ exports.deleteUser = catchAsyncError(async (req, res, next) => {
   });
 });
 
-exports.userSummary = catchAsyncError(async (req, res, next) => {
+exports.userTotalTranscations = catchAsyncError(async (req, res, next) => {
+  const data = await Invoice.aggregate([
+    { $group: { _id: "$userId", total: { $sum: 1 } } },
+    {
+      $lookup: {
+        from: "users",
+        localField: "_id",
+        foreignField: "_id",
+        as: "clientDetails",
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        userId: "$_id",
+        total: 1,
+        clientDetails: {
+          userDetails: { firstName: 1, lastName: 1, email: 1 },
+          companyDetails: 1,
+        },
+      },
+    },
+  ]);
+
+  res.status(200).json({
+    status: "success",
+    results: data.length,
+    data,
+  });
+});
+
+exports.userTranscationSummary = catchAsyncError(async (req, res, next) => {
   const { status } = req.query;
 
   const data = await Invoice.aggregate([
@@ -106,7 +118,7 @@ exports.userSummary = catchAsyncError(async (req, res, next) => {
     },
   ]);
 
-  res.status(201).json({
+  res.status(200).json({
     status: "success",
     results: data.length,
     data,
@@ -122,7 +134,7 @@ exports.userMonthSummary = catchAsyncError(async (req, res, next) => {
     { $project: { _id: 0, month: "$_id", count: 1 } },
   ]);
 
-  res.status(201).json({
+  res.status(200).json({
     status: "success",
     results: data.length,
     data,

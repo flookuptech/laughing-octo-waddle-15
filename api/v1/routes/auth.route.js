@@ -17,6 +17,8 @@ router.post("/login", reqController.loginFilter, authController.login);
 
 router.post(
   "/tenantsignup",
+  authController.protectRoute,
+  authController.accessTo("super"),
   reqController.tenantSignupFilter,
   authController.tenantSignup
 );
@@ -24,6 +26,7 @@ router.post(
 router.post(
   "/clientsignup",
   authController.protectRoute,
+  authController.accessTo("admin"),
   reqController.clientSignupFilter,
   authController.clientSignup
 );

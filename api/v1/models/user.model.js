@@ -64,6 +64,10 @@ const userSchema = new mongoose.Schema(
         maxlength: 50,
         required: [true, "Company name is required"],
       },
+      companyNameSlug: {
+        type: String,
+        trim: true,
+      },
       companyEmail: {
         type: String,
         trim: true,
@@ -76,7 +80,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
       required: [true, "User workspace cannot be empty"],
-      validate: [validator.isSlug, "Invalid workspace slug"],
     },
     password: {
       type: String,
@@ -131,12 +134,24 @@ const userSchema = new mongoose.Schema(
 
 userSchema.pre("validate", async function (next) {
   if (this.userType === "root" && this.userRole === "super") {
+    this.companyDetails.companyNameSlug = slugify(
+      this.companyDetails.companyName,
+      ""
+    );
     this.registeredBy = contextService.get("req.user._id");
     this.workspace = "15cacb_main_db";
   } else if (this.userType === "client" && this.userRole === "admin") {
+    this.companyDetails.companyNameSlug = slugify(
+      this.companyDetails.companyName,
+      ""
+    );
     this.registeredBy = contextService.get("req.user._id");
     this.workspace = slugify(this.companyDetails.companyName, "_t");
   } else if (this.userType === "client" && this.userRole === "client") {
+    this.companyDetails.companyNameSlug = slugify(
+      this.companyDetails.companyName,
+      ""
+    );
     this.workspace = contextService.get("req.user.workspace");
     this.registeredBy = contextService.get("req.user._id");
   }
@@ -166,6 +181,7 @@ userSchema.methods.generateAuthToken = function () {
       _id: this._id,
       userDetails: this.userDetails,
       companyName: this.companyDetails.companyName,
+      companyNameSlug: this.companyDetails.companyNameSlug,
       workspace: this.workspace,
       userRole: this.userRole,
       userType: this.userType,
