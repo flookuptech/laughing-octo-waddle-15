@@ -14,6 +14,7 @@ const TransactionDataFields = ({
   handleOnChange,
   handleOpen,
   handleSave,
+  handleClose,
   open,
   loading15cb,
 }) => {
@@ -98,6 +99,7 @@ const TransactionDataFields = ({
               handleOpen={handleOpen}
               handleSave={handleSave}
               open={open}
+              handleClose={handleClose}
             />
           </Grid>
           <br />

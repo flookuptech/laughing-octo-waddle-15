@@ -54,13 +54,13 @@ class Details extends Form {
   // };
 
   onSubmit = async () => {
-    const { data, transactionId, userId } = this.state;
+    const { data, transactionId } = this.state;
     if (data.files) {
       this.setState({ loading15ca: true });
       try {
         const data15ca = new FormData();
-        data15ca.append("documentType", "xml");
-        data15ca.append("user", userId);
+        data15ca.append("documentType", "15ca");
+        data15ca.append("user", this.state.userId);
         data15ca.append("file", data.files[0]);
         const result = await upload15caOrXml(transactionId, data15ca);
         if (result.status === 201) {
@@ -246,66 +246,7 @@ class Details extends Form {
                     <br />
                   </Paper>
                   <br />
-                  <br />{" "}
-                </Fragment>
-              ) : null}
-              {!clientData.xmlLink ? (
-                <Fragment>
-                  <Paper className="paper" elevation={4}>
-                    <Fragment>
-                      <Typography
-                        className="pageHeading"
-                        component="h6"
-                        variant="h6"
-                      >
-                        Upload 15CA
-                      </Typography>
-                      <br />
-                    </Fragment>
-                    <Grid>
-                      <Fragment>
-                        <form onSubmit={this.handleSubmit}>
-                          <Grid
-                            container
-                            justify="space-around"
-                            alignItems="center"
-                            direction="row"
-                          >
-                            <Grid item>
-                              <CustomButton
-                                variant="outlined"
-                                color="secondary"
-                                onClick={this.handleOpen}
-                                icon={<Publish />}
-                                label="XML"
-                              />
-                              <FileUpload
-                                open={this.state.data.open}
-                                handleSave={this.handleSave}
-                                handleClose={this.handleClose}
-                                filesLimit={1}
-                              />
-                            </Grid>
-                            <Grid item>
-                              <CustomButton
-                                variant="contained"
-                                loading={this.state.loadingXml}
-                                color="primary"
-                                icon={<Send />}
-                                label="XML"
-                                type="submit"
-                              />
-                            </Grid>
-                          </Grid>
-                        </form>
-                        <br />
-                        <br />
-                      </Fragment>
-                    </Grid>
-                    <br />
-                  </Paper>
                   <br />
-                  <br />{" "}
                 </Fragment>
               ) : null}
             </Container>

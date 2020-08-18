@@ -42,7 +42,7 @@ class Details extends Form {
       try {
         const update15cb = new FormData();
         update15cb.append("documentType", "15cb");
-        update15cb.append("user", userId);
+        update15cb.append("user", this.state.userId);
         update15cb.append("ackNumber", ackNumber);
         update15cb.append("udin", udin);
         update15cb.append("adminRemarks", adminRemarks);
@@ -141,6 +141,7 @@ class Details extends Form {
                       handleOpen={this.handleOpen}
                       handleSave={this.handleSave}
                       open={data.open}
+                      handleClose={this.handleClose}
                       loading15cb={loading15cb}
                     />
                   </Fragment>

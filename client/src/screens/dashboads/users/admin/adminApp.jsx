@@ -39,7 +39,7 @@ class AdminUserDS extends Component {
           <Route exact path="/dashboard/pending15CB" component={Pending15cb} />
           <Route
             path="/dashboard/pending15CB/:id"
-            component={Pending15cbDetails}
+            render={(props) => <Pending15cbDetails user={user} {...props} />}
           />
           <Route
             path="/dashboard/completed15CB/:id"
