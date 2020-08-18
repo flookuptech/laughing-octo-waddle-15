@@ -188,3 +188,13 @@ exports.workspaceFilter = (req, res, next) => {
 
   next();
 };
+
+exports.idChecker = catchAsyncError(async (req, res, next) => {
+  if (!ObjectID.isValid(req.params.id))
+    return next(new AppError("Invalid user-id provided", 400));
+
+  const user = await User.findById(req.params.id);
+  if (!user) return next(new AppError("Invalid user-id provided", 400));
+
+  next();
+});
