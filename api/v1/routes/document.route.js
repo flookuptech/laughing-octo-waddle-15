@@ -10,13 +10,17 @@ router
   .route("/invoice")
   .post(
     authController.protectRoute,
+    authController.accessTo("client"),
     uploadMulti.uploadMultiFiles,
+    requestValidator.invoiceFile,
     documentController.userUploadsInvoice
   );
 
 router
   .route("/15cb/:id")
   .post(
+    authController.protectRoute,
+    authController.accessTo("admin"),
     uploadMulti.uploadFile,
     requestValidator.form15CB,
     documentController.adminUploads15CB
@@ -25,6 +29,8 @@ router
 router
   .route("/15caOrXml/:id")
   .post(
+    authController.protectRoute,
+    authController.accessTo("client"),
     uploadMulti.uploadFile,
     requestValidator.form15CAOrXml,
     documentController.upload15CaOrXml

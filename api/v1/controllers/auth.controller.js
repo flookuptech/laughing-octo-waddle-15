@@ -40,6 +40,8 @@ exports.clientSignup = catchAsyncError(async (req, res, next) => {
 
   const userData = await user.save(); // Save user type:owner to `users` collection
 
+  userData.password = undefined;
+
   const message = `<h3>Welcome aboard!</h3><p>Below are your credentials to log in:</p><p>
     <b>Workspace:</b> ${userData.workspace}
     <b>Email:</b> ${userData.userDetails.email}
@@ -190,3 +192,17 @@ exports.protectRoute = catchAsyncError(async (req, res, next) => {
 
   next();
 });
+
+exports.accessTo = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.userRole)) {
+      return next(
+        new AppError(
+          "You do not have enough permissions to access this resource",
+          403
+        )
+      );
+    }
+    next();
+  };
+};

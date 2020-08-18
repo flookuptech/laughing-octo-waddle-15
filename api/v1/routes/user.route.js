@@ -7,7 +7,10 @@ const tenantController = require("../controllers/tenant.controller");
 router.get("/", userController.getAllUsers);
 router.get("/tenants", tenantController.getAllTenants);
 
-router.route("/summary").post(userController.userSummary);
+router
+  .route("/summary")
+  .get(userController.userTotalTranscations)
+  .post(userController.userTranscationSummary);
 
 router.route("/summary/:id").get(userController.userMonthSummary);
 

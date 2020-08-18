@@ -61,7 +61,8 @@ const invoiceSchema = mongoose.Schema(
       default: false,
     },
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
     },
     partyName: {
       type: String,
@@ -149,6 +150,10 @@ const invoiceSchema = mongoose.Schema(
         trim: true,
       },
     },
+    adminRemarks: {
+      type: String,
+      trim: true,
+    },
   },
   {
     toJSON: { virtuals: true },
@@ -160,8 +165,15 @@ const invoiceSchema = mongoose.Schema(
 );
 
 invoiceSchema.pre("save", function (next) {
-  // db = contextService.get("request:user.db");
   this.trackingNumber = generateRandNumber(8, "numeric");
+  next();
+});
+
+invoiceSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "userId",
+    select: "userDetails companyDetails",
+  });
   next();
 });
 

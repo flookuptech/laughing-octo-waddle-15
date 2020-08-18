@@ -6,14 +6,25 @@ const AppError = require("./appError.util");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const folder = req.body.user;
-    const docType = req.body.documentType;
-    fs.mkdir(`tmp/${folder}/${docType}`, { recursive: true }, (err) => {
-      if (err) {
-        cb(new AppError("Failed to create directory", 400), false);
+    const workspace = req.user.workspace;
+    const user = req.user.companyNameSlug;
+    const docType = req.body.documentType.toLowerCase();
+    const n = ["invoice", "15cb", "15ca", "xml"].includes(docType);
+
+    if (!n) {
+      return cb(new AppError("Invalid file submitted", 400), false);
+    }
+
+    fs.mkdir(
+      `tmp/${workspace}/${user}/${docType}`,
+      { recursive: true },
+      (err) => {
+        if (err) {
+          return cb(new AppError("Failed to create directory", 400), false);
+        }
+        cb(null, `tmp/${workspace}/${user}/${docType}`);
       }
-      cb(null, `tmp/${folder}/${docType}`);
-    });
+    );
   },
   filename: function (req, file, cb) {
     const rand = r.generateRandNumber(10, "alphanumeric");
@@ -32,7 +43,7 @@ const multerFilter = (req, file, cb) => {
   ].includes(file.mimetype);
 
   if (value) cb(null, true);
-  else cb(new AppError("Invalid file format", 400), false);
+  else return cb(new AppError("Invalid file format", 400), false);
 };
 
 const upload = multer({
