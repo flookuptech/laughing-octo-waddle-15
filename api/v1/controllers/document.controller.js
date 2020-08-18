@@ -2,6 +2,7 @@ const _ = require("lodash");
 
 const z = require("../utils/zipper.util");
 const { ocr } = require("../utils/ocr.util");
+const User = require("../models/user.model");
 const Invoice = require("../models/invoice.model");
 const AppError = require("../utils/appError.util");
 const catchAsync = require("../utils/catchAsync.util");
@@ -15,6 +16,16 @@ exports.userUploadsInvoice = catchAsync(async (req, res, next) => {
   payload.invoiceLink = objectS3.Location;
 
   const doc = await Invoice.create(payload);
+
+  const update = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $inc: { totalTranscations: 1 },
+    },
+    {
+      runValidators: false,
+    }
+  );
 
   res.status(201).json({
     status: "success",

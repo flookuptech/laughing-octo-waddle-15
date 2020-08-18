@@ -9,8 +9,6 @@ const catchAsyncError = require("../utils/catchAsync.util");
 exports.getAllUsers = catchAsyncError(async (req, res, next) => {
   const users = await User.find();
 
-  // throw new Error('Error created');
-
   res.status(200).json({
     status: "success",
     results: users.length,
@@ -111,6 +109,7 @@ exports.userTranscationSummary = catchAsyncError(async (req, res, next) => {
         userId: "$_id",
         count: 1,
         clientDetails: {
+          totalTranscations: 1,
           userDetails: { firstName: 1, lastName: 1, email: 1 },
           companyDetails: 1,
         },
@@ -129,7 +128,7 @@ exports.userMonthSummary = catchAsyncError(async (req, res, next) => {
   const id = mongoose.Types.ObjectId(req.params.id);
 
   const data = await Invoice.aggregate([
-    { $match: { userId: id } },
+    { $match: { $and: [{ userId: id }, { status: "complete" }] } },
     { $group: { _id: { $month: "$createdAt" }, count: { $sum: 1 } } },
     { $project: { _id: 0, month: "$_id", count: 1 } },
   ]);

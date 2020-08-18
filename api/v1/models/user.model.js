@@ -122,6 +122,10 @@ const userSchema = new mongoose.Schema(
         message: "Root user role must be `super`",
       },
     },
+    totalTranscations: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     toJSON: { virtuals: true },
