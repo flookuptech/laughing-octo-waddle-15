@@ -17,16 +17,26 @@ import {
 import Form from "components/form/form";
 import HtmlTitle from "components/title";
 import { getAllTransactions } from "services/getAllTransactions";
+import { get15cbSummaryForClient } from "services/getSummary";
 
 class Completed15cb extends Form {
   state = {
     allTransactionList: [],
     summary: true,
+    summaryTransactions: [],
   };
 
   async componentDidMount() {
     try {
+      const user = this.props.user;
       const status = "complete";
+      const summary = await get15cbSummaryForClient(user._id);
+      console.log(summary);
+      if (summary.status === 200) {
+        this.setState({
+          summaryTransactions: summary.data.data,
+        });
+      }
       const result = await getAllTransactions(status);
       if (result.status === 201) {
         this.setState({
@@ -47,7 +57,7 @@ class Completed15cb extends Form {
   };
 
   render() {
-    const { summary, allTransactionList } = this.state;
+    const { summary, allTransactionList, summaryTransactions } = this.state;
     return (
       <Fragment>
         <HtmlTitle title={"Completed 15CB"} />
@@ -97,6 +107,7 @@ class Completed15cb extends Form {
                     <Fragment>
                       {summary ? (
                         <SummaryTable
+                          transactionList={summaryTransactions}
                           tableHead={clientCompletedSummaryTableHead}
                         />
                       ) : (

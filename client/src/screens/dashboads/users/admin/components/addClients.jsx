@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Typography, Box, Container, Grid, Paper } from "@material-ui/core";
+import { Typography, Container, Grid, Paper } from "@material-ui/core";
 import UserDataFields from "./dataFields/userDataFields";
 import Form from "components/form/form";
 import { createClient } from "services/createUser";
@@ -11,9 +11,11 @@ import HtmlTitle from "components/title";
 class AddUsers extends Form {
   state = {
     data: {},
+    loading: false,
   };
 
   onSubmit = async () => {
+    this.setState({ loading: !this.state.loading });
     const data = {
       ...this.state.data,
       userType: "client",
@@ -21,12 +23,15 @@ class AddUsers extends Form {
     try {
       const result = await createClient(data);
       if (result.status == 201) toast.success("User created successfully");
+      this.setState({ loading: !this.state.loading, data: {} });
     } catch (error) {
       toast.error("User creation failed");
+      this.setState({ loading: !this.state.loading });
     }
   };
 
   render() {
+    const { loading } = this.state;
     return (
       <Fragment>
         <HtmlTitle title={"Add Client"} />
@@ -50,6 +55,7 @@ class AddUsers extends Form {
                   <UserDataFields
                     onSubmit={this.handleSubmit}
                     onChange={this.handleOnChange}
+                    loading={loading}
                   />
                 </div>
                 <br />

@@ -11,7 +11,11 @@ const DetailedTable = ({ tableHead, transactionList }) => {
         <TableCell align="center" component="th" scope="row">
           {i + 1}
         </TableCell>
-        <TableCell align="center"></TableCell>
+        <TableCell align="center">
+          {item.userId.userDetails.firstName +
+            `\n` +
+            item.userId.userDetails.lastName}
+        </TableCell>
         <TableCell align="center">{item.createdAt.split("T")[0]}</TableCell>
         <TableCell align="center">{item.ackNumber}</TableCell>
         <TableCell align="center">

@@ -5,6 +5,7 @@ import { TableCell, TableRow } from "@material-ui/core";
 import CustomButton from "components/form/button";
 
 const DetailedTable = ({ tableHead, transactionList }) => {
+  console.log(transactionList);
   const tbody = transactionList.map((item, i) => {
     return (
       <TableRow>

@@ -10,14 +10,18 @@ import {
 import "react-toastify/dist/ReactToastify.css";
 import SummaryTable from "./summaryTable";
 import DetailedTable from "./detailedTable";
-import { adminPendingSummaryTableHead } from "components/tableHead";
 import HtmlTitle from "components/title";
 import Form from "components/form/form";
-import { adminPendingDetailedTableHead } from "components/tableHead";
+import {
+  adminPendingDetailedTableHead,
+  adminPendingSummaryTableHead,
+} from "components/tableHead";
 import { getAllTransactions } from "services/getAllTransactions";
+import { get15cbSummaryOfClients } from "services/getSummary";
 
 class Pending15cb extends Form {
   state = {
+    summaryTransactions: [],
     allTransactionList: [],
     summary: true,
   };
@@ -25,8 +29,13 @@ class Pending15cb extends Form {
   async componentDidMount() {
     try {
       const status = "pending";
+      const summary = await get15cbSummaryOfClients(status);
+      if (summary.status === 200) {
+        this.setState({
+          summaryTransactions: summary.data.data,
+        });
+      }
       const result = await getAllTransactions(status);
-      console.log(result);
       if (result.status === 201) {
         this.setState({
           allTransactionList: result.data.data.transcations,
@@ -46,7 +55,7 @@ class Pending15cb extends Form {
   };
 
   render() {
-    const { summary, allTransactionList } = this.state;
+    const { summary, allTransactionList, summaryTransactions } = this.state;
     return (
       <Fragment>
         <HtmlTitle title={"Pending 15CB"} />
@@ -96,6 +105,7 @@ class Pending15cb extends Form {
                     <Fragment>
                       {summary ? (
                         <SummaryTable
+                          transactionList={summaryTransactions}
                           tableHead={adminPendingSummaryTableHead}
                         />
                       ) : (

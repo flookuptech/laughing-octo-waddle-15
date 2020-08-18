@@ -18,7 +18,6 @@ class UploadInvoice extends Form {
 
   componentDidMount() {
     const { user } = this.props;
-    console.log(user);
     this.setState({ user });
   }
 

@@ -1,22 +1,21 @@
 import React, { Fragment, Component } from "react";
-import { Grid, Typography, Container, Paper, Box } from "@material-ui/core";
+import { Grid, Typography, Container, Paper } from "@material-ui/core";
 import HomeTable from "./homeTable";
-// import { getUsers } from "services/getUsers";
 import { adminHomeTableHead } from "components/tableHead";
 import HtmlTitle from "components/title";
 import "assets/css/contentStructure.css";
+import { getTotalTransactionsOfUsers } from "services/getTotalTransactionsOfUsers";
 
 class Home extends Component {
-  state = { clientsList: [] };
+  state = { totalTransactions: [] };
 
-  // async componentDidMount() {
-  //   const db = this.props.user.orgDatabase;
-  //   const { data: clientsList } = await getUsers(db);
-  //   this.setState({ clientsList });
-  // }
+  async componentDidMount() {
+    const totalTransactions = await getTotalTransactionsOfUsers();
+    console.log("totalTransactions", totalTransactions);
+  }
 
   render() {
-    const { clientsList } = this.state;
+    const { totalTransactions } = this.state;
     return (
       <Fragment>
         <HtmlTitle title={"Home"} />
@@ -38,7 +37,7 @@ class Home extends Component {
                 <div>
                   <HomeTable
                     tableHead={adminHomeTableHead}
-                    clientsList={clientsList}
+                    totalTransactions={totalTransactions}
                   />
                 </div>
                 <br />

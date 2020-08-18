@@ -1,12 +1,35 @@
 import React from "react";
-import CustomTable from 'components/table';
+import CustomTable from "components/table";
+import { TableCell, TableRow } from "@material-ui/core";
 
-const SummaryTable =  ({tableHead}) => {
-  const tbody = () => {
-    return null;
-  }
-  return (
-    <CustomTable tableHead={tableHead} tbody={tbody} />
-  );
-}
+const monthName = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "may",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+const SummaryTable = ({ tableHead, transactionList }) => {
+  const tbody = transactionList.map((item, i) => {
+    console.log(transactionList);
+    return (
+      <TableRow key={item.userId}>
+        <TableCell align="center" component="th" scope="row">
+          {i + 1}
+        </TableCell>
+        <TableCell align="center">{monthName[item.month - 1]}</TableCell>
+        <TableCell align="center">{item.count}</TableCell>
+      </TableRow>
+    );
+  });
+  return <CustomTable tableHead={tableHead} tbody={tbody} />;
+};
 export default SummaryTable;

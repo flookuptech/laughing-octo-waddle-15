@@ -11,9 +11,9 @@ class UsersList extends Component {
   state = { clientsList: [] };
 
   async componentDidMount() {
-    const db = this.props.user.orgDatabase;
-    const { data: clientsList } = await getUsers(db);
-    this.setState({ clientsList });
+    const result = await getUsers();
+    this.setState({ clientsList: result.data.data.users });
+    console.log(result.data.data.users);
   }
 
   // handleSwitchChange = async (e) => {

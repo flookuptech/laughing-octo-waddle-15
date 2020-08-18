@@ -1,12 +1,20 @@
 import React, { Fragment } from "react";
 import { TextareaAutosize } from "@material-ui/core";
 
-const CustomTextArea = ({ rows, name, onChange, placeholder, variant }) => {
+const CustomTextArea = ({
+  rows,
+  name,
+  onChange,
+  placeholder,
+  variant,
+  value,
+}) => {
   return (
     <Fragment>
       <TextareaAutosize
         rowsMin={rows}
         name={name}
+        value={value}
         onChange={onChange}
         placeholder={placeholder}
         style={

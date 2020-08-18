@@ -33,7 +33,7 @@ class ClientDS extends Component {
           <Route exact path="/dashboard/" component={Home} />
           <Route
             path="/dashboard/completedTransaction/:id"
-            component={Completed15cbDetails}
+            render={(props) => <Completed15cbDetails user={user} {...props} />}
           />
           <Route component={NotFound} />
         </Switch>

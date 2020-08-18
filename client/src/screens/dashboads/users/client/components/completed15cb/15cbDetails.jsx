@@ -19,10 +19,12 @@ class Details extends Form {
     clientRemarks: {},
     textFrom15cb: {},
     loading15ca: false,
-    loadingXml: false,
+    userId: "",
   };
 
   async componentDidMount() {
+    const user = this.props.user;
+    this.setState({ userId: user._id });
     const { id } = this.props.match.params;
     this.setState({ transactionId: id });
     const result = await getTransactionById(id);
@@ -42,60 +44,35 @@ class Details extends Form {
   //   });
   // };
 
-  handleXmlSave = (files) => {
-    const data = { ...this.state.data };
-    data.filesXml = files;
-    data.open = false;
-    this.setState({
-      data,
-    });
-  };
-
-  // on15caSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const { data, transactionId } = this.state;
-  //   if (data.files15ca) {
-  //     this.setState({ loading15ca: true });
-  //     try {
-  //       const data15ca = new FormData();
-  //       data15ca.append("documentType", "15ca");
-  //       data15ca.append("user", "flookup");
-  //       data15ca.append("file", data.files15ca[0]);
-  //       const result = await upload15caOrXml(transactionId, data15ca);
-  //       if (result.status === 201) {
-  //         this.setState({ loading15ca: false, data: {} });
-  //         toast.success("15CA successfully uploaded");
-  //       }
-  //     } catch (error) {
-  //       this.setState({ loading15ca: false });
-  //       console.log(error);
-  //     }
-  //   } else {
-  //     toast.error("No 15CA Selected");
-  //   }
+  // handleXmlSave = (files) => {
+  //   const data = { ...this.state.data };
+  //   data.filesXml = files;
+  //   data.open = false;
+  //   this.setState({
+  //     data,
+  //   });
   // };
 
-  onXmlSubmit = async (e) => {
-    e.preventDefault();
-    const { data, transactionId } = this.state;
-    if (data.filesXml) {
-      this.setState({ loadingXml: true });
+  onSubmit = async () => {
+    const { data, transactionId, userId } = this.state;
+    if (data.files) {
+      this.setState({ loading15ca: true });
       try {
-        const dataXml = new FormData();
-        dataXml.append("documentType", "xml");
-        dataXml.append("user", "flookup");
-        dataXml.append("file", data.filesXml[0]);
-        const result = await upload15caOrXml(transactionId, dataXml);
+        const data15ca = new FormData();
+        data15ca.append("documentType", "xml");
+        data15ca.append("user", userId);
+        data15ca.append("file", data.files[0]);
+        const result = await upload15caOrXml(transactionId, data15ca);
         if (result.status === 201) {
-          this.setState({ loadingXml: false });
-          toast.success("XML successfully uploaded");
+          this.setState({ loading15ca: false, data: {} });
+          toast.success("15CA successfully uploaded");
         }
       } catch (error) {
-        this.setState({ loadingXml: false });
+        this.setState({ loading15ca: false });
         console.log(error);
       }
     } else {
-      toast.error("No XML Selected");
+      toast.error("No 15CA Selected");
     }
   };
 
@@ -213,101 +190,124 @@ class Details extends Form {
                 <br />
               </Paper>
               <br />
-              <Paper className="paper" elevation={4}>
+              {!clientData.caLink ? (
                 <Fragment>
-                  <Typography
-                    className="pageHeading"
-                    component="h6"
-                    variant="h6"
-                  >
-                    Upload 15CA or XML
-                  </Typography>
+                  <Paper className="paper" elevation={4}>
+                    <Fragment>
+                      <Typography
+                        className="pageHeading"
+                        component="h6"
+                        variant="h6"
+                      >
+                        Upload 15CA
+                      </Typography>
+                      <br />
+                    </Fragment>
+                    <Grid>
+                      <Fragment>
+                        <form onSubmit={this.handleSubmit}>
+                          <Grid
+                            container
+                            justify="space-around"
+                            alignItems="center"
+                            direction="row"
+                          >
+                            <Grid item>
+                              <CustomButton
+                                variant="outlined"
+                                color="secondary"
+                                onClick={this.handleOpen}
+                                icon={<Publish />}
+                                label="15CA"
+                              />
+                              <FileUpload
+                                open={this.state.data.open}
+                                handleSave={this.handleSave}
+                                handleClose={this.handleClose}
+                                filesLimit={1}
+                              />
+                            </Grid>
+                            <Grid item>
+                              <CustomButton
+                                variant="contained"
+                                loading={this.state.loading15ca}
+                                color="primary"
+                                icon={<Send />}
+                                label="15CA"
+                                type="submit"
+                              />
+                            </Grid>
+                          </Grid>
+                        </form>
+                        <br />
+                        <br />
+                      </Fragment>
+                    </Grid>
+                    <br />
+                  </Paper>
                   <br />
+                  <br />{" "}
                 </Fragment>
-                <Grid>
-                  {/* {!clientData.caLink ? (
+              ) : null}
+              {!clientData.xmlLink ? (
+                <Fragment>
+                  <Paper className="paper" elevation={4}>
                     <Fragment>
-                      <form onSubmit={this.on15caSubmit}>
-                        <Grid
-                          container
-                          justify="space-around"
-                          alignItems="center"
-                          direction="row"
-                        >
-                          <Grid item>
-                            <CustomButton
-                              variant="outlined"
-                              color="secondary"
-                              onClick={this.handleOpen}
-                              icon={<Publish />}
-                              label="15CA"
-                            />
-                            <FileUpload
-                              open={this.state.data.open}
-                              handleSave={this.handle15caSave}
-                              handleClose={this.handleClose}
-                              filesLimit={1}
-                            />
-                          </Grid>
-                          <Grid item>
-                            <CustomButton
-                              variant="contained"
-                              loading={this.state.loading15ca}
-                              color="primary"
-                              icon={<Send />}
-                              label="15CA"
-                              type="submit"
-                            />
-                          </Grid>
-                        </Grid>
-                      </form>
-                      <br />
+                      <Typography
+                        className="pageHeading"
+                        component="h6"
+                        variant="h6"
+                      >
+                        Upload 15CA
+                      </Typography>
                       <br />
                     </Fragment>
-                  ) : null} */}
-                  {!clientData.xmlLink ? (
-                    <Fragment>
-                      <form onSubmit={this.onXmlSubmit}>
-                        <Grid
-                          container
-                          justify="space-around"
-                          alignItems="center"
-                          direction="row"
-                        >
-                          <Grid item>
-                            <CustomButton
-                              variant="outlined"
-                              color="secondary"
-                              onClick={this.handleOpen}
-                              icon={<Publish />}
-                              label="XML"
-                            />
-                            <FileUpload
-                              open={this.state.data.open}
-                              handleSave={this.handleXmlSave}
-                              handleClose={this.handleClose}
-                              filesLimit={1}
-                            />
+                    <Grid>
+                      <Fragment>
+                        <form onSubmit={this.handleSubmit}>
+                          <Grid
+                            container
+                            justify="space-around"
+                            alignItems="center"
+                            direction="row"
+                          >
+                            <Grid item>
+                              <CustomButton
+                                variant="outlined"
+                                color="secondary"
+                                onClick={this.handleOpen}
+                                icon={<Publish />}
+                                label="XML"
+                              />
+                              <FileUpload
+                                open={this.state.data.open}
+                                handleSave={this.handleSave}
+                                handleClose={this.handleClose}
+                                filesLimit={1}
+                              />
+                            </Grid>
+                            <Grid item>
+                              <CustomButton
+                                variant="contained"
+                                loading={this.state.loadingXml}
+                                color="primary"
+                                icon={<Send />}
+                                label="XML"
+                                type="submit"
+                              />
+                            </Grid>
                           </Grid>
-                          <Grid item>
-                            <CustomButton
-                              variant="contained"
-                              color="primary"
-                              loading={this.state.loadingXml}
-                              icon={<Send />}
-                              label="XML"
-                              type="submit"
-                            />
-                          </Grid>
-                        </Grid>
-                      </form>
-                    </Fragment>
-                  ) : null}
-                </Grid>
-                <br />
-              </Paper>
-              <br />
-              <br />
+                        </form>
+                        <br />
+                        <br />
+                      </Fragment>
+                    </Grid>
+                    <br />
+                  </Paper>
+                  <br />
+                  <br />{" "}
+                </Fragment>
+              ) : null}
             </Container>
           </main>
         </Grid>

@@ -1,9 +1,5 @@
 export let readOnlyFields = [
   {
-    value: "clientName",
-    helperText: "Client Name",
-  },
-  {
     value: "createdAt",
     helperText: "Date",
   },

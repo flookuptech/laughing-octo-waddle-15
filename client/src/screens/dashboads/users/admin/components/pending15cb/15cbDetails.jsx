@@ -16,7 +16,7 @@ class Details extends Form {
   state = {
     data: {},
     clientData: {},
-    transactionId: {},
+    transactionId: "",
     clientRemarks: {},
     loading: false,
   };
@@ -25,6 +25,7 @@ class Details extends Form {
     const { id } = this.props.match.params;
     this.setState({ transactionId: id });
     const result = await getTransactionById(id);
+    console.log(result);
     this.setState({
       clientData: result.data.data.transcation,
       clientRemarks: result.data.data.transcation.userRemarks,
@@ -67,12 +68,12 @@ class Details extends Form {
 
     return (
       <Fragment>
-        <HtmlTitle title={"Add Client"} />
+        <HtmlTitle title={"Pending 15CB"} />
         <Grid>
           <ToastContainer autoClose={1500} closeButton={false} />
           <main className="content">
             <Container maxWidth="lg">
-              <br />
+              <br />}
               <Paper className="paper" elevation={4}>
                 <Fragment>
                   <Typography

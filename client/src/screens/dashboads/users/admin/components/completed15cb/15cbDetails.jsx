@@ -3,47 +3,31 @@ import { ToastContainer, toast } from "react-toastify";
 import HtmlTitle from "components/title";
 import { Typography, Container, Grid, Paper } from "@material-ui/core";
 import Form from "components/form/form";
-import GetAppIcon from "@material-ui/icons/GetApp";
-import {
-  readOnlyFields,
-  editableFields,
-  extractedTextFields,
-} from "../15cbDetailsFields";
+import { extractedTextFields } from "../15cbDetailsFields";
 import InputField from "components/form/inputField";
-import PublishIcon from "@material-ui/icons/Publish";
-import SendIcon from "@material-ui/icons/Send";
+import { GetApp } from "@material-ui/icons";
 import CustomButton from "components/form/button";
-import FileUpload from "components/fileUpload";
-import CustomTextArea from "components/form/textArea";
 import { getTransactionById } from "services/getTransactionById";
-import { upload15caOrXml } from "services/upload15caOrXml";
 import { upload15cb } from "services/upload15cb";
+import TransactionDataFields from "./transactionDataFields";
 
 class Details extends Form {
   state = {
     data: {},
     transactionId: "",
-    clientData: {},
-    clientRemarks: {},
-    textFrom15CB: {},
-  };
-
-  handleCaFieldsChange = ({ target }) => {
-    const clientData = { ...this.state.clientData };
-    clientData[target.name] = target.value;
-    this.setState({ clientData });
-    console.log(clientData);
+    userId: "",
+    loading15cb: false,
   };
 
   async componentDidMount() {
     try {
+      const user = this.props.user;
+      this.setState({ userId: user._id });
       const { id } = this.props.match.params;
       this.setState({ transactionId: id });
       const result = await getTransactionById(id);
       this.setState({
-        clientData: result.data.data.transcation,
-        clientRemarks: result.data.data.transcation.userRemarks,
-        textFrom15CB: result.data.data.transcation.textFrom15CB,
+        data: result.data.data.transcation,
       });
     } catch (error) {
       console.log(error);
@@ -51,29 +35,28 @@ class Details extends Form {
   }
 
   onSubmit = async () => {
-    const transactionId = this.state.transactionId;
-    const { ackNumber, udin, partyName } = this.state.clientData;
-    const file15cb = this.state.data;
-    if (file15cb.files) {
+    const { transactionId, userId, data, loading15cb } = this.state;
+    const { ackNumber, udin, partyName, adminRemarks } = this.state.data;
+    if (data.files) {
+      this.setState({ loading15cb: !loading15cb });
       try {
-        const data = new FormData();
-        data.append("documentType", "15cb");
-        data.append("user", "admin");
-        data.append("ackNumber", ackNumber);
-        data.append("udin", udin);
-        data.append("partyName", partyName);
-        data.append("file", file15cb.files[0]);
-        const result = await upload15cb(transactionId, data);
+        const update15cb = new FormData();
+        update15cb.append("documentType", "15cb");
+        update15cb.append("user", userId);
+        update15cb.append("ackNumber", ackNumber);
+        update15cb.append("udin", udin);
+        update15cb.append("adminRemarks", adminRemarks);
+        update15cb.append("partyName", partyName);
+        update15cb.append("file", data.files[0]);
+        const result = await upload15cb(transactionId, update15cb);
         if (result.status === 201) {
-          toast.success("15CB uploaded succesfully");
-          this.setState({
-            loading: !this.state.loading,
-          });
+          toast.success("15CB updated succesfully");
+          this.setState({ loading15cb: !this.state.loading15cb });
         }
       } catch (error) {
         console.log(error);
         toast.error("Error Occured");
-        this.setState({ loading: !this.state.loading });
+        this.setState({ loading15cb: !this.state.loading15cb });
       }
     } else {
       toast.error("Please upload 15CB");
@@ -81,183 +64,123 @@ class Details extends Form {
   };
 
   render() {
-    const { clientData, clientRemarks, textFrom15CB } = this.state;
-
+    const { data, loading15cb } = this.state;
     return (
       <Fragment>
-        <HtmlTitle title={"Add Client"} />
-        <Grid>
-          {console.log(this.state)}
-          <ToastContainer autoClose={1500} closeButton={false} />
-          <main className="content">
-            <Container maxWidth="lg">
-              <br />
-              <Paper className="paper" elevation={4}>
-                <Fragment>
-                  <Typography
-                    className="pageHeading"
-                    component="h6"
-                    variant="h6"
-                  >
-                    Downloads Available
-                  </Typography>
-                  <br />
-                </Fragment>
-                <Grid
-                  container
-                  direction="row"
-                  justify="space-around"
-                  alignItems="center"
-                >
-                  <Grid item>
-                    <a
-                      href={clientData.invoiceLink}
-                      target="_blank"
-                      style={{ textDecoration: "none" }}
-                      rel="noopener noreferrer"
+        <HtmlTitle title={"15CB Details"} />
+        {Object.keys(data).length ? (
+          <Grid>
+            <ToastContainer autoClose={1500} closeButton={false} />
+            <main className="content">
+              <Container maxWidth="lg">
+                <br />
+                <Paper className="paper" elevation={4}>
+                  <Fragment>
+                    <Typography
+                      className="pageHeading"
+                      component="h6"
+                      variant="h6"
                     >
-                      <CustomButton
-                        variant="outlined"
-                        color="secondary"
-                        icon={<GetAppIcon />}
-                        label="Invoice"
-                      />
-                    </a>
-                  </Grid>
-                  <Grid item>
-                    <a
-                      style={{ textDecoration: "none" }}
-                      href={clientData.cbLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <CustomButton
-                        variant="outlined"
-                        color="secondary"
-                        icon={<GetAppIcon />}
-                        label="15CB"
-                      />
-                    </a>
-                  </Grid>
-                </Grid>
-              </Paper>
-              <br />
-              <Paper className="paper" elevation={4}>
-                <Fragment>
-                  <Typography
-                    className="pageHeading"
-                    component="h6"
-                    variant="h6"
+                      Downloads Available
+                    </Typography>
+                    <br />
+                  </Fragment>
+                  <Grid
+                    container
+                    direction="row"
+                    justify="space-around"
+                    alignItems="center"
                   >
-                    Transaction Details
-                  </Typography>
-                  <br />
-                </Fragment>
-                <Grid container spacing={3}>
-                  {readOnlyFields.map((item) => {
-                    return (
-                      <Grid item xs={12} sm={6} md={4} lg={4}>
-                        <InputField
-                          value={
-                            item.value === "createdAt" ||
-                            item.value === "trackingNumber"
-                              ? clientData[item.value]
-                              : clientRemarks[item.value]
-                          }
-                          helperText={item.helperText}
-                          InputProps={{ readOnly: true }}
-                          name={item.value}
+                    <Grid item>
+                      <a
+                        href={data.invoiceLink}
+                        target="_blank"
+                        style={{ textDecoration: "none" }}
+                        rel="noopener noreferrer"
+                      >
+                        <CustomButton
+                          variant="outlined"
+                          color="secondary"
+                          icon={<GetApp />}
+                          label="Invoice"
                         />
-                      </Grid>
-                    );
-                  })}
-                </Grid>
-                <form onSubmit={this.handleSubmit}>
+                      </a>
+                    </Grid>
+                    <Grid item>
+                      <a
+                        style={{ textDecoration: "none" }}
+                        href={data.cbLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <CustomButton
+                          variant="outlined"
+                          color="secondary"
+                          icon={<GetApp />}
+                          label="15CB"
+                        />
+                      </a>
+                    </Grid>
+                  </Grid>
+                </Paper>
+                <br />
+                <Paper className="paper" elevation={4}>
+                  <Fragment>
+                    <Typography
+                      className="pageHeading"
+                      component="h6"
+                      variant="h6"
+                    >
+                      Transaction Details
+                    </Typography>
+                    <br />
+                    <TransactionDataFields
+                      data={data}
+                      handleSubmit={this.handleSubmit}
+                      handleOnChange={this.handleOnChange}
+                      handleOpen={this.handleOpen}
+                      handleSave={this.handleSave}
+                      open={data.open}
+                      loading15cb={loading15cb}
+                    />
+                  </Fragment>
+                </Paper>
+                <br />
+                <Paper className="paper" elevation={4}>
+                  <Fragment>
+                    <Typography
+                      className="pageHeading"
+                      component="h6"
+                      variant="h6"
+                    >
+                      Text extracted from 15CB
+                    </Typography>
+                    <br />
+                  </Fragment>
                   <Grid container spacing={3}>
-                    {editableFields.map((item) => {
+                    {extractedTextFields.map((item) => {
                       return (
                         <Grid item xs={12} sm={6} md={4} lg={4}>
                           <InputField
-                            className="editable-field-background"
-                            value={clientData[item.value]}
-                            onChange={this.handleCaFieldsChange}
-                            name={item.value}
+                            value={data.textFrom15CB[item.value]}
                             helperText={item.helperText}
-                            InputProps={{ readOnly: false }}
+                            InputProps={{ readOnly: true }}
+                            name={item.value}
                           />
                         </Grid>
                       );
                     })}
-                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                      <CustomTextArea
-                        variant="completed"
-                        name="remarks"
-                        placeholder="Type your remarks here, if any"
-                        rows={3}
-                        onChange={this.handleOnChange}
-                      />
-                    </Grid>
                   </Grid>
                   <br />
-                  <CustomButton
-                    variant="outlined"
-                    color="secondary"
-                    icon={<PublishIcon />}
-                    label="15CB"
-                    onClick={this.handleOpen}
-                  />
-                  <br />
-                  <FileUpload
-                    filesLimit={1}
-                    handleOpen={this.handleOpen}
-                    handleSave={this.handleSave}
-                    open={this.state.data.open}
-                  />
-                  <div style={{ float: "right" }}>
-                    <CustomButton
-                      variant="contained"
-                      color="primary"
-                      icon={<SendIcon />}
-                      label="Update 15CB Details"
-                      type="submit"
-                    />
-                  </div>
-                </form>
+                </Paper>
                 <br />
-              </Paper>
-              <br />
-              <Paper className="paper" elevation={4}>
-                <Fragment>
-                  <Typography
-                    className="pageHeading"
-                    component="h6"
-                    variant="h6"
-                  >
-                    Text extracted from 15CB
-                  </Typography>
-                  <br />
-                </Fragment>
-                <Grid container spacing={3}>
-                  {extractedTextFields.map((item) => {
-                    return (
-                      <Grid item xs={12} sm={6} md={4} lg={4}>
-                        <InputField
-                          value={textFrom15CB[item.value]}
-                          helperText={item.helperText}
-                          InputProps={{ readOnly: true }}
-                          name={item.value}
-                        />
-                      </Grid>
-                    );
-                  })}
-                </Grid>
                 <br />
-              </Paper>
-              <br />
-              <br />
-            </Container>
-          </main>
-        </Grid>
+              </Container>
+            </main>
+          </Grid>
+        ) : (
+          <h1>Loading...</h1>
+        )}
       </Fragment>
     );
   }

@@ -43,7 +43,7 @@ class AdminUserDS extends Component {
           />
           <Route
             path="/dashboard/completed15CB/:id"
-            component={Completed15cbDetails}
+            render={(props) => <Completed15cbDetails user={user} {...props} />}
           />
           <Route component={NotFound} />
         </Switch>

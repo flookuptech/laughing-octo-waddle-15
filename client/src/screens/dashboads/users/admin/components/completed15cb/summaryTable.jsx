@@ -1,12 +1,23 @@
 import React from "react";
-import { TableCell, TableRow } from "@material-ui/core";
 import CustomTable from "components/table";
+import { TableCell, TableRow } from "@material-ui/core";
 
-const tbody = () => {
-  return null;
-};
-
-const SummaryTable = ({ tableHead }) => {
+const SummaryTable = ({ tableHead, transactionList }) => {
+  const tbody = transactionList.map((item, i) => {
+    return (
+      <TableRow key={item.userId}>
+        <TableCell align="center" component="th" scope="row">
+          {i + 1}
+        </TableCell>
+        <TableCell align="center">
+          {item.clientDetails[0].userDetails.firstName +
+            `\n` +
+            item.clientDetails[0].userDetails.lastName}
+        </TableCell>
+        <TableCell align="center">{item.count}</TableCell>
+      </TableRow>
+    );
+  });
   return <CustomTable tableHead={tableHead} tbody={tbody} />;
 };
 export default SummaryTable;
