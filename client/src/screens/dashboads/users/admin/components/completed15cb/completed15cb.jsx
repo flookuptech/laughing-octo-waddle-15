@@ -36,7 +36,6 @@ class Completed15cb extends Form {
         });
       }
       const result = await getAllTransactions(status);
-      console.log(result);
       if (result.status === 201) {
         this.setState({
           allTransactionList: result.data.data.transcations,

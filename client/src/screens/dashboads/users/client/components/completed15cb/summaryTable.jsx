@@ -19,7 +19,6 @@ const monthName = [
 
 const SummaryTable = ({ tableHead, transactionList }) => {
   const tbody = transactionList.map((item, i) => {
-    console.log(transactionList);
     return (
       <TableRow key={item.userId}>
         <TableCell align="center" component="th" scope="row">

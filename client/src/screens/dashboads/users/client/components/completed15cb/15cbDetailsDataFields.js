@@ -44,7 +44,7 @@ export let transactionDetailsDataFields = [
     helperText: "UDIN",
   },
   {
-    value: "",
+    value: "adminRemarks",
     helperText: "Remarks by CA",
   },
 ];

@@ -6,21 +6,21 @@ import { withStyles, Button, Typography } from "@material-ui/core";
 const styles = () => ({
   root: {
     display: "flex",
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   header: {
     fontWeight: 900,
     minWidth: 0,
-    fontSize: 18
+    fontSize: 18,
   },
   grow: {
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 });
 
 const Navbar = ({ classes, companyName }) => {
   return (
-    <Fragment style={{ backgroundColor: "white" }}>
+    <Fragment>
       <Typography noWrap className={classes.header}>
         Dashboard
       </Typography>
