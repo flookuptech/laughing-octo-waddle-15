@@ -33,6 +33,7 @@ class Pending15cb extends Component {
           <main className="content">
             <Container maxWidth="lg">
               <br />
+              {console.log(transactionList)}
               <Paper className="paper" elevation={4}>
                 <div>
                   <Typography

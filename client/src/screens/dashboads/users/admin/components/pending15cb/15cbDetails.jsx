@@ -1,52 +1,47 @@
 import React, { Fragment } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import HtmlTitle from "components/title";
-import { Typography, Container, Grid, Paper, Divider } from "@material-ui/core";
-import FileUpload from "components/fileUpload";
-import CustomTextArea from "components/form/textArea";
+import { Typography, Container, Grid, Paper } from "@material-ui/core";
 import Form from "components/form/form";
-import { GetApp, Publish, Send } from "@material-ui/icons";
-import { readOnlyFields, editableFields } from "../15cbDetailsFields";
-import InputField from "components/form/inputField";
+import { GetApp } from "@material-ui/icons";
 import { getTransactionById } from "services/getTransactionById";
 import { upload15cb } from "services/upload15cb";
 import CustomButton from "components/form/button";
+import TransactionDataFields from "./transactionDataFields";
 
 class Details extends Form {
   state = {
     data: {},
-    clientData: {},
     transactionId: "",
-    clientRemarks: {},
     loading: false,
+    userId: "",
   };
 
   async componentDidMount() {
+    const user = this.props.user;
+    this.setState({ userId: user._id });
     const { id } = this.props.match.params;
     this.setState({ transactionId: id });
     const result = await getTransactionById(id);
-    console.log(result);
     this.setState({
-      clientData: result.data.data.transcation,
-      clientRemarks: result.data.data.transcation.userRemarks,
+      data: result.data.data.transcation,
     });
   }
 
   onSubmit = async () => {
-    const transactionId = this.state.transactionId;
-    const adminRemarks = this.state.data;
-    if (adminRemarks.files) {
-      this.setState({ loading: !this.state.loading });
+    const { transactionId, data, loading } = this.state;
+    if (data.files) {
+      this.setState({ loading: !loading });
       try {
-        const data = new FormData();
-        data.append("documentType", "15cb");
-        data.append("user", "admin");
-        data.append("ackNumber", adminRemarks.ackNumber);
-        data.append("udin", adminRemarks.udin);
-        data.append("partyName", adminRemarks.partyName);
-        data.append("remarks", adminRemarks.remarks);
-        data.append("file", adminRemarks.files[0]);
-        const result = await upload15cb(transactionId, data);
+        const data15cb = new FormData();
+        data15cb.append("documentType", "15cb");
+        data15cb.append("user", this.state.userId);
+        data15cb.append("ackNumber", data.ackNumber);
+        data15cb.append("udin", data.udin);
+        data15cb.append("partyName", data.partyName);
+        data15cb.append("adminRemarks", data.adminRemarks);
+        data15cb.append("file", data.files[0]);
+        const result = await upload15cb(transactionId, data15cb);
         if (result.status === 201) {
           toast.success("15CB uploaded succesfully");
           this.setState({
@@ -64,7 +59,7 @@ class Details extends Form {
   };
 
   render() {
-    const { clientData, clientRemarks } = this.state;
+    const { data, loading } = this.state;
 
     return (
       <Fragment>
@@ -72,117 +67,51 @@ class Details extends Form {
         <Grid>
           <ToastContainer autoClose={1500} closeButton={false} />
           <main className="content">
-            <Container maxWidth="lg">
-              <br />}
-              <Paper className="paper" elevation={4}>
-                <Fragment>
-                  <Typography
-                    className="pageHeading"
-                    component="h6"
-                    variant="h6"
-                  >
-                    Client Remarks
-                  </Typography>
-                  <br />
-                  <a
-                    style={{ textDecoration: "none" }}
-                    href={clientData.invoiceLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <CustomButton
-                      variant="outlined"
-                      color="secondary"
-                      icon={<GetApp />}
-                      label="Invoice"
-                    />
-                  </a>
-                  <br />
-                  <br />
-                  <Grid container spacing={3}>
-                    {readOnlyFields.map((item) => {
-                      return (
-                        <Grid item xs={6} md={4} lg={4}>
-                          <InputField
-                            value={
-                              item.value === "partyName" ||
-                              item.value === "createdAt" ||
-                              item.value === "trackingNumber"
-                                ? clientData[item.value]
-                                : clientRemarks[item.value]
-                            }
-                            helperText={item.helperText}
-                            InputProps={{ readOnly: true }}
-                            name={item.value}
-                          />
-                        </Grid>
-                      );
-                    })}
-                  </Grid>
-                </Fragment>
+            {Object.keys(data).length ? (
+              <Container maxWidth="lg">
                 <br />
-                <Divider style={{ padding: 1 }} />
-                <br />
-                <Typography className="pageHeading" component="h6" variant="h6">
-                  Add your inputs and remarks:
-                </Typography>
-                <br />
-                <Fragment>
-                  <form onSubmit={this.handleSubmit}>
-                    <Grid container spacing={3}>
-                      {editableFields.map((item) => {
-                        return (
-                          <Grid item xs={6} md={4} lg={4}>
-                            <InputField
-                              required
-                              helperText={item.helperText}
-                              InputProps={{ readOnly: false }}
-                              name={item.value}
-                              onChange={this.handleOnChange}
-                            />
-                          </Grid>
-                        );
-                      })}
-                    </Grid>
+                <Paper className="paper" elevation={4}>
+                  <Fragment>
+                    <Typography
+                      className="pageHeading"
+                      component="h6"
+                      variant="h6"
+                    >
+                      Client Remarks
+                    </Typography>
                     <br />
-                    <CustomTextArea
-                      variant="pending"
-                      onChange={this.handleOnChange}
-                      name="remarks"
-                      rows={3}
-                      placeholder="Type your remarks here, if any"
-                    />
-                    <br />
-                    <br />
-                    <CustomButton
-                      variant="outlined"
-                      color="secondary"
-                      icon={<Publish />}
-                      onClick={this.handleOpen}
-                      label="Upload 15CB"
-                    />
-                    <br />
-                    <br />
-                    <FileUpload
-                      open={this.state.data.open}
-                      handleSave={this.handleSave}
-                      onClose={this.handleClose}
-                    />
-                    <div style={{ float: "right" }}>
+                    <a
+                      style={{ textDecoration: "none" }}
+                      href={data.invoiceLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <CustomButton
-                        variant="contained"
-                        loading={this.state.loading}
-                        color="primary"
-                        icon={<Send />}
-                        label="Submit"
-                        type="submit"
+                        variant="outlined"
+                        color="secondary"
+                        icon={<GetApp />}
+                        label="Invoice"
                       />
-                    </div>
-                  </form>
-                </Fragment>
-              </Paper>
-              <br />
-            </Container>
+                    </a>
+                  </Fragment>
+                  <br />
+                  <br />
+                  <TransactionDataFields
+                    data={data}
+                    handleSubmit={this.handleSubmit}
+                    handleOnChange={this.handleOnChange}
+                    handleOpen={this.handleOpen}
+                    handleSave={this.handleSave}
+                    open={data.open}
+                    handleClose={this.handleClose}
+                    loading={loading}
+                  />
+                </Paper>
+                <br />
+              </Container>
+            ) : (
+              <h1>Loading....</h1>
+            )}
           </main>
         </Grid>
       </Fragment>
