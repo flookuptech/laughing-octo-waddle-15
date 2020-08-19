@@ -11,7 +11,6 @@ class Home extends Component {
 
   async componentDidMount() {
     const totalTransactions = await getTotalTransactionsOfUsers();
-    console.log("totalTransactions", totalTransactions);
   }
 
   render() {

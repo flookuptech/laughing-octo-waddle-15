@@ -68,17 +68,17 @@ const TransactionDataFields = ({
               </Grid>
             );
           })}
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <CustomTextArea
-              value={data.adminRemarks === null ? "none" : data.adminRemarks}
-              variant="completed"
-              name="adminRemarks"
-              placeholder="Type your remarks here, if any"
-              rows={3}
-              onChange={handleOnChange}
-            />
-          </Grid>
         </Grid>
+        <br />
+        <CustomTextArea
+          value={data.adminRemarks === null ? "none" : data.adminRemarks}
+          variant="completed"
+          name="adminRemarks"
+          placeholder="Type your remarks here, if any"
+          rows={3}
+          onChange={handleOnChange}
+        />
+        <br />
         <br />
         <Grid
           container

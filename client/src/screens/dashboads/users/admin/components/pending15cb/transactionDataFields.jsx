@@ -20,10 +20,23 @@ const TransactionDataFields = ({
 }) => {
   return (
     <Fragment>
+      {console.log(data)}
       <Grid container spacing={3}>
+        <Grid item xs={12} sm={6} md={4} lg={4}>
+          <InputField
+            value={
+              data.userId.userDetails.firstName +
+              " " +
+              data.userId.userDetails.lastName
+            }
+            helperText={"Client Name"}
+            InputProps={{ readOnly: true }}
+            name={"clientName"}
+          />
+        </Grid>
         {readOnlyFields.map((item) => {
           return (
-            <Grid item xs={6} md={4} lg={4}>
+            <Grid item xs={12} sm={6} md={4} lg={4}>
               <InputField
                 value={
                   item.value === "partyName" || item.value === "trackingNumber"
@@ -52,7 +65,7 @@ const TransactionDataFields = ({
           <Grid container spacing={3}>
             {editableFields.map((item) => {
               return (
-                <Grid item xs={6} md={4} lg={4}>
+                <Grid item xs={12} sm={6} md={4} lg={4}>
                   <InputField
                     required
                     helperText={item.helperText}
@@ -86,7 +99,8 @@ const TransactionDataFields = ({
           <FileUpload
             open={open}
             handleSave={handleSave}
-            onClose={handleClose}
+            handleClose={handleClose}
+            filesLimit={1}
           />
           <div style={{ float: "right" }}>
             <CustomButton
