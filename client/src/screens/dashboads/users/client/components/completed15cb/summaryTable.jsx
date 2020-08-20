@@ -19,13 +19,14 @@ const monthName = [
 
 const SummaryTable = ({ tableHead, transactionList }) => {
   const tbody = transactionList.map((item, i) => {
+    console.log(transactionList);
     return (
       <TableRow key={item.userId}>
         <TableCell align="center" component="th" scope="row">
           {i + 1}
         </TableCell>
         <TableCell align="center">{monthName[item.month - 1]}</TableCell>
-        <TableCell align="center">{item.count}</TableCell>
+        <TableCell align="center">{item.complete}</TableCell>
       </TableRow>
     );
   });

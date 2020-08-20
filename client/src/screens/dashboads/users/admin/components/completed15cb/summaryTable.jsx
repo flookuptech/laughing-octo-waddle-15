@@ -10,9 +10,7 @@ const SummaryTable = ({ tableHead, transactionList }) => {
           {i + 1}
         </TableCell>
         <TableCell align="center">
-          {item.clientDetails[0].userDetails.firstName +
-            `\n` +
-            item.clientDetails[0].userDetails.lastName}
+          {item.userDetails.firstName + `\n` + item.userDetails.lastName}
         </TableCell>
         <TableCell align="center">{item.count}</TableCell>
       </TableRow>
