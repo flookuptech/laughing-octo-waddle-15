@@ -27,13 +27,23 @@ router
   );
 
 router
-  .route("/15caOrXml/:id")
+  .route("/15ca/:id")
   .post(
     authController.protectRoute,
     authController.accessTo("client"),
     uploadMulti.uploadFile,
-    requestValidator.form15CAOrXml,
-    documentController.upload15CaOrXml
+    requestValidator.form15CA,
+    documentController.upload15Ca
+  );
+
+router
+  .route("/xml/:id")
+  .post(
+    authController.protectRoute,
+    authController.accessTo("admin"),
+    uploadMulti.uploadFile,
+    requestValidator.xml,
+    documentController.uploadXML
   );
 
 router

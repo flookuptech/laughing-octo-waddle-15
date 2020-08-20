@@ -70,14 +70,20 @@ exports.userTotalTranscations = catchAsyncError(async (req, res, next) => {
       },
     },
     {
+      $replaceRoot: {
+        newRoot: {
+          $mergeObjects: [{ $arrayElemAt: ["$clientDetails", 0] }, "$$ROOT"],
+        },
+      },
+    },
+    { $project: { clientDetails: 0 } },
+    {
       $project: {
         _id: 0,
         userId: "$_id",
         total: 1,
-        clientDetails: {
-          userDetails: { firstName: 1, lastName: 1, email: 1 },
-          companyDetails: 1,
-        },
+        userDetails: { firstName: 1, lastName: 1, email: 1 },
+        companyDetails: { companyName: 1, companyEmail: 1 },
       },
     },
   ]);
@@ -104,15 +110,21 @@ exports.userTranscationSummary = catchAsyncError(async (req, res, next) => {
       },
     },
     {
+      $replaceRoot: {
+        newRoot: {
+          $mergeObjects: [{ $arrayElemAt: ["$clientDetails", 0] }, "$$ROOT"],
+        },
+      },
+    },
+    { $project: { clientDetails: 0 } },
+    {
       $project: {
         _id: 0,
         userId: "$_id",
         count: 1,
-        clientDetails: {
-          totalTranscations: 1,
-          userDetails: { firstName: 1, lastName: 1, email: 1 },
-          companyDetails: 1,
-        },
+        total: "$totalTranscations",
+        userDetails: { firstName: 1, lastName: 1, email: 1 },
+        companyDetails: { companyName: 1, companyEmail: 1 },
       },
     },
   ]);
@@ -130,7 +142,7 @@ exports.userMonthSummary = catchAsyncError(async (req, res, next) => {
   const data = await Invoice.aggregate([
     { $match: { $and: [{ userId: id }, { status: "complete" }] } },
     { $group: { _id: { $month: "$createdAt" }, count: { $sum: 1 } } },
-    { $project: { _id: 0, month: "$_id", count: 1 } },
+    { $project: { _id: 0, month: "$_id", complete: "$count" } },
   ]);
 
   res.status(200).json({

@@ -27,7 +27,8 @@ const storage = multer.diskStorage({
     );
   },
   filename: function (req, file, cb) {
-    const rand = r.generateRandNumber(10, "alphanumeric");
+    const rand = r.generateRandNumber(10, "numeric");
+    req.body.fileIdentifier = rand;
     const ext = file.mimetype.split("/")[1];
     cb(null, `${file.fieldname}-${rand}.${ext}`);
   },

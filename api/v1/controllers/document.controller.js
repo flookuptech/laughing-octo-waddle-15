@@ -3,17 +3,22 @@ const _ = require("lodash");
 const z = require("../utils/zipper.util");
 const { ocr } = require("../utils/ocr.util");
 const User = require("../models/user.model");
+const rand = require("../utils/randNumber.util");
 const Invoice = require("../models/invoice.model");
-const AppError = require("../utils/appError.util");
 const catchAsync = require("../utils/catchAsync.util");
 const ApiFeatures = require("../utils/apiFeatures.util");
 
 exports.userUploadsInvoice = catchAsync(async (req, res, next) => {
   let { payload } = req.body;
 
-  const objectS3 = await z.upload(payload.user, payload.documentType);
+  const objectS3 = await z.upload(
+    payload.user,
+    payload.documentType,
+    payload.fileIdentifier
+  );
 
   payload.invoiceLink = objectS3.Location;
+  payload.trackingNumber = payload.fileIdentifier;
 
   const doc = await Invoice.create(payload);
 
@@ -42,10 +47,11 @@ exports.adminUploads15CB = catchAsync(async (req, res, next) => {
 
   const data = await ocr(req.file);
 
-  const objectS3 = await z.upload15CB(
+  const objectS3 = await z.uploadAdmin(
     payload.admin,
     payload.documentType,
-    payload.user
+    payload.user,
+    payload.fileIdentifier
   );
 
   payload.status = "complete";
@@ -69,23 +75,19 @@ exports.adminUploads15CB = catchAsync(async (req, res, next) => {
   await z.emptyDir(payload.admin, payload.documentType);
 });
 
-exports.upload15CaOrXml = catchAsync(async (req, res, next) => {
+exports.upload15Ca = catchAsync(async (req, res, next) => {
   const { payload } = req.body;
 
-  const ext = req.file.mimetype.split("/")[1].toLowerCase();
-  const objectS3 = await z.upload(payload.user, payload.documentType);
-
-  let fileLink = {};
-  if (ext === "xml" && payload.documentType === "xml") {
-    fileLink["xmlLink"] = objectS3.Location;
-  } else if (ext === "pdf" && payload.documentType === "15ca") {
-    fileLink["caLink"] = objectS3.Location;
-  }
+  const objectS3 = await z.upload(
+    payload.user,
+    payload.documentType,
+    payload.fileIdentifier
+  );
 
   const doc = await Invoice.findByIdAndUpdate(
     { _id: req.params.id },
-    fileLink,
-    { new: true, runValidators: true }
+    { caLink: objectS3.Location },
+    { new: true, runValidators: false }
   );
 
   res.status(201).json({
@@ -97,6 +99,33 @@ exports.upload15CaOrXml = catchAsync(async (req, res, next) => {
   });
 
   await z.emptyDir(payload.user, payload.documentType);
+});
+
+exports.uploadXML = catchAsync(async (req, res, next) => {
+  const { payload } = req.body;
+
+  const objectS3 = await z.uploadAdmin(
+    payload.admin,
+    payload.documentType,
+    payload.user,
+    payload.fileIdentifier
+  );
+
+  const doc = await Invoice.findByIdAndUpdate(
+    { _id: req.params.id },
+    { xmlLink: objectS3.Location },
+    { new: true, runValidators: false }
+  );
+
+  res.status(201).json({
+    status: "success",
+    results: doc.length,
+    data: {
+      doc,
+    },
+  });
+
+  await z.emptyDir(payload.admin, payload.documentType);
 });
 
 exports.getTranscationByID = catchAsync(async (req, res, next) => {

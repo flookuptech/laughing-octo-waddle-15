@@ -69,7 +69,6 @@ const invoiceSchema = mongoose.Schema(
       trim: true,
       default: null,
     },
-
     invoiceLink: {
       type: String,
       trim: true,
@@ -164,10 +163,10 @@ const invoiceSchema = mongoose.Schema(
   }
 );
 
-invoiceSchema.pre("save", function (next) {
-  this.trackingNumber = generateRandNumber(8, "numeric");
-  next();
-});
+// invoiceSchema.pre("save", function (next) {
+//   this.trackingNumber = ;
+//   next();
+// });
 
 invoiceSchema.pre(/^find/, function (next) {
   this.populate({

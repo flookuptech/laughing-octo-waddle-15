@@ -15,9 +15,9 @@ const uploadParams = {
 
 const s3FileExtension = "zip";
 
-exports.s3Upload = (user, docType, buffer) => {
+exports.s3Upload = (user, docType, buffer, filename) => {
   return new Promise((resolve, reject) => {
-    uploadParams.Key = `${user}/${docType}/${docType}-${Date.now()}.${s3FileExtension}`;
+    uploadParams.Key = `${user}/${docType}/${docType}-${filename}.${s3FileExtension}`;
     uploadParams.Body = buffer;
     const params = uploadParams;
 

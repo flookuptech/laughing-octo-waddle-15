@@ -22,20 +22,6 @@ const docType = (type, next, docType) => {
   if (!type) return next(new AppError("Document type cannot to empty", 400));
 };
 
-const docType15CAXML = (type, next, file) => {
-  if (type !== "15ca" && type !== "xml") {
-    return next(new AppError("Invalid document type provided", 400));
-  }
-
-  if (!type) return next(new AppError("Document type cannot to empty", 400));
-
-  const ext = file.mimetype.split("/")[1].toLowerCase();
-
-  if (type === "xml" && ext !== "xml") {
-    return next(new AppError("Upload valid xml file", 400));
-  }
-};
-
 const fields = (ackNumber, udin, partyName, next) => {
   const message = `Fields are missing`;
   if (!ackNumber || !udin || !partyName)
@@ -77,6 +63,7 @@ exports.invoiceFile = (req, res, next) => {
       trc: req.body.trc,
       clientRemarks: req.body.clientRemarks,
     },
+    fileIdentifier: req.body.fileIdentifier,
     documentType: req.body.documentType,
     userId: req.user._id,
     user: req.user.workspace + "/" + req.user.companyNameSlug,
@@ -105,6 +92,7 @@ exports.form15CB = catchAsyncError(async (req, res, next) => {
     partyName,
     adminRemarks,
     documentType,
+    fileIdentifier: id.trackingNumber,
     admin: req.user.workspace + "/" + req.user.companyNameSlug,
     user: req.user.workspace + "/" + id.userId.companyDetails.companyNameSlug,
   };
@@ -114,19 +102,45 @@ exports.form15CB = catchAsyncError(async (req, res, next) => {
   next();
 });
 
-exports.form15CAOrXml = catchAsyncError(async (req, res, next) => {
+exports.form15CA = catchAsyncError(async (req, res, next) => {
   const documentType = req.body.documentType.toLowerCase();
 
   objectID(req.params.id, next);
   inputFile(req.file, next);
-  docType15CAXML(documentType, next, req.file);
 
   const id = await Invoice.findById(req.params.id);
   if (!id) return next(new AppError("Invalid id provided", 400));
 
   const obj = {
     documentType,
+    fileIdentifier: id.trackingNumber,
     user: req.user.workspace + "/" + req.user.companyNameSlug,
+  };
+
+  req.body.payload = { ...obj };
+
+  console.log(req.body.payload);
+
+  next();
+});
+
+exports.xml = catchAsyncError(async (req, res, next) => {
+  const documentType = req.body.documentType.toLowerCase();
+
+  objectID(req.params.id, next);
+  inputFile(req.file, next);
+
+  const id = await Invoice.findById(req.params.id);
+  if (!id) return next(new AppError("Invalid id provided", 400));
+
+  const ext = req.file.mimetype.split("/")[1];
+  if (ext !== "xml") return next(new AppError("Invalid file uploaded", 400));
+
+  const obj = {
+    documentType,
+    fileIdentifier: id.trackingNumber,
+    admin: req.user.workspace + "/" + req.user.companyNameSlug,
+    user: req.user.workspace + "/" + id.userId.companyDetails.companyNameSlug,
   };
 
   req.body.payload = { ...obj };

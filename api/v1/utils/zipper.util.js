@@ -5,15 +5,15 @@ const s3 = require("./s3.util");
 const zipper = require("zip-local");
 const AppError = require("./appError.util");
 
-exports.upload = async (user, docType) => {
+exports.upload = async (user, docType, filename) => {
   const buff = await zip(user, docType);
-  const data = await s3.s3Upload(user, docType, buff);
+  const data = await s3.s3Upload(user, docType, buff, filename);
   return data;
 };
 
-exports.upload15CB = async (admin, docType, user) => {
+exports.uploadAdmin = async (admin, docType, user, filename) => {
   const buff = await zip(admin, docType);
-  const data = await s3.s3Upload(user, docType, buff);
+  const data = await s3.s3Upload(user, docType, buff, filename);
   return data;
 };
 
