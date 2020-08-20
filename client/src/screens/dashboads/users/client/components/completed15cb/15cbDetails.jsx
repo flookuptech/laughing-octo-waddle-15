@@ -6,7 +6,7 @@ import Form from "components/form/form";
 import { GetApp } from "@material-ui/icons";
 import CustomButton from "components/form/button";
 import { getTransactionById } from "services/getTransactionById";
-import { upload15caOrXml } from "services/upload15caOrXml";
+import { upload15ca } from "services/upload15ca";
 import TransactionDataFields from "./transactionDataFields";
 
 class Details extends Form {
@@ -37,7 +37,7 @@ class Details extends Form {
         data15ca.append("documentType", "15ca");
         data15ca.append("user", user._id);
         data15ca.append("file", data.files[0]);
-        const result = await upload15caOrXml(transactionId, data15ca);
+        const result = await upload15ca(transactionId, data15ca);
         if (result.status === 201) {
           this.setState({ loading: !this.state.loading });
           toast.success("15CA successfully uploaded");

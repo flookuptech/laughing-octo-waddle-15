@@ -9,6 +9,7 @@ import { GetApp } from "@material-ui/icons";
 import CustomButton from "components/form/button";
 import { getTransactionById } from "services/getTransactionById";
 import { upload15cb } from "services/upload15cb";
+import { uploadXml } from "services/uploadXml";
 import TransactionDataFields from "./transactionDataFields";
 
 class Details extends Form {
@@ -121,6 +122,23 @@ class Details extends Form {
                         />
                       </a>
                     </Grid>
+                    {data.caLink ? (
+                      <Grid item>
+                        <a
+                          style={{ textDecoration: "none" }}
+                          href={data.caLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <CustomButton
+                            variant="outlined"
+                            color="secondary"
+                            icon={<GetApp />}
+                            label="15CA"
+                          />
+                        </a>
+                      </Grid>
+                    ) : null}
                   </Grid>
                 </Paper>
                 <br />

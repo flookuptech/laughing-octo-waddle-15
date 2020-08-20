@@ -4,22 +4,28 @@ import HomeTable from "./homeTable";
 import { adminHomeTableHead } from "components/tableHead";
 import HtmlTitle from "components/title";
 import "assets/css/contentStructure.css";
-import { getTotalTransactionsOfUsers } from "services/getTotalTransactionsOfUsers";
+import { get15cbSummaryOfClients } from "services/getSummary";
 
 class Home extends Component {
-  state = { totalTransactions: [] };
+  state = { pendingTransactions: [] };
 
   async componentDidMount() {
-    const totalTransactions = await getTotalTransactionsOfUsers();
+    // const status = "pending";
+    const pendingTransactionsOfUsers = await get15cbSummaryOfClients();
+    console.log(pendingTransactionsOfUsers);
+    // this.setState({
+    //   pendingTransactions: pendingTransactionsOfUsers.data.data,
+    // });
   }
 
   render() {
-    const { totalTransactions } = this.state;
+    const { pendingTransactions } = this.state;
     return (
       <Fragment>
         <HtmlTitle title={"Home"} />
         <Grid>
           <main className="content">
+            {/* {pendingTransactions.length ? ( */}
             <Container maxWidth="lg">
               <br />
               <Paper className="paper" elevation={4}>
@@ -36,13 +42,16 @@ class Home extends Component {
                 <div>
                   <HomeTable
                     tableHead={adminHomeTableHead}
-                    totalTransactions={totalTransactions}
+                    pendingTransactions={pendingTransactions}
                   />
                 </div>
                 <br />
               </Paper>
               <br />
             </Container>
+            {/* ) : (
+              <h1>Loading....</h1>
+            )} */}
           </main>
         </Grid>
       </Fragment>

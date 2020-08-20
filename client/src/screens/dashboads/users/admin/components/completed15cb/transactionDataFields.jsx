@@ -96,7 +96,6 @@ const TransactionDataFields = ({
             />
             <FileUpload
               filesLimit={1}
-              handleOpen={handleOpen}
               handleSave={handleSave}
               open={open}
               handleClose={handleClose}
@@ -115,9 +114,9 @@ const TransactionDataFields = ({
           </Grid>
         </Grid>
       </form>
-      <br />
       {/* <br />
-      {/* <Divider />
+      <br />
+      <Divider style={{ padding: 2 }} />
       <br />
       <Fragment>
         <Typography className="pageHeading" component="h6" variant="h6">
@@ -125,7 +124,7 @@ const TransactionDataFields = ({
         </Typography>
       </Fragment>
       <br />
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleXmlSubmit}>
         <Grid
           container
           direction="row"
@@ -138,14 +137,14 @@ const TransactionDataFields = ({
               color="secondary"
               icon={<Publish />}
               label="XML"
-              onClick={handleOpen}
+              onClick={handleXmlOpen}
             />
             <FileUpload
               name="xml"
               filesLimit={1}
-              handleOpen={handleOpen}
-              handleSave={handleSave}
-              open={open}
+              handleSave={handleXmlSave}
+              open={data.openXml}
+              handleClose={handleXmlClose}
             />
           </Grid>
           <Grid item>
