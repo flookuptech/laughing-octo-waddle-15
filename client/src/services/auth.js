@@ -25,7 +25,7 @@ export async function emailPassAuthentication(data) {
     localStorage.setItem(userDetails, user);
     return result;
   } catch (error) {
-    return null;
+    return error.response.data.message;
   }
 }
 

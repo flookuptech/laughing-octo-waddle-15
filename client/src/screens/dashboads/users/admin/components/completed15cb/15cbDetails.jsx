@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import HtmlTitle from "components/title";
-import { Typography, Container, Grid, Paper } from "@material-ui/core";
+import { Typography, Container, Grid, Paper, Divider } from "@material-ui/core";
 import Form from "components/form/form";
 import { extractedTextFields } from "../15cbDetailsFields";
 import InputField from "components/form/inputField";
@@ -9,15 +9,15 @@ import { GetApp } from "@material-ui/icons";
 import CustomButton from "components/form/button";
 import { getTransactionById } from "services/getTransactionById";
 import { upload15cb } from "services/upload15cb";
-import { uploadXml } from "services/uploadXml";
 import TransactionDataFields from "./transactionDataFields";
+import UploadXml from "./uploadXml";
 
 class Details extends Form {
   state = {
     data: {},
     transactionId: "",
     userId: "",
-    loading15cb: false,
+    loading: false,
   };
 
   async componentDidMount() {
@@ -31,15 +31,15 @@ class Details extends Form {
         data: result.data.data.transcation,
       });
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.message);
     }
   }
 
   onSubmit = async () => {
-    const { transactionId, userId, data, loading15cb } = this.state;
+    const { transactionId, data, loading } = this.state;
     const { ackNumber, udin, partyName, adminRemarks } = this.state.data;
     if (data.files) {
-      this.setState({ loading15cb: !loading15cb });
+      this.setState({ loading: !loading });
       try {
         const update15cb = new FormData();
         update15cb.append("documentType", "15cb");
@@ -52,27 +52,26 @@ class Details extends Form {
         const result = await upload15cb(transactionId, update15cb);
         if (result.status === 201) {
           toast.success("15CB updated succesfully");
-          this.setState({ loading15cb: !this.state.loading15cb });
+          this.setState({ loading: !this.state.loading });
         }
       } catch (error) {
-        console.log(error);
-        toast.error("Error Occured");
-        this.setState({ loading15cb: !this.state.loading15cb });
+        toast.error(error.response.data.message);
+        this.setState({ loading: !this.state.loading });
       }
     } else {
-      toast.error("Please upload 15CB");
+      toast.error("Please select a 15CB File to upload");
     }
   };
 
   render() {
-    const { data, loading15cb } = this.state;
+    const { data, loading, transactionId, userId } = this.state;
     return (
       <Fragment>
         <HtmlTitle title={"15CB Details"} />
-        {Object.keys(data).length ? (
-          <Grid>
-            <ToastContainer autoClose={1500} closeButton={false} />
-            <main className="content">
+        <Grid>
+          <ToastContainer autoClose={1500} closeButton={false} />
+          <main className="content">
+            {Object.keys(data).length ? (
               <Container maxWidth="lg">
                 <br />
                 <Paper className="paper" elevation={4}>
@@ -139,6 +138,23 @@ class Details extends Form {
                         </a>
                       </Grid>
                     ) : null}
+                    {data.xmlLink ? (
+                      <Grid item>
+                        <a
+                          style={{ textDecoration: "none" }}
+                          href={data.xmlLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <CustomButton
+                            variant="outlined"
+                            color="secondary"
+                            icon={<GetApp />}
+                            label="XML"
+                          />
+                        </a>
+                      </Grid>
+                    ) : null}
                   </Grid>
                 </Paper>
                 <br />
@@ -160,8 +176,19 @@ class Details extends Form {
                       handleSave={this.handleSave}
                       open={data.open}
                       handleClose={this.handleClose}
-                      loading15cb={loading15cb}
+                      loading={loading}
                     />
+                    <br />
+                    {data.xmlLink === null ? (
+                      <Fragment>
+                        <Divider style={{ padding: 1 }} />
+                        <br />
+                        <UploadXml
+                          userId={userId}
+                          transactionId={transactionId}
+                        />
+                      </Fragment>
+                    ) : null}
                   </Fragment>
                 </Paper>
                 <br />
@@ -193,13 +220,12 @@ class Details extends Form {
                   <br />
                 </Paper>
                 <br />
-                <br />
               </Container>
-            </main>
-          </Grid>
-        ) : (
-          <h1>Loading...</h1>
-        )}
+            ) : (
+              <h1>Loading...</h1>
+            )}
+          </main>
+        </Grid>
       </Fragment>
     );
   }

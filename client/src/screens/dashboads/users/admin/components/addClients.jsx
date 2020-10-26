@@ -15,18 +15,23 @@ class AddUsers extends Form {
   };
 
   onSubmit = async () => {
-    this.setState({ loading: !this.state.loading });
-    const data = {
-      ...this.state.data,
-      userType: "client",
-    };
-    try {
-      const result = await createClient(data);
-      if (result.status == 201) toast.success("User created successfully");
-      this.setState({ loading: !this.state.loading, data: {} });
-    } catch (error) {
-      toast.error("User creation failed");
+    if (this.state.data.userRole) {
       this.setState({ loading: !this.state.loading });
+      const data = {
+        ...this.state.data,
+        userType: "client",
+      };
+      try {
+        const result = await createClient(data);
+        if (result.status == 201) toast.success("User created successfully");
+        this.setState({ loading: !this.state.loading });
+      } catch (error) {
+        console.log(error.response);
+        toast.error(error.response.data.message);
+        this.setState({ loading: !this.state.loading });
+      }
+    } else {
+      toast.error("Please select User Role");
     }
   };
 

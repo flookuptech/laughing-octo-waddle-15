@@ -1,6 +1,6 @@
 import React from "react";
 import { Fragment } from "react";
-import { Typography, Grid, Divider } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import InputField from "components/form/inputField";
 import { readOnlyFields, editableFields } from "../15cbDetailsFields";
 import CustomTextArea from "components/form/textArea";
@@ -16,7 +16,7 @@ const TransactionDataFields = ({
   handleSave,
   handleClose,
   open,
-  loading15cb,
+  loading,
 }) => {
   return (
     <Fragment>
@@ -42,6 +42,8 @@ const TransactionDataFields = ({
                     ? data[item.value]
                     : item.value === "createdAt"
                     ? data[item.value].split("T")[0]
+                    : data.userRemarks[item.value] === "undefined"
+                    ? "Not entered by the Client"
                     : data.userRemarks[item.value]
                 }
                 helperText={item.helperText}
@@ -99,6 +101,7 @@ const TransactionDataFields = ({
               handleSave={handleSave}
               open={open}
               handleClose={handleClose}
+              acceptedFiles="application/pdf"
             />
           </Grid>
           <br />
@@ -109,55 +112,11 @@ const TransactionDataFields = ({
               icon={<Send />}
               label="Update 15CB Details"
               type="submit"
-              loading={loading15cb}
+              loading={loading}
             />
           </Grid>
         </Grid>
       </form>
-      {/* <br />
-      <br />
-      <Divider style={{ padding: 2 }} />
-      <br />
-      <Fragment>
-        <Typography className="pageHeading" component="h6" variant="h6">
-          Upload XML
-        </Typography>
-      </Fragment>
-      <br />
-      <form onSubmit={handleXmlSubmit}>
-        <Grid
-          container
-          direction="row"
-          justify="space-around"
-          alignItems="center"
-        >
-          <Grid item>
-            <CustomButton
-              variant="outlined"
-              color="secondary"
-              icon={<Publish />}
-              label="XML"
-              onClick={handleXmlOpen}
-            />
-            <FileUpload
-              name="xml"
-              filesLimit={1}
-              handleSave={handleXmlSave}
-              open={data.openXml}
-              handleClose={handleXmlClose}
-            />
-          </Grid>
-          <Grid item>
-            <CustomButton
-              variant="contained"
-              color="primary"
-              icon={<Send />}
-              label="XML"
-              type="submit"
-            />
-          </Grid>
-        </Grid>
-      </form> */}
     </Fragment>
   );
 };

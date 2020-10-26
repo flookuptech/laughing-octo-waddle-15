@@ -18,14 +18,18 @@ class Details extends Form {
   };
 
   async componentDidMount() {
-    const user = this.props.user;
-    this.setState({ userId: user._id });
-    const { id } = this.props.match.params;
-    this.setState({ transactionId: id });
-    const result = await getTransactionById(id);
-    this.setState({
-      data: result.data.data.transcation,
-    });
+    try {
+      const user = this.props.user;
+      this.setState({ userId: user._id });
+      const { id } = this.props.match.params;
+      this.setState({ transactionId: id });
+      const result = await getTransactionById(id);
+      this.setState({
+        data: result.data.data.transcation,
+      });
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
   }
 
   onSubmit = async () => {
@@ -49,12 +53,11 @@ class Details extends Form {
           });
         }
       } catch (error) {
-        console.log(error);
-        toast.error("Error Occured");
+        toast.error(error.response.data.message);
         this.setState({ loading: !this.state.loading });
       }
     } else {
-      toast.error("Please upload 15CB");
+      toast.error("Please select a 15CB File to upload");
     }
   };
 

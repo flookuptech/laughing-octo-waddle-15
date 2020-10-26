@@ -49,7 +49,7 @@ class UploadInvoice extends Form {
           });
         }
       } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.message);
         this.setState({ loading: !this.state.loading });
       }
     } else {
@@ -60,9 +60,9 @@ class UploadInvoice extends Form {
   render() {
     return (
       <Fragment>
-        <ToastContainer autoClose={1500} />
         <HtmlTitle title={"Upload Invoice"} />
         <Grid>
+          <ToastContainer autoClose={1500} />
           <main className="content">
             <Container maxWidth="lg">
               <br />
@@ -97,6 +97,7 @@ class UploadInvoice extends Form {
                     <FileUpload
                       handleClose={this.handleClose}
                       filesLimit={5}
+                      acceptedFiles="application/pdf"
                       handleOpen={this.handleOpen}
                       handleSave={this.handleSave}
                       open={this.state.data.open}

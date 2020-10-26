@@ -36,6 +36,7 @@ const multerFilter = (req, file, cb) => {
     "image.jpg",
     "application/pdf",
     "application/xml",
+    "text/xml",
   ].includes(file.mimetype);
 
   if (value) cb(null, true);

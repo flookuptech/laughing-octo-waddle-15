@@ -1,7 +1,29 @@
 import React, { Fragment } from "react";
-import { Typography, Button, TextField, Grid } from "@material-ui/core";
+import {
+  Typography,
+  Button,
+  TextField,
+  Grid,
+  Card,
+  CircularProgress,
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
 
-const EmailPassAuthentication = ({ handleChange, onSubmit }) => {
+const useStyles = makeStyles({
+  cardStyle: {
+    backgroundColor: "#d9534f",
+    color: "white",
+    padding: 5,
+  },
+});
+
+const EmailPassAuthentication = ({
+  handleChange,
+  onSubmit,
+  errorEmailPass,
+  loadingEmailPass,
+}) => {
+  const classes = useStyles();
   return (
     <Fragment>
       <Grid item md={12}>
@@ -19,7 +41,9 @@ const EmailPassAuthentication = ({ handleChange, onSubmit }) => {
             name="email"
             onChange={handleChange}
             fullWidth
-            required
+            size="small"
+            margin="normal"
+            autoFocus={true}
           />
           <br />
           <br />
@@ -30,9 +54,17 @@ const EmailPassAuthentication = ({ handleChange, onSubmit }) => {
             name="password"
             onChange={handleChange}
             fullWidth
-            required
+            size="small"
+            margin="normal"
+            autoFocus={true}
           />
-          <br /> <br />
+          <br />
+          {errorEmailPass && (
+            <Fragment>
+              <Card className={classes.cardStyle}>{errorEmailPass}</Card>
+            </Fragment>
+          )}
+          <br />
           <Button
             type="submit"
             size="large"
@@ -44,7 +76,16 @@ const EmailPassAuthentication = ({ handleChange, onSubmit }) => {
             }}
             variant="contained"
           >
-            Sign In
+            {loadingEmailPass ? (
+              <CircularProgress
+                style={{
+                  color: "white",
+                }}
+                size="1.5rem "
+              />
+            ) : (
+              "Sign In"
+            )}
           </Button>
         </form>
       </Grid>
