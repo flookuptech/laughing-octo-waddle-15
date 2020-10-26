@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  lighten,
-  makeStyles,
-  withStyles,
-  Grid,
-  Typography,
-} from "@material-ui/core";
+import { lighten, makeStyles, withStyles, Grid } from "@material-ui/core";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
 const BorderLinearProgress = withStyles({
@@ -28,9 +22,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function LinearBar({ completed, pending }) {
+export function LinearBar({ total, completed }) {
   const classes = useStyles();
-
   return (
     <div className={classes.root}>
       <Grid
@@ -50,7 +43,7 @@ export function LinearBar({ completed, pending }) {
           <label>
             <b>Pending</b>
             <br />
-            {pending}
+            {total - completed}
           </label>
         </Grid>
       </Grid>
@@ -58,10 +51,10 @@ export function LinearBar({ completed, pending }) {
         className={classes.margin}
         variant="determinate"
         color="secondary"
-        value={(completed / (pending + completed)) * 100}
+        value={(completed / total) * 100}
       />
       <label style={{ zIndex: 90000 }}>
-        <b>Total 15CB submitted:</b>&nbsp;{completed + pending}
+        <b>Total 15CB submitted:</b>&nbsp;{total}
       </label>
     </div>
   );

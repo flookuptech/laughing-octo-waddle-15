@@ -4,28 +4,41 @@ import HomeTable from "./homeTable";
 import { adminHomeTableHead } from "components/tableHead";
 import HtmlTitle from "components/title";
 import "assets/css/contentStructure.css";
-import { get15cbSummaryOfClients } from "services/getSummary";
+import { getTotalTransactionsOfUsers } from "services/getTotalTransactionsOfUsers";
+import { get15cbSummaryForClient } from "../../../../../../services/getSummary";
+
+const calculateCompletedTransactions = async (totalTransactions) => {
+  const promises = totalTransactions.map(async (item, i) => {
+    const completed = await get15cbSummaryForClient(item.userId);
+    return {
+      ...item,
+      complete:
+        completed.data.results > 0 ? completed.data.data[i].complete : 0,
+    };
+  });
+
+  return await Promise.all(promises);
+};
 
 class Home extends Component {
-  state = { pendingTransactions: [] };
+  state = { totalTransactions: [] };
 
   async componentDidMount() {
-    // const status = "pending";
-    const pendingTransactionsOfUsers = await get15cbSummaryOfClients();
-    console.log(pendingTransactionsOfUsers);
-    // this.setState({
-    //   pendingTransactions: pendingTransactionsOfUsers.data.data,
-    // });
+    const totalTransactionsOfUsers = await getTotalTransactionsOfUsers();
+    this.setState({ totalTransactions: totalTransactionsOfUsers.data.data });
+    const newTotalTransactions = await calculateCompletedTransactions(
+      this.state.totalTransactions
+    );
+    this.setState({ totalTransactions: newTotalTransactions });
   }
 
   render() {
-    const { pendingTransactions } = this.state;
+    const { totalTransactions } = this.state;
     return (
       <Fragment>
         <HtmlTitle title={"Home"} />
         <Grid>
           <main className="content">
-            {/* {pendingTransactions.length ? ( */}
             <Container maxWidth="lg">
               <br />
               <Paper className="paper" elevation={4}>
@@ -39,19 +52,19 @@ class Home extends Component {
                   </Typography>
                 </div>
                 <br />
-                <div>
+                {totalTransactions.length > 0 ? (
                   <HomeTable
                     tableHead={adminHomeTableHead}
-                    pendingTransactions={pendingTransactions}
+                    totalTransactions={totalTransactions}
                   />
-                </div>
-                <br />
+                ) : (
+                  <Typography variant="h6" component="h6">
+                    No Users have submitted 15CB yet
+                  </Typography>
+                )}
               </Paper>
               <br />
             </Container>
-            {/* ) : (
-              <h1>Loading....</h1>
-            )} */}
           </main>
         </Grid>
       </Fragment>

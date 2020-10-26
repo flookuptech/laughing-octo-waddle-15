@@ -12,6 +12,7 @@ const UploadInvoiceDataFields = ({ onSubmit, onChange }) => {
             <InputField
               name="tdsRate"
               onChange={onChange}
+              type="number"
               placeholder="Enter rate of TDS"
             />
           </Grid>

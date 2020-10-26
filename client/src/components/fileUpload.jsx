@@ -6,13 +6,14 @@ const DropzoneDialogExample = ({
   handleClose,
   open,
   filesLimit,
+  acceptedFiles,
 }) => {
   return (
     <Fragment>
       <DropzoneDialog
         open={open}
         onSave={handleSave}
-        acceptedFiles={["application/pdf", ".xml"]}
+        acceptedFiles={[acceptedFiles]}
         showPreviews={true}
         maxFileSize={5000000}
         filesLimit={filesLimit}

@@ -19,7 +19,11 @@ const PendindDetailedTable = ({ tableHead, transactionList }) => {
             </IconButton>
           </a>
         </TableCell>
-        <TableCell align="center">{item.userRemarks.clientRemarks}</TableCell>
+        <TableCell align="center">
+          {item.userRemarks.clientRemarks === "undefined"
+            ? "None"
+            : item.userRemarks.clientRemarks}
+        </TableCell>
         <TableCell align="center">{item.trackingNumber}</TableCell>
       </TableRow>
     );

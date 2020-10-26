@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { Typography, Container, Grid, Paper } from "@material-ui/core";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PendingDetailedTable from "./pendingDetailedTable";
 import { clientPendingDetailedTableHead } from "components/tableHead";
@@ -12,14 +13,18 @@ class Pending15cb extends Component {
   };
 
   async componentDidMount() {
-    const { user } = this.props;
-    const status = "pending";
-    const userId = user._id;
-    const result = await getAllTransactionsForClient(status, userId);
-    if (result.status === 201) {
-      this.setState({
-        transactionList: result.data.data.transcations,
-      });
+    try {
+      const { user } = this.props;
+      const status = "pending";
+      const userId = user._id;
+      const result = await getAllTransactionsForClient(status, userId);
+      if (result.status === 201) {
+        this.setState({
+          transactionList: result.data.data.transcations,
+        });
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
     }
   }
 
@@ -30,10 +35,10 @@ class Pending15cb extends Component {
       <Fragment>
         <HtmlTitle title={"Pending 15CB"} />
         <Grid>
+          <ToastContainer autoClose={1500} closeButton={false} />
           <main className="content">
             <Container maxWidth="lg">
               <br />
-              {console.log(transactionList)}
               <Paper className="paper" elevation={4}>
                 <div>
                   <Typography
@@ -45,18 +50,16 @@ class Pending15cb extends Component {
                   </Typography>
                 </div>
                 <br />
-                <div>
-                  <Typography component="h5" variant="h6">
-                    Total Number of 15CB pending: {transactionList.length}
-                  </Typography>
-                  <br />
-                  {transactionList.length > 0 ? (
-                    <PendingDetailedTable
-                      transactionList={transactionList}
-                      tableHead={clientPendingDetailedTableHead}
-                    />
-                  ) : null}
-                </div>
+                <Typography component="h5" variant="h6">
+                  Total Number of 15CB pending: {transactionList.length}
+                </Typography>
+                <br />
+                {transactionList.length > 0 ? (
+                  <PendingDetailedTable
+                    transactionList={transactionList}
+                    tableHead={clientPendingDetailedTableHead}
+                  />
+                ) : null}
               </Paper>
               <br />
             </Container>

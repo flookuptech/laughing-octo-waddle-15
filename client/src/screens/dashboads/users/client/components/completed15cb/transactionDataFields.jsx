@@ -30,6 +30,8 @@ const TransactionDataFields = ({
                     ? data[item.value]
                     : item.value === "createdAt"
                     ? data[item.value].split("T")[0]
+                    : data.userRemarks[item.value] === "undefined"
+                    ? "Not provided"
                     : data.userRemarks[item.value]
                 }
                 helperText={item.helperText}
@@ -40,16 +42,15 @@ const TransactionDataFields = ({
           );
         })}
       </Grid>
+      <br />
       {!data.caLink ? (
         <Fragment>
-          <br />
           <Divider style={{ padding: 1 }} />
           <br />
           <Typography className="pageHeading" component="h6" variant="h6">
             Upload 15CA
           </Typography>
           <br />
-
           <form onSubmit={handleSubmit}>
             <Grid
               container
@@ -70,6 +71,7 @@ const TransactionDataFields = ({
                   handleSave={handleSave}
                   handleClose={handleClose}
                   filesLimit={1}
+                  acceptedFiles="application/pdf"
                 />
               </Grid>
               <Grid item>

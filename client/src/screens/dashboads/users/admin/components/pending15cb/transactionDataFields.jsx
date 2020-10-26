@@ -20,7 +20,6 @@ const TransactionDataFields = ({
 }) => {
   return (
     <Fragment>
-      {console.log(data)}
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6} md={4} lg={4}>
           <InputField
@@ -29,9 +28,9 @@ const TransactionDataFields = ({
               " " +
               data.userId.userDetails.lastName
             }
-            helperText={"Client Name"}
+            helperText="Client Name"
             InputProps={{ readOnly: true }}
-            name={"clientName"}
+            name="clientName"
           />
         </Grid>
         {readOnlyFields.map((item) => {
@@ -43,6 +42,8 @@ const TransactionDataFields = ({
                     ? data[item.value]
                     : item.value === "createdAt"
                     ? data[item.value].split("T")[0]
+                    : data.userRemarks[item.value] === "undefined"
+                    ? "Not entered by the Client"
                     : data.userRemarks[item.value]
                 }
                 helperText={item.helperText}
@@ -94,13 +95,12 @@ const TransactionDataFields = ({
             onClick={handleOpen}
             label="15CB"
           />
-          <br />
-          <br />
           <FileUpload
             open={open}
             handleSave={handleSave}
             handleClose={handleClose}
             filesLimit={1}
+            acceptedFiles="application/pdf"
           />
           <div style={{ float: "right" }}>
             <CustomButton

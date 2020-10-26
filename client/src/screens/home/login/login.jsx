@@ -13,43 +13,83 @@ class Login extends Form {
   state = {
     data: {},
     workspaceMatch: false,
+    errorWorkspace: "",
+    errorEmailPass: "",
+    loadingWorkspace: false,
+    loadingEmailPass: false,
   };
 
   onWorkSpaceSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const data = {
-        workspace: this.state.data.workspace,
-      };
-      console.log(data);
-      const result = await workspaceAuthentication(data);
-      if (result.data.data.workspaceExists) {
-        this.setState({ workspaceMatch: !this.state.workspaceMatch });
+    const { data, workspaceMatch, loadingWorkspace } = this.state;
+    if (data.workspace) {
+      this.setState({ loadingWorkspace: !loadingWorkspace });
+      try {
+        const workspace = {
+          workspace: data.workspace,
+        };
+        const result = await workspaceAuthentication(workspace);
+        if (result.data.data.workspaceExists) {
+          this.setState({
+            workspaceMatch: !workspaceMatch,
+            loadingWorkspace: !loadingWorkspace,
+          });
+        } else {
+          this.setState({
+            loadingWorkspace: !this.state.loadingWorkspace,
+            errorWorkspace: "Invalid Workspace Id provided",
+          });
+        }
+      } catch (error) {
+        this.setState({ errorWorkspace: error.response.data.message });
       }
-    } catch (error) {
-      console.log(error);
+    } else {
+      this.setState({
+        errorWorkspace: "Please enter your Workspace Id in order to continue",
+      });
     }
   };
 
   onEmailPassSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const data = {
-        email: this.state.data.email,
-        password: this.state.data.password,
-      };
-      const result = await emailPassAuthentication(data);
-      console.log(result);
-      if (result.status === 200) {
-        window.location = "/dashboard/";
+    const { data, loadingEmailPass } = this.state;
+    if (data.email && data.password) {
+      this.setState({
+        loadingEmailPass: !loadingEmailPass,
+      });
+      try {
+        const emailPass = {
+          email: data.email,
+          password: data.password,
+        };
+        const result = await emailPassAuthentication(emailPass);
+        if (result.status === 200) {
+          this.setState({ loadingEmailPass: !this.state.loadingEmailPass });
+          window.location = "/dashboard/";
+        } else {
+          this.setState({
+            errorEmailPass: result,
+            loadingEmailPass: !this.state.loadingEmailPass,
+          });
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+    } else {
+      this.setState({
+        errorEmailPass: "Please enter your Email Id and Password to login ",
+      });
     }
   };
 
   render() {
-    const { workspaceMatch } = this.state;
+    const {
+      workspaceMatch,
+      errorWorkspace,
+      errorEmailPass,
+      loadingWorkspace,
+      loadingEmailPass,
+    } = this.state;
 
     return (
       <Fragment>
@@ -59,7 +99,6 @@ class Login extends Form {
           justify="center"
           style={{ marginTop: "10vh" }}
         >
-          {console.log(this.state)}
           <Grid item xs={12} md={12} lg={12}>
             <img
               src={BrandLogo}
@@ -76,13 +115,17 @@ class Login extends Form {
           {!workspaceMatch ? (
             <WorkspaceAuthentication
               style={{ marginTop: "50vh" }}
+              loadingWorkspace={loadingWorkspace}
               handleChange={this.handleOnChange}
               onSubmit={this.onWorkSpaceSubmit}
+              errorWorkspace={errorWorkspace}
             />
           ) : (
             <EmailPassAuthentication
+              loadingEmailPass={loadingEmailPass}
               handleChange={this.handleOnChange}
               onSubmit={this.onEmailPassSubmit}
+              errorEmailPass={errorEmailPass}
             />
           )}
         </Grid>

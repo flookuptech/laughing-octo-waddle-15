@@ -7,6 +7,7 @@ import {
   Button,
   ButtonGroup,
 } from "@material-ui/core";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SummaryTable from "./summaryTable";
 import DetailedTable from "./detailedTable";
@@ -31,7 +32,6 @@ class Completed15cb extends Form {
       const user = this.props.user;
       const status = "complete";
       const summary = await get15cbSummaryForClient(user._id);
-      console.log(summary);
       if (summary.status === 200) {
         this.setState({
           summaryTransactions: summary.data.data,
@@ -44,7 +44,7 @@ class Completed15cb extends Form {
         });
       }
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.message);
     }
   }
 
@@ -62,6 +62,7 @@ class Completed15cb extends Form {
       <Fragment>
         <HtmlTitle title={"Completed 15CB"} />
         <Grid>
+          <ToastContainer autoClose={1500} closeButton={false} />
           <main className="content">
             <Container maxWidth="lg">
               <br />
@@ -103,7 +104,6 @@ class Completed15cb extends Form {
                       </ButtonGroup>
                     </div>
                     <br />
-                    <br />
                     <Fragment>
                       {summary ? (
                         <SummaryTable
@@ -119,7 +119,6 @@ class Completed15cb extends Form {
                         />
                       )}
                     </Fragment>
-                    <br />
                   </Fragment>
                 ) : null}
               </Paper>

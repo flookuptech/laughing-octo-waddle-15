@@ -18,14 +18,18 @@ class Details extends Form {
   };
 
   async componentDidMount() {
-    const user = this.props.user;
-    this.setState({ user });
-    const { id } = this.props.match.params;
-    this.setState({ transactionId: id });
-    const result = await getTransactionById(id);
-    this.setState({
-      data: result.data.data.transcation,
-    });
+    try {
+      const user = this.props.user;
+      this.setState({ user });
+      const { id } = this.props.match.params;
+      this.setState({ transactionId: id });
+      const result = await getTransactionById(id);
+      this.setState({
+        data: result.data.data.transcation,
+      });
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
   }
 
   onSubmit = async () => {
@@ -40,14 +44,14 @@ class Details extends Form {
         const result = await upload15ca(transactionId, data15ca);
         if (result.status === 201) {
           this.setState({ loading: !this.state.loading });
-          toast.success("15CA successfully uploaded");
+          toast.success("15CA uploaded succcesfully");
         }
       } catch (error) {
-        this.setState({ loading15ca: !loading });
-        console.log(error);
+        this.setState({ loading: !this.state.loading });
+        toast.error(error.response.data.message);
       }
     } else {
-      toast.error("No 15CA Selected");
+      toast.error("Please select a 15CA File to upload");
     }
   };
 
@@ -57,10 +61,10 @@ class Details extends Form {
     return (
       <Fragment>
         <HtmlTitle title={"Completed 15CB"} />
-        {Object.keys(data).length ? (
-          <Grid>
-            <ToastContainer autoClose={1500} closeButton={false} />
-            <main className="content">
+        <Grid>
+          <ToastContainer autoClose={1500} closeButton={false} />
+          <main className="content">
+            {Object.keys(data).length ? (
               <Container maxWidth="lg">
                 <br />
                 <Paper className="paper" elevation={4}>
@@ -127,6 +131,23 @@ class Details extends Form {
                         </a>
                       </Grid>
                     ) : null}
+                    {data.xmlLink ? (
+                      <Grid item>
+                        <a
+                          style={{ textDecoration: "none" }}
+                          href={data.xmlLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <CustomButton
+                            variant="outlined"
+                            color="secondary"
+                            icon={<GetApp />}
+                            label="XML"
+                          />
+                        </a>
+                      </Grid>
+                    ) : null}
                   </Grid>
                 </Paper>
                 <br />
@@ -151,13 +172,12 @@ class Details extends Form {
                   </Fragment>
                 </Paper>
                 <br />
-                <br />
               </Container>
-            </main>
-          </Grid>
-        ) : (
-          <h1>Loading...</h1>
-        )}
+            ) : (
+              <h1>Loading...</h1>
+            )}
+          </main>
+        </Grid>
       </Fragment>
     );
   }

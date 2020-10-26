@@ -52,6 +52,7 @@ const UserDataFields = ({ onChange, onSubmit, loading }) => {
               id="phone"
               label="Contact"
               name="phone"
+              type="tel"
               onChange={onChange}
             />
           </Grid>
